@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+    ViewData["title"] = "Add Attributes";
+}
+
+<section class="product-category-create">
+    <form action="/" method="post" class="theme-form theme-form-2">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Add Attributes</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="name" class="col-3 form-label-title">Attribute Name</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" name="name" value="" id="name" placeholder="Attribute Name" />
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-start">
+                        <label for="value" class="col-3 form-label-title pt-2 pb-2">Attribute Value</label>
+                        <div class="col-9">
+                            <div class="row g-sm-4 g-3">
+                                <div class="col-9">
+                                    <input class="form-control" type="text" name="name" value="" id="value" placeholder="Attribute Value" />
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn text-danger h-100 w-100">Remove</button>
+                                </div>
+                                <div class="col-xll-4">
+                                    <button class="btn text-white theme-bg-color">Add Value</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn text-white theme-bg-color ms-auto">Add Attribute</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

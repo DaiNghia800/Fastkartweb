@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+    ViewData["title"] = "Create Category";
+}
+
+<section class="product-category-create">
+    <form action="/" method="post" class="theme-form theme-form-2">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Category Information</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="name" class="col-3 form-label-title">Category Name</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" name="name" value="" id="name" placeholder="Category Name" />
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label class="col-3 form-label-title">Category Image</label>
+                        <div class="col-9">
+                            <div id="my-dropzone" class="dropzone"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="type" class="col-3 form-label-title">Select Category Icon</label>
+                        <div class="col-9">
+                            <div class="dropdown icon-dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Select Icon
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    @{
+                                        for(int i = 0; i < 10; i++)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" href="#">
+                                                    <img src="/images/grocery.svg" alt="Alternate Text" />
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

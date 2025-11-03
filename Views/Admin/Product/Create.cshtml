@@ -1,0 +1,284 @@
+﻿@using Fastkart.Models.Entities;
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["title"] = "Create Product";
+}
+
+<section class="product-create">
+    <form action="/" method="post" class="theme-form theme-form-2">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Product Information</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="name" class="col-3 form-label-title">Product Name</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" name="name" value="" id="name" placeholder="Product name" />
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="category" class="col-3 form-label-title">Product Category</label>
+                        <div class="col-9">
+                            <select id="category" class="js-example-basic-single w-100">
+                                @{
+                                    if(ViewData["productCategories"] != null)
+                                    {
+                                        foreach (var productCategory in ViewBag.productCategories)
+                                        {
+                                            <option value="@productCategory.Uid">@productCategory.CategoryName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="subcategory" class="col-3 form-label-title">Subcategory</label>
+                        <div class="col-9">
+                            <select id="subcategory" class="js-example-basic-single w-100">
+                                <option disabled value="">Static Menu</option>
+                                <option value="">Simple</option>
+                                <option value="">Classified</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="brand" class="col-3 form-label-title">Brand</label>
+                        <div class="col-9">
+                            <select id="brand" class="js-example-basic-single w-100">
+                                @{
+                                    if(ViewData["brands"] != null)
+                                    {
+                                        foreach(Brand brand in ViewBag.brands)
+                                        {
+                                            <option value=@brand.Uid>@brand.BrandName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="unit" class="col-3 form-label-title">Unit</label>
+                        <div class="col-9">
+                            <select id="unit" class="js-example-basic-single w-100">
+                                @{
+                                    if (ViewData["units"] != null)
+                                    {
+                                        foreach (Unit unit in ViewBag.units)
+                                        {
+                                            <option value=@unit.Uid>@unit.UnitName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="exchangeable" class="col-3 form-label-title">Exchangeable</label>
+                        <div class="col-9">
+                            <label class="switch">
+                                <input type="checkbox" name="name" value="" id="exchangeable" class="d-none" />
+                                <span class="switch-state"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="refundable" class="col-3 form-label-title">Refundable</label>
+                        <div class="col-9">
+                            <label class="switch">
+                                <input type="checkbox" name="name" value="" id="refundable" class="d-none" checked />
+                                <span class="switch-state"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Description</h5>
+                    </div>
+                    <div class="row mb-4 align-items-start">
+                        <label for="desc" class="col-3 form-label-title">Product Description</label>
+                        <div class="col-9">
+                            <textarea id="editor"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Product Images</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="desc" class="col-3 form-label-title">Images</label>
+                        <div class="col-9">
+                            <div id="my-dropzone" class="dropzone"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Product variations</h5>
+                    </div>
+                    <div id="product-variations-container">
+                        <div id="option-group-0" class="option-group">
+                            <div class="row mb-4 align-items-center">
+                                <label for="optionName" class="col-3 form-label-title">Option Name</label>
+                                <div class="col-9">
+                                    <select class="js-example-basic-single w-100" option-name option-name-data='@Html.Raw(Json.Serialize(ViewBag.optionNames))'>
+                                        <option value="" selected>--Chọn một thuộc tính--</option>
+                                        @{
+                                            if (ViewData["optionNames"] != null)
+                                            {
+                                                foreach (OptionName optionName in ViewBag.optionNames)
+                                                {
+                                                    <option value=@optionName.Uid>@optionName.Name</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4 align-items-center">
+                                <label for="optionValue" class="col-3 form-label-title">Option Value</label>
+                                <div class="col-9">
+                                    <input id="optionValue" data-allow-new="true" type="text" data-role="tagsinput" option-value placeholder="Type tag & hit enter" />
+                                    <div id="suggestions" class="list-group position-absolute" style="z-index:1000; display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-option">
+                        <a href="#" id="button-add-option">
+                            <i class="fa-solid fa-plus"></i>
+                            Add Another Option
+                        </a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Shipping</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="weight" class="col-3 form-label-title">Weight (kg)</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" name="name" value="" id="weight" placeholder="Weight" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Product Price</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="price" class="col-3 form-label-title">Price</label>
+                        <div class="col-9">
+                            <input class="form-control" type="number" name="name" value="" id="price" placeholder="0" />
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="discount" class="col-3 form-label-title">Discount</label>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-11 pe-0">
+                                    <input class="form-control rounded-0 rounded-start" type="number" name="name" value="" id="discount" placeholder="0" />
+                                </div>
+                                <div class="col-1 ps-0">
+                                    <span class="theme-bg-color fw-bold text-white d-flex justify-content-center align-items-center w-100 h-100 rounded-end">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Product Inventory</h5>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="sku" class="col-3 form-label-title">SKU</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" name="name" value="" id="sku" />
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label for="optionName" class="col-3 form-label-title">Stock Status</label>
+                        <div class="col-9">
+                            <select class="js-example-basic-single w-100">
+                                @{
+                                    if (ViewData["stockStatus"] != null)
+                                    {
+                                        foreach (StockStatus stockStatus in ViewBag.stockStatus)
+                                        {
+                                            <option value=@stockStatus.Uid>@stockStatus.StockName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <table class="table variant-table table-responsive-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>Variant</th>
+                                <th>Price</th>
+                                <th>SKU</th>
+                                <th>Quantity</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Red</td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="button-delete">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Blue</td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <input class="form-control" type="number" placeholder="0">
+                                </td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="button-delete">
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @* <div class="d-flex justify-content-end mb-3">
+                    <button type="submit" class="btn text-white theme-bg-color ms-auto">Add Product</button>
+                </div> *@
+            </div>
+        </div>
+    </form>
+    
+</section>

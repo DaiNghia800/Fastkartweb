@@ -1,0 +1,19 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Fastkart.Controllers.Admin
+{
+    public class AttributesController : Controller
+    {
+        [Route("/admin/attributes")]
+        public IActionResult Index()
+        {
+            return View("~/Views/Admin/Attributes/Index.cshtml");
+        }
+
+        [Route("/admin/attributes/create")]
+        public IActionResult Create()
+        {
+            return View("~/Views/Admin/Attributes/Create.cshtml");
+        }
+    }
+}
