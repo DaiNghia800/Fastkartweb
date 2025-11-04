@@ -1690,3 +1690,26 @@ header.close {
     font-size: 14px;
 }
 /*end footer*/
+
+/*table order */
+.order-area .table-img, .table-image {
+    width: 45px;
+    height: 45px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.options-order {
+    font-size: 18px;
+    position: relative;
+    color: #4a5568;
+}
+h5.card-title {
+    font-weight: 700;
+    text-transform: capitalize;
+    font-size: 16px;
+    color: #212529;
+}
+.rating-star i {
+    color: #ffa202;
+}
+/*end table order */

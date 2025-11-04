@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+    ViewData["title"] = "Create Coupon";
+}
+
+<div class="header-title">
+    <h5>Create Coupon</h5>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="couponTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="restriction-tab" data-bs-toggle="tab" data-bs-target="#restriction" type="button" role="tab" aria-controls="restriction" aria-selected="false">Restriction</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="usage-tab" data-bs-toggle="tab" data-bs-target="#usage" type="button" role="tab" aria-controls="usage" aria-selected="false">Usage</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="couponTabsContent">
+
+            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+
+                <form class="theme-form mt-4" id="formGeneral">
+                    <div class="row">
+                        <h5 class="mb-3">General</h5>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="couponTitle">Coupon Title</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="couponTitle" placeholder="Coupon Title">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="couponCode">Coupon Code</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="couponCode" placeholder="Coupon Code">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="startDate">Start Date</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="startDate" placeholder="dd/mm/yyyy">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="endDate">End Date</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="endDate" placeholder="dd/mm/yyyy">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end">Free Shipping</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="freeShipping">
+                                    <label class="form-check-label" for="freeShipping">
+                                        Allow Free Shipping
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="quantity">Quantity</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="quantity" placeholder="Quantity">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="discountType">Discount Type</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" id="discountType">
+                                    <option selected>Percent</option>
+                                    <option value="1">Fixed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="discountValue">Discount Value</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="discountValue" placeholder="Percent">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end">Status</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="enableCoupon">
+                                    <label class="form-check-label" for="enableCoupon">
+                                        Enable the Coupon
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-pane fade" id="restriction" role="tabpanel" aria-labelledby="restriction-tab">
+                <form class="theme-form mt-4" id="formRestriction">
+                    <div class="row">
+                        <h5 class="mb-3">Restriction</h5>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="products">Products</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="products" placeholder="Search product">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="category">Category</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" id="category">
+                                    <option selected>Electronics</option>
+                                    <option value="1">Clothing</option>
+                                    <option value="2">Bags</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="minSpend">Minimum Spend</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="minSpend" placeholder="Minimum Spend">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="maxSpend">Maximum Spend</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="maxSpend" placeholder="Maximum Spend">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-pane fade" id="usage" role="tabpanel" aria-labelledby="usage-tab">
+                <form class="theme-form mt-4" id="formUsage">
+                    <div class="row">
+                        <h5 class="mb-3">Usage Limits</h5>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="perLimited">
+                                Per Limited
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="perLimited" value="3">
+                            </div>
+
+                                
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-sm-end" for="perCustomer">Per Customer</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="perCustomer" value="1">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-sm-9">
+                    <button type="submit" class="btn btn-success" form="formGeneral">Save Coupon</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
