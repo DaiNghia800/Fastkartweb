@@ -116,6 +116,11 @@ p {
 .theme-bg-color {
     background-color: var(--theme-color);
 }
+
+.btn:hover{
+    background-color: var(--theme-color);
+    border-color: none;
+}
 /*table */
 .table th {
     color: #4a5568;
@@ -1441,7 +1446,7 @@ header.close {
 
 .theme-form .form-control:focus {
     color: #898989 !important;
-    border-color: #efefef !important;
+    border-color: #efefef;
     box-shadow: none !important;
 }
 
@@ -1607,6 +1612,12 @@ header.close {
 }
 /*end dropzone*/
 
+/*suggestions*/
+.theme-form .suggestions button:hover {
+    background: #f9f9f9;
+}
+/*end suggestions*/
+
 /*dropdown*/
 .dropdown.icon-dropdown {
     background-color: #f9f9f6;
@@ -1683,6 +1694,7 @@ header.close {
     background-color: #fff;
     box-shadow: 0 0 20px rgba(89, 102, 122, 0.1);
     padding: 15px;
+    z-index: 5;
 }
 
 .footer p {

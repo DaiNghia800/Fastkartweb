@@ -14,9 +14,9 @@
                         <h5>Product Information</h5>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="name" class="col-3 form-label-title">Product Name</label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="name" value="" id="name" placeholder="Product name" />
+                        <label for="productName" class="col-3 form-label-title">Product Name</label>
+                        <div class="col-9 parent">
+                            <input class="form-control" type="text" name="name" value="" id="productName" placeholder="Nhập tên sản phẩm (VD: Rau muống Đà Lạt)" />
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
@@ -126,7 +126,7 @@
                         <div id="option-group-0" class="option-group">
                             <div class="row mb-4 align-items-center">
                                 <label for="optionName" class="col-3 form-label-title">Option Name</label>
-                                <div class="col-9">
+                                <div class="col-9 parent">
                                     <select class="js-example-basic-single w-100" option-name option-name-data='@Html.Raw(Json.Serialize(ViewBag.optionNames))'>
                                         <option value="" selected>--Chọn một thuộc tính--</option>
                                         @{
@@ -143,9 +143,9 @@
                             </div>
                             <div class="row mb-4 align-items-center">
                                 <label for="optionValue" class="col-3 form-label-title">Option Value</label>
-                                <div class="col-9">
+                                <div class="col-9 parent">
                                     <input id="optionValue" data-allow-new="true" type="text" data-role="tagsinput" option-value placeholder="Type tag & hit enter" />
-                                    <div id="suggestions" class="list-group position-absolute" style="z-index:1000; display:none;"></div>
+                                    <div suggestions class="list-group position-absolute suggestions" style="z-index:1000; display:none;"></div>
                                 </div>
                             </div>
                         </div>
@@ -162,9 +162,9 @@
                         <h5>Shipping</h5>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="weight" class="col-3 form-label-title">Weight (kg)</label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="name" value="" id="weight" placeholder="Weight" />
+                        <label for="productWeight" class="col-3 form-label-title">Weight (kg)</label>
+                        <div class="col-9 parent">
+                            <input class="form-control" type="text" name="weight" value="" id="productWeight" placeholder="Weight" />
                         </div>
                     </div>
                 </div>
@@ -173,17 +173,17 @@
                         <h5>Product Price</h5>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="price" class="col-3 form-label-title">Price</label>
-                        <div class="col-9">
-                            <input class="form-control" type="number" name="name" value="" id="price" placeholder="0" />
+                        <label for="productPrice" class="col-3 form-label-title">Price</label>
+                        <div class="col-9 parent">
+                            <input class="form-control" type="text" name="price" value="" id="productPrice" placeholder="0" />
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="discount" class="col-3 form-label-title">Discount</label>
-                        <div class="col-9">
+                        <label for="productDiscount" class="col-3 form-label-title">Discount</label>
+                        <div class="col-9 parent">
                             <div class="row">
                                 <div class="col-11 pe-0">
-                                    <input class="form-control rounded-0 rounded-start" type="number" name="name" value="" id="discount" placeholder="0" />
+                                    <input class="form-control rounded-0 rounded-start" type="text" name="discount" value="" id="productDiscount" placeholder="0" />
                                 </div>
                                 <div class="col-1 ps-0">
                                     <span class="theme-bg-color fw-bold text-white d-flex justify-content-center align-items-center w-100 h-100 rounded-end">%</span>
@@ -198,8 +198,8 @@
                     </div>
                     <div class="row mb-4 align-items-center">
                         <label for="sku" class="col-3 form-label-title">SKU</label>
-                        <div class="col-9">
-                            <input class="form-control" type="text" name="name" value="" id="sku" />
+                        <div class="col-9 parent">
+                            <input class="form-control" type="text" name="sku" value="" id="sku" />
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
@@ -218,7 +218,7 @@
                             </select>
                         </div>
                     </div>
-                    <table class="table variant-table table-responsive-sm mb-0">
+                    <table class="table variant-table table-responsive-sm mb-0" variant-table>
                         <thead>
                             <tr>
                                 <th>Variant</th>
@@ -229,7 +229,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @* <tr>
                                 <td>Red</td>
                                 <td>
                                     <input class="form-control" type="number" placeholder="0">
@@ -270,7 +270,7 @@
                                         </li>
                                     </ul>
                                 </td>
-                            </tr>
+                            </tr> *@
                         </tbody>
                     </table>
                 </div>
