@@ -1,14 +1,17 @@
 ﻿using Fastkart.Models.EF;
 using Fastkart.Models.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Fastkart.Services
 {
     public class FastkartService : IFastkartService
     {
         private readonly ApplicationDbContext _context;
-
+       
         public FastkartService(ApplicationDbContext context)
         {
             _context = context;
@@ -20,7 +23,8 @@ namespace Fastkart.Services
             {
                 return _context.Product.Include(p => p.SubCategory).ThenInclude(p => p.ProductCategory).ToList();
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return new List<Product>();
             }
         }
@@ -30,7 +34,8 @@ namespace Fastkart.Services
             try
             {
                 return _context.ProductCategory.AsNoTracking().ToList();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new List<ProductCategory>();
             }
@@ -39,8 +44,9 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.ProductSubCategory .AsNoTracking().ToList();
-            } catch(Exception ex)
+                return _context.ProductSubCategory.AsNoTracking().ToList();
+            }
+            catch (Exception ex)
             {
                 return new List<ProductSubCategory>();
             }
@@ -50,7 +56,8 @@ namespace Fastkart.Services
             try
             {
                 return _context.Brand.AsNoTracking().ToList();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new List<Brand>();
             }
@@ -60,7 +67,8 @@ namespace Fastkart.Services
             try
             {
                 return _context.Unit.AsNoTracking().ToList();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new List<Unit>();
             }
@@ -71,7 +79,8 @@ namespace Fastkart.Services
             try
             {
                 return _context.ProductSubCategory.Where(t => t.CategoryUid == categoryId).AsNoTracking().ToList();
-            } catch
+            }
+            catch
             {
                 return new List<ProductSubCategory>();
             }
@@ -106,7 +115,8 @@ namespace Fastkart.Services
             try
             {
                 return _context.OptionValue.Where(t => t.OptionNameUid == optionNameId).Select(t => t.Value).AsNoTracking().ToList();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new List<string>();
             }

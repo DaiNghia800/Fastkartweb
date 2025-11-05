@@ -19,7 +19,8 @@ namespace Fastkart.Models.EF
         public DbSet<OptionValue> OptionValue { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<ProductVariantOptionValue> ProductVariantOptionValue { get; set; }
-        
+        public DbSet<Roles> Roles { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -231,9 +232,9 @@ namespace Fastkart.Models.EF
                 entity.Property(e => e.Status)
                     .HasMaxLength(50)
                     .IsRequired();
-                entity.HasOne(e => e.Brand)          
-                    .WithMany()                    
-                    .HasForeignKey(e => e.BrandUid) 
+                entity.HasOne(e => e.Brand)
+                    .WithMany()
+                    .HasForeignKey(e => e.BrandUid)
                     .OnDelete(DeleteBehavior.Restrict);
                 entity.Property(e => e.Weight)
                     .HasColumnType("float");
@@ -290,7 +291,7 @@ namespace Fastkart.Models.EF
                       .HasMaxLength(100);
 
                 entity.HasIndex(e => new { e.OptionNameUid, e.Value })
-                      .IsUnique(); 
+                      .IsUnique();
 
                 entity.HasOne(e => e.OptionName)
                       .WithMany(n => n.OptionValues)
@@ -349,6 +350,81 @@ namespace Fastkart.Models.EF
                 entity.HasIndex(e => new { e.ProductVariantUid, e.OptionValueUid })
                       .IsUnique();
             });
+            modelBuilder.Entity<Roles>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+                entity.Property(e => e.RoleName)
+                    .HasMaxLength(100)
+                    .IsRequired();
+                entity.Property(e => e.CreatedAt)
+                   .HasColumnType("datetime")
+                   .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.CreatedBy)
+                   .HasMaxLength(100)
+                   .IsUnicode(true)
+                   .IsRequired(false);
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(true)
+                    .IsRequired(false);
+                entity.Property(e => e.Deleted)
+                    .HasDefaultValue(false);
+            });
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+                entity.Property(e => e.FullName)
+                    .HasMaxLength(200)
+                    .IsUnicode(true)
+                    .IsRequired();
+                entity.Property(e => e.ImgUser)
+                    .HasMaxLength(255)
+                    .IsRequired(false);
+
+                entity.Property(e => e.Email)
+                    .HasConversion(v => v.ToLower(), v => v)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .IsRequired();
+                entity.HasIndex(e => e.Email)
+                    .IsUnique();
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .IsRequired(false);
+                entity.Property(e => e.Address)
+                    .HasColumnType("nvarchar(255)")
+                    .IsRequired(false);
+                entity.Property(e => e.PasswordHash)
+                    .HasColumnType("nvarchar(max)")
+                    .IsRequired();
+                entity.HasOne(u => u.Role)
+                      .WithMany(r => r.Users)
+                      .HasForeignKey(u => u.RoleUid)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.CreatedBy)
+                   .HasMaxLength(100)
+                   .IsUnicode(true)
+                   .IsRequired(false);
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(true)
+                    .IsRequired(false);
+                entity.Property(e => e.Deleted)
+                    .HasDefaultValue(false);
+
+            });
+
         }
     }
 }
