@@ -1,0 +1,54 @@
+﻿@model Fastkart.Models.Entities.Pages
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["title"] = "Create New Page";
+}
+
+<section class="list-page-area">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                <h5>Create New Page</h5>
+            </div>
+
+            @* HIỂN THỊ LỖI NẾU CÓ *@
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>⚠️ Lỗi:</strong> @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form method="post" class="theme-form">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Title">Page Title *</label>
+                    <input class="form-control" asp-for="Title" type="text" placeholder="Nhập tiêu đề page" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Content">Content *</label>
+                    <textarea class="form-control" asp-for="Content" rows="5" placeholder="Nhập nội dung page" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i> Save Page
+                    </button>
+                    <a href="/admin/list-page" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    // LOG KHI FORM ĐƯỢC SUBMIT
+    document.querySelector('form').addEventListener('submit', function(e) {
+        console.log('📤 Form đang được submit...');
+        console.log('Title:', document.querySelector('[name="Title"]').value);
+        console.log('Content:', document.querySelector('[name="Content"]').value);
+    });
+</script>

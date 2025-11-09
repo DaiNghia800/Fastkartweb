@@ -1,13 +1,20 @@
-using Fastkart.Models.EF;
+﻿using Fastkart.Models.EF;
 using Fastkart.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var sqlConnectionString = "Server=SONNT\\SQLEXPRESS;Database=Fastkart;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(sqlConnectionString)
+); 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IFastkartService, FastkartService>();
+builder.Services.AddScoped<IPageService, PageService>();
 
 var app = builder.Build();
 
@@ -23,7 +30,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

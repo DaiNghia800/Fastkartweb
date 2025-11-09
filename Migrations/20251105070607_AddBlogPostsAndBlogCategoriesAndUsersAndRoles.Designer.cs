@@ -4,6 +4,7 @@ using Fastkart.Models.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251105070607_AddBlogPostsAndBlogCategoriesAndUsersAndRoles")]
+    partial class AddBlogPostsAndBlogCategoriesAndUsersAndRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,74 +195,6 @@ namespace Fastkart.Migrations
                         .IsUnique();
 
                     b.ToTable("OptionValue");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.Pages", b =>
-                {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
-
-                    b.Property<int>("AuthorUid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("Deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("PublishedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(100)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("AuthorUid");
-
-                    b.HasIndex("Slug")
-                        .IsUnique();
-
-                    b.ToTable("Pages");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -839,17 +774,6 @@ namespace Fastkart.Migrations
                         .IsRequired();
 
                     b.Navigation("OptionName");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.Pages", b =>
-                {
-                    b.HasOne("Fastkart.Models.Entities.Users", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorUid")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>

@@ -111,5 +111,54 @@ namespace Fastkart.Services
                 return new List<string>();
             }
         }
+        public List<BlogCategories> GetBlogCategories()
+        {
+            try
+            {
+                return _context.BlogCategories.AsNoTracking().ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<BlogCategories>();
+            }
+        }
+        public List<BlogPosts> GetAllBlogPosts()
+        {
+            try
+            {
+                return _context.BlogPosts.Include(b => b.Category).Include(b => b.Users).AsNoTracking().ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<BlogPosts>();
+            }
+        }
+        
+        public List<Roles> GetAllRoles()
+        {
+            try
+            {
+                return _context.Roles.AsNoTracking().ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<Roles>();
+            }
+        }
+
+        public List<Users> GetAllUsers()
+        {
+            try
+            {
+                return _context.Users
+                               .Include(u => u.Role)
+                               .AsNoTracking()
+                               .ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<Users>();
+            }
+        }
     }
 }

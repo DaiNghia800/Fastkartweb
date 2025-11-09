@@ -13,5 +13,9 @@ namespace Fastkart.Services
         List<OptionName> GetAllOptionName();
         List<StockStatus> GetAllStockStatus();
         List<string> GetOptionValues(int optionNameId);
+        List<BlogCategories> GetBlogCategories();
+        List<BlogPosts> GetAllBlogPosts();
+        List<Roles> GetAllRoles();
+        List<Users> GetAllUsers();
     }
 }
