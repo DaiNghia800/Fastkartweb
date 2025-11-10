@@ -1,8 +1,13 @@
-﻿namespace Fastkart.Models.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Fastkart.Models.Entities
 {
     public class ProductSubCategory
     {
         public int Uid { get; set; }
+
+        [Required(ErrorMessage = "Danh mục không được để trống")]
+        [RegularExpression(@"^[\p{L}0-9\s\-]+$", ErrorMessage = "Danh mục không được chứa ký tự đặc biệt")]
         public string SubCategoryName { get; set; }
         public string Slug { get; set; }
         public ProductCategory ProductCategory { get; set; }

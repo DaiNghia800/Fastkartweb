@@ -1,30 +1,39 @@
 ﻿@using Fastkart.Models.Entities;
-@model ProductCategory;
+@model ProductSubCategory;
 @{
     Layout = "_LayoutAdmin";
-    ViewData["title"] = "Create Category";
+    ViewData["title"] = "Create SubCategory";
 }
 
 <section class="product-category-create">
-    <form action="/admin/product-category/create" method="post" class="theme-form theme-form-2" id="mainForm" enctype="multipart/form-data">
+    <form action="/admin/sub-category/create" method="post" class="theme-form theme-form-2">
         <div class="row">
             <div class="col-8 mx-auto">
                 <div class="card">
                     <div class="card-header2">
-                        <h5>Category Information</h5>
+                        <h5>SubCategory Information</h5>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="name" class="col-3 form-label-title">Category Name</label>
+                        <label for="name" class="col-3 form-label-title">SubCategory Name</label>
                         <div class="col-9">
-                            <input class="form-control" type="text" asp-for="CategoryName" id="name" placeholder="Category Name" />
-                            <span asp-validation-for="CategoryName" class="text-danger"></span>
+                            <input class="form-control" type="text" asp-for="SubCategoryName" id="name" placeholder="SubCategory Name" />
+                            <span asp-validation-for="SubCategoryName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label class="col-3 form-label-title">Category Image</label>
+                        <label for="category" class="col-3 form-label-title">Category</label>
                         <div class="col-9">
-                            <div id="my-dropzone" class="dropzone"></div>
-                            <input type="hidden" name="Thumbnail" id="Thumbnail">
+                            <select id="category" class="js-example-basic-single w-100" name="CategoryUid">
+                                @{
+                                    if (ViewData["productCategories"] != null)
+                                    {
+                                        foreach (var productCategory in ViewBag.productCategories)
+                                        {
+                                            <option value="@productCategory.Uid">@productCategory.CategoryName</option>
+                                        }
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
@@ -45,21 +54,14 @@
                         </div>
                     </div>
                     <div class="row mb-4 align-items-start">
-                        <label for="desc" class="col-3 form-label-title">Product Description</label>
+                        <label for="desc" class="col-3 form-label-title">Description</label>
                         <div class="col-9">
                             <textarea id="editor" name="Description"></textarea>
                         </div>
                     </div>
-                    <div class="row mb-4 align-items-center">
-                        <label for="position" class="col-3 form-label-title">Position</label>
-                        <div class="col-9 parent">
-                            <input class="form-control" asp-for="Position" type="number" id="position" placeholder="Tự động tăng" />
-                            <span asp-validation-for="Position" class="text-danger"></span>
-                        </div>
-                    </div>
                 </div>
                 <div class="d-flex justify-content-end mb-3">
-                    <button type="submit" class="btn text-white theme-bg-color ms-auto" button-save>Add Product</button>
+                    <button type="submit" class="btn text-white theme-bg-color ms-auto" button-save>Add SubCategory</button>
                 </div>
             </div>
         </div>

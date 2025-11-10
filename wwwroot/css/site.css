@@ -167,7 +167,71 @@ thead, tbody, tfoot, tr, td, th {
     border-radius: 15px;
     padding: 25px;
 }
+
+.card [sort-select] ~ .select2-container{
+    min-width: 250px !important;
+}
+
+.card [sort-select] ~ .select2-container .selection{
+    border-radius: 3px;
+}
+
+.card [form-change-multi] .select2-container {
+    min-width: 200px !important;
+}
+
+.card [form-change-multi] .select2-container .selection{
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.card [form-change-multi] button{
+    height: 41px;
+    background-color: var(--theme-color);
+    color: white;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border: 1px solid var(--theme-color);
+}
+
+.card [box-filter] ~ .select2-container {
+    min-width: 200px;
+}
 /*end card */
+/*radio-section*/
+.radio-section label {
+    margin-right: 20px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.radio-section label > input {
+    display: none;
+}
+
+.radio-section label > input:checked + i {
+    background: var(--theme-color);
+}
+
+.radio-section label > i {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+    border: 2px solid var(--theme-color);
+    box-shadow: none;
+    transition: 0.25s;
+}
+/*end radio-section*/
+
+/*validation-error*/
+input.input-validation-error {
+    border-color: #dc3545 !important;
+}
+/*end validation-error*/
+
 /*header*/
 .header {
     max-width: 100vw;
@@ -1126,6 +1190,79 @@ header.close {
 }
 /*end dashboard */
 
+/*box page*/
+.box-page {
+    margin-top: calc(22px + 13 * (100vw - 320px) / 1600);
+}
+
+.box-page .page-item {
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0);
+    transition: all 0.3s ease-in-out;
+}
+
+.box-page .page-item:hover {
+    border: 1px solid var(--theme-color);
+}
+
+.box-page .page-item a {
+    display: block;
+    color: #4a5568;
+    padding: 6px 12px;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.box-page .page-item.active a {
+    color: white;
+    background-color: var(--theme-color);
+}
+
+.box-page .page-item.disabled {
+    pointer-events: none;
+}
+/*end box page*/
+
+/*check box*/
+.checkbox_animated {
+    cursor: pointer;
+    position: relative;
+    margin: 0 16px 0 0;
+}
+
+.checkbox_animated:before {
+    transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    transform: rotate(-45deg) scale(0, 0);
+    content: "";
+    position: absolute;
+    left: 0.25rem;
+    top: 0.225rem;
+    z-index: 1;
+    width: .75rem;
+    height: .375rem;
+    border: 2px solid var(--theme-color);
+    border-top-style: none;
+    border-right-style: none;
+}
+
+.checkbox_animated:checked:before {
+    transform: rotate(-45deg) scale(1, 1);
+}
+
+.checkbox_animated:after {
+    content: "";
+    position: absolute;
+    top: -0.125rem;
+    left: 0;
+    width: 1.3rem;
+    height: 1.3rem;
+    background: #fff;
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+/*end check box*/
+
 /*product */
 .card-table {
     padding: calc(14px + 11 * ((100vw - 320px) / 1600));
@@ -1182,7 +1319,7 @@ header.close {
 .table-search {
     margin-bottom: 25px;
     color: #333;
-    float: right;
+    text-align: right;
 }
 
 .table-search input {
@@ -1208,6 +1345,7 @@ header.close {
 .theme-table thead tr th:first-child {
     border-top-left-radius: 9px;
     border-bottom-left-radius: 9px;
+    min-width: 70px;
 }
 
 .theme-table thead tr th:last-child {
@@ -1249,25 +1387,32 @@ header.close {
     color: var(--theme-color);
 }
 
+.theme-table tbody tr td.td-position input{
+    width: 100px;
+    border: 1px solid #efefef;
+    text-align: center;
+}
+
 .theme-table tbody tr td.td-price {
     font-weight: 800;
 }
 
-.theme-table tbody tr td.status span {
+.theme-table tbody tr td.status button {
     padding: 5px 10px;
     text-transform: capitalize;
     display: inline-block;
     border-radius: 5px;
     font-size: 12px;
     font-weight: 500;
+    border: none;
 }
 
-.theme-table tbody tr td.status-danger span {
+.theme-table tbody tr td.status-danger button {
     background-color: rgba(226, 36, 84, 0.15);
     color: #e22454;
 }
 
-.theme-table tbody tr td.status-close span {
+.theme-table tbody tr td.status-close button {
     background-color: rgba(47, 135, 51, 0.15);
     color: #2f8733;
 }
@@ -1395,18 +1540,18 @@ header.close {
     padding: 6px 10px !important;
 }
 
-.theme-form .select2-container {
+.theme-form-2 .select2-container {
     width: 100% !important;
 }
 
-.theme-form .select2-container .selection {
+.select2-container .selection {
     display: inline-block;
     width: 100%;
     background-color: #f9f9f6 !important;
     border: 1px solid #efefef;
 }
 
-.theme-form .select2-selection__rendered {
+.select2-selection__rendered {
     display: flex !important;
     justify-content: space-between;
     align-items: center;
@@ -1464,6 +1609,7 @@ header.close {
 }
 
 .theme-form .variant-table {
+    display: none;
     border: 1px solid #efefef;
 }
 
@@ -1602,7 +1748,13 @@ header.close {
     padding: 0;
 }
 
-.dropzone .dz-preview:hover .dz-image img{
+.dropzone .dz-preview .dz-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dropzone .dz-preview:hover .dz-image img {
     filter: none;
     transform: scale(1);
 }

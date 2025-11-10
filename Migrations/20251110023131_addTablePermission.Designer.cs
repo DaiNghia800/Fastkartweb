@@ -4,6 +4,7 @@ using Fastkart.Models.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251110023131_addTablePermission")]
+    partial class addTablePermission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,7 +117,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Functions");
+                    b.ToTable("Function");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
@@ -147,7 +150,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permission");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
@@ -170,7 +173,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionTypes");
+                    b.ToTable("PermissionType");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>

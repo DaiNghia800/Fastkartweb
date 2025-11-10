@@ -2,11 +2,12 @@
 @model ProductCategory;
 @{
     Layout = "_LayoutAdmin";
-    ViewData["title"] = "Create Category";
+    ViewData["title"] = "Edit Category";
+    var productCategory = ViewBag.productCategory as ProductCategory;
 }
 
 <section class="product-category-create">
-    <form action="/admin/product-category/create" method="post" class="theme-form theme-form-2" id="mainForm" enctype="multipart/form-data">
+    <form action="/admin/product-category/edit/@productCategory.Uid" method="post" class="theme-form theme-form-2" id="mainForm" enctype="multipart/form-data">
         <div class="row">
             <div class="col-8 mx-auto">
                 <div class="card">
@@ -16,7 +17,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="name" class="col-3 form-label-title">Category Name</label>
                         <div class="col-9">
-                            <input class="form-control" type="text" asp-for="CategoryName" id="name" placeholder="Category Name" />
+                            <input class="form-control" type="text" asp-for="CategoryName" id="name" value="@productCategory.CategoryName" placeholder="Category Name" />
                             <span asp-validation-for="CategoryName" class="text-danger"></span>
                         </div>
                     </div>
@@ -24,7 +25,7 @@
                         <label class="col-3 form-label-title">Category Image</label>
                         <div class="col-9">
                             <div id="my-dropzone" class="dropzone"></div>
-                            <input type="hidden" name="Thumbnail" id="Thumbnail">
+                            <input type="hidden" name="Thumbnail" id="Thumbnail" data-thumbnail="@productCategory.Thumbnail">
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
@@ -32,12 +33,12 @@
                         <div class="col-9">
                             <div class="radio-section">
                                 <label>
-                                    <input type="radio" name="Status" value="Active" checked="">
+                                    <input type="radio" name="Status" value="Active" @(productCategory.Status == "Active" ? "checked" : "")>
                                     <i></i>
                                     <span>Active</span>
                                 </label>
                                 <label>
-                                    <input type="radio" name="Status" value="Inactive">
+                                    <input type="radio" name="Status" value="Inactive" @(productCategory.Status == "Inactive" ? "checked" : "")>
                                     <i></i>
                                     <span>Inactive</span>
                                 </label>
@@ -47,13 +48,13 @@
                     <div class="row mb-4 align-items-start">
                         <label for="desc" class="col-3 form-label-title">Product Description</label>
                         <div class="col-9">
-                            <textarea id="editor" name="Description"></textarea>
+                            <textarea id="editor" name="Description">@productCategory.Description</textarea>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
                         <label for="position" class="col-3 form-label-title">Position</label>
                         <div class="col-9 parent">
-                            <input class="form-control" asp-for="Position" type="number" id="position" placeholder="Tự động tăng" />
+                            <input class="form-control" asp-for="Position" type="number" id="position" value="@productCategory.Position" placeholder="Tự động tăng" />
                             <span asp-validation-for="Position" class="text-danger"></span>
                         </div>
                     </div>

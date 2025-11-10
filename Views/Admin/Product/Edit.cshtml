@@ -2,21 +2,22 @@
 @model Product;
 @{
     Layout = "_LayoutAdmin";
-    ViewData["title"] = "Create Product";
+    ViewData["title"] = "Edit Product";
+    var product = ViewBag.product as Product;
 }
 
 <section class="product-create">
-    <form action="/admin/product/create" method="post" class="theme-form theme-form-2" id="mainForm" enctype="multipart/form-data">
+    <form action="/admin/product/edit/@product.Uid" method="post" enctype="multipart/form-data" class="theme-form theme-form-2" id="mainForm">
         <div class="row">
             <div class="col-8 mx-auto">
                 <div class="card">
                     <div class="card-header2">
-                        <h5>Product Information</h5>
+                        <h5>Edit Product Information</h5>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="productName" class="col-3 form-label-title">Product Name</label>
+                        <label for="productName" class="col-3 form-label-title">@product.ProductName</label>
                         <div class="col-9 parent">
-                            <input class="form-control" asp-for="ProductName" type="text" id="productName" placeholder="Nhập tên sản phẩm (VD: Rau muống Đà Lạt)" />
+                            <input class="form-control" asp-for="ProductName" type="text" id="productName" value=@product.ProductName placeholder="Nhập tên sản phẩm (VD: Rau muống Đà Lạt)" />
                             <span asp-validation-for="ProductName" class="text-danger"></span>
                         </div>
                     </div>
@@ -25,11 +26,11 @@
                         <div class="col-9">
                             <select id="category" class="js-example-basic-single w-100">
                                 @{
-                                    if(ViewData["productCategories"] != null)
+                                    if (ViewData["productCategories"] != null)
                                     {
                                         foreach (var productCategory in ViewBag.productCategories)
                                         {
-                                            <option value="@productCategory.Uid">@productCategory.CategoryName</option>
+                                            <option value="@productCategory.Uid" selected=@(product.SubCategory.CategoryUid == productCategory.Uid  ? true : false)>@productCategory.CategoryName</option>
                                         }
                                     }
                                 }
@@ -39,10 +40,8 @@
                     <div class="row mb-4 align-items-center">
                         <label for="subcategory" class="col-3 form-label-title">Subcategory</label>
                         <div class="col-9">
-                            <select id="subcategory" class="js-example-basic-single w-100" name="SubCategoryUid">
-                                <option disabled value="">Static Menu</option>
-                                <option value="">Simple</option>
-                                <option value="">Classified</option>
+                            <select id="subcategory" class="js-example-basic-single w-100" name="SubCategoryUid" subcategory-id=@product.SubCategoryUid>
+                                
                             </select>
                         </div>
                     </div>
@@ -51,11 +50,11 @@
                         <div class="col-9">
                             <select id="brand" class="js-example-basic-single w-100" name="BrandUid">
                                 @{
-                                    if(ViewData["brands"] != null)
+                                    if (ViewData["brands"] != null)
                                     {
-                                        foreach(Brand brand in ViewBag.brands)
+                                        foreach (Brand brand in ViewBag.brands)
                                         {
-                                            <option value=@brand.Uid>@brand.BrandName</option>
+                                            <option value=@brand.Uid selected=@(product.BrandUid == brand.Uid ? true : false)>@brand.BrandName</option>
                                         }
                                     }
                                 }
@@ -71,7 +70,7 @@
                                     {
                                         foreach (Unit unit in ViewBag.units)
                                         {
-                                            <option value=@unit.Uid>@unit.UnitName</option>
+                                            <option value=@unit.Uid selected=@(product.UnitUid == unit.Uid ? true : false)>@unit.UnitName</option>
                                         }
                                     }
                                 }
@@ -82,7 +81,7 @@
                         <label for="exchangeable" class="col-3 form-label-title">Exchangeable</label>
                         <div class="col-9">
                             <label class="switch">
-                                <input type="checkbox" name="Exchangeable" id="exchangeable" value="true" class="d-none" />
+                                <input type="checkbox" name="Exchangeable" id="exchangeable" value="true" class="d-none" @(product.Exchangeable ? "checked" : "")/>
                                 <span class="switch-state"></span>
                             </label>
                         </div>
@@ -91,7 +90,7 @@
                         <label for="refundable" class="col-3 form-label-title">Refundable</label>
                         <div class="col-9">
                             <label class="switch">
-                                <input type="checkbox" name="Refundable" id="refundable" value="true" class="d-none" checked />
+                                <input type="checkbox" name="Refundable" id="refundable" value="true" class="d-none" @(product.Refundable ? "checked" : "") />
                                 <span class="switch-state"></span>
                             </label>
                         </div>
@@ -101,12 +100,12 @@
                         <div class="col-9">
                             <div class="radio-section">
                                 <label>
-                                    <input type="radio" name="Status" value="Active" checked="">
+                                    <input type="radio" name="Status" value="Active" @(product.Status == "Active" ? "checked" : "")>
                                     <i></i>
                                     <span>Active</span>
                                 </label>
                                 <label>
-                                    <input type="radio" name="Status" value="Inactive">
+                                    <input type="radio" name="Status" value="Inactive" @(product.Status == "Inactive" ? "checked" : "")>
                                     <i></i>
                                     <span>Inactive</span>
                                 </label>
@@ -116,7 +115,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="position" class="col-3 form-label-title">Position</label>
                         <div class="col-9 parent">
-                            <input class="form-control" asp-for="Position" type="number" id="position" placeholder="Tự động tăng" />
+                            <input class="form-control" asp-for="Position" type="number" value="@product.Position" id="position" placeholder="Tự động tăng" />
                             <span asp-validation-for="Position" class="text-danger"></span>
                         </div>
                     </div>
@@ -128,7 +127,7 @@
                     <div class="row mb-4 align-items-start">
                         <label for="desc" class="col-3 form-label-title">Product Description</label>
                         <div class="col-9">
-                            <textarea id="editor" name="Description"></textarea>
+                            <textarea id="editor" name="Description">@product.Description</textarea>
                         </div>
                     </div>
                 </div>
@@ -140,7 +139,7 @@
                         <label for="desc" class="col-3 form-label-title">Images</label>
                         <div class="col-9">
                             <div id="my-dropzone" class="dropzone"></div>
-                            <input type="hidden" name="Thumbnail" id="Thumbnail">
+                            <input type="hidden" name="Thumbnail" id="Thumbnail" data-thumbnail='@(string.IsNullOrEmpty(product.Thumbnail) ? "[]" : product.Thumbnail)'>
                         </div>
                     </div>
                 </div>
@@ -151,7 +150,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="productWeight" class="col-3 form-label-title">Weight (kg)</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="text" name="Weight" value="" id="productWeight" placeholder="Weight" />
+                            <input class="form-control" type="text" name="Weight" value=@product.Weight id="productWeight" placeholder="Weight" />
                         </div>
                     </div>
                 </div>
@@ -162,7 +161,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="productPrice" class="col-3 form-label-title">Price</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="number" asp-for="Price" id="productPrice" placeholder="0" />
+                            <input class="form-control" step="0.01" type="number" asp-for="Price" id="productPrice" value="@(product.Price % 1 == 0 ? ((int)product.Price).ToString() : product.Price.Value.ToString("0.##"))" placeholder="0" />
                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                     </div>
@@ -171,7 +170,7 @@
                         <div class="col-9 parent">
                             <div class="row">
                                 <div class="col-11 pe-0">
-                                    <input class="form-control rounded-0 rounded-start" asp-for="Discount" type="number" id="productDiscount" placeholder="0" />                
+                                    <input class="form-control rounded-0 rounded-start" asp-for="Discount" type="number" value=@product.Discount id="productDiscount" placeholder="0" />
                                 </div>
                                 <div class="col-1 ps-0">
                                     <span class="theme-bg-color fw-bold text-white d-flex justify-content-center align-items-center w-100 h-100 rounded-end">%</span>
@@ -188,17 +187,16 @@
                     <div class="row mb-4 align-items-center" container-sku>
                         <label for="sku" class="col-3 form-label-title">SKU</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="text" asp-for="Sku" id="sku" />
-                            <span asp-validation-for="Sku" class="text-danger"></span>
+                            <input class="form-control" type="text" name="Sku" value=@product.Sku id="sku" />
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
                         <label for="StockQuantity" class="col-3 form-label-title">Stock Quantity</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="number" name="StockQuantity" id="StockQuantity" placeholder="0" />
+                            <input class="form-control" type="number" id="StockQuantity" name="StockQuantity" value=@product.StockQuantity placeholder="0" />
                         </div>
                     </div>
-                    <div class="row mb-4 align-items-center" >
+                    <div class="row mb-4 align-items-center">
                         <label for="optionName" class="col-3 form-label-title">Stock Status</label>
                         <div class="col-9">
                             <select class="js-example-basic-single w-100" name="StockStatusUid">
@@ -207,7 +205,7 @@
                                     {
                                         foreach (StockStatus stockStatus in ViewBag.stockStatus)
                                         {
-                                            <option value=@stockStatus.Uid>@stockStatus.StockName</option>
+                                            <option value=@stockStatus.Uid selected=@(product.StockStatusUid == stockStatus.Uid ? true : false)>@stockStatus.StockName</option>
                                         }
                                     }
                                 }
@@ -216,11 +214,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-3">
-                    <button type="submit" class="btn text-white theme-bg-color ms-auto"  button-save>Add Product</button>
+                    <button type="button" class="btn text-white theme-bg-color ms-auto" button-save>Update Product</button>
                 </div>
             </div>
         </div>
     </form>
-    
+
 </section>
 

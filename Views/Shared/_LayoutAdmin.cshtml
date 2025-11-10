@@ -3,9 +3,9 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="/lib/fontawesome/css/all.min.css" />
     <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/lib/slick/slick.css" />
@@ -202,6 +202,27 @@
                             </ul>
                         </li>
                         <li class="sidebar-list">
+                            <a href="#collapseSubcategory" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSubcategory">
+                                <i class="fa-regular fa-rectangle-list"></i>
+                                <span class="text-capitalize">SubCategory</span>
+                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </a>
+                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "show" : "")" id="collapseSubcategory">
+                                <li>
+                                    <a href="/admin/sub-category" class="text-capitalize">
+                                        SubCategory List
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/sub-category/create" class="text-capitalize">
+                                        Add new SubCategory
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-list">
                             <a href="#collapseAtributes" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseAtributes">
                                 <i class="fa-solid fa-sliders"></i>
                                 <span class="text-capitalize">Attributes</span>
@@ -239,6 +260,32 @@
                                 <li>
                                     <a href="/admin/user/create" class="text-capitalize">
                                         Add new user
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-list">
+                            <a href="#collapseRole" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseRole">
+                                <i class="fa-regular fa-user"></i>
+                                <span class="text-capitalize">Role</span>
+                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </a>
+                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/role") ? "show" : "")" id="collapseRole">
+                                <li>
+                                    <a href="/admin/role" class="text-capitalize">
+                                        All roles
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/role/create" class="text-capitalize">
+                                        Add new role
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/role/permission" class="text-capitalize">
+                                        Permission
                                     </a>
                                 </li>
                             </ul>
@@ -333,16 +380,15 @@
     </footer>
     <script src="/lib/jquery/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="/lib/tinymce/tinymce.min.js"></script>
     <script src="/lib/slick/slick.min.js"></script>
     <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/chart-custom.js"></script>
     <script src="~/js/sidebar-effect.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/product-form.js"></script>
 </body>
 </html>
