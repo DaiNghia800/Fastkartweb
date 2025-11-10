@@ -2,12 +2,17 @@ using Fastkart.Models.EF;
 using Fastkart.Services;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
+Console.WriteLine($"ENVIRONMENT: {builder.Environment.EnvironmentName}");
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IFastkartService, FastkartService>();
+builder.Services.AddScoped<MoMoService>();
+
 
 var app = builder.Build();
 

@@ -15,10 +15,6 @@ namespace Fastkart.Models.EF
         public DbSet<Unit> Unit { get; set; }
         public DbSet<StockStatus> StockStatus { get; set; }
         public DbSet<Product> Product { get; set; }
-        public DbSet<OptionName> OptionName { get; set; }
-        public DbSet<OptionValue> OptionValue { get; set; }
-        public DbSet<ProductVariant> ProductVariant { get; set; }
-        public DbSet<ProductVariantOptionValue> ProductVariantOptionValue { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -261,94 +257,7 @@ namespace Fastkart.Models.EF
                     .HasDefaultValue(false);
             });
 
-            modelBuilder.Entity<OptionName>(entity =>
-            {
-                entity.HasKey(e => e.Uid);
-
-                entity.Property(e => e.Name)
-                      .IsRequired()
-                      .HasMaxLength(100);
-                entity.Property(e => e.ValueType)
-                      .HasMaxLength(50)
-                      .HasDefaultValue("text");
-
-                entity.Property(e => e.Pattern)
-                      .HasMaxLength(255)
-                      .IsRequired(false);
-                entity.HasMany(e => e.OptionValues)
-                      .WithOne(v => v.OptionName)
-                      .HasForeignKey(v => v.OptionNameUid)
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<OptionValue>(entity =>
-            {
-                entity.HasKey(e => e.Uid);
-
-                entity.Property(e => e.Value)
-                      .IsRequired()
-                      .HasMaxLength(100);
-
-                entity.HasIndex(e => new { e.OptionNameUid, e.Value })
-                      .IsUnique(); 
-
-                entity.HasOne(e => e.OptionName)
-                      .WithMany(n => n.OptionValues)
-                      .HasForeignKey(e => e.OptionNameUid)
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<ProductVariant>(entity =>
-            {
-                entity.HasKey(e => e.Uid);
-                entity.HasOne(e => e.Product)
-                    .WithMany(p => p.Variants)
-                    .HasForeignKey(e => e.ProductUid)
-                    .OnDelete(DeleteBehavior.Cascade);
-                entity.Property(e => e.VariantName)
-                    .HasMaxLength(255)
-                    .IsRequired();
-                entity.Property(e => e.Price)
-                    .HasColumnType("decimal(18,2)")
-                    .IsRequired();
-                entity.Property(e => e.Sku)
-                    .HasMaxLength(100)
-                    .IsRequired();
-                entity.Property(e => e.Quantity)
-                    .HasDefaultValue(0);
-                entity.Property(e => e.CreatedAt)
-                   .HasColumnType("datetime")
-                   .HasDefaultValueSql("GETDATE()");
-                entity.Property(e => e.UpdatedAt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("GETDATE()");
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(100)
-                    .IsUnicode(true);
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(100)
-                    .IsUnicode(true);
-                entity.Property(e => e.Deleted)
-                    .HasDefaultValue(false);
-            });
-
-            modelBuilder.Entity<ProductVariantOptionValue>(entity =>
-            {
-                entity.HasKey(e => e.Uid);
-
-                entity.HasOne(e => e.ProductVariant)
-                      .WithMany(v => v.ProductVariantOptionValues)
-                      .HasForeignKey(e => e.ProductVariantUid)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(e => e.OptionValue)
-                      .WithMany(v => v.ProductVariantOptionValues)
-                      .HasForeignKey(e => e.OptionValueUid)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasIndex(e => new { e.ProductVariantUid, e.OptionValueUid })
-                      .IsUnique();
-            });
+           
         }
     }
 }
