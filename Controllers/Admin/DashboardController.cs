@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class DashboardController : Controller
     {
         [Route("/admin/dashboard")]

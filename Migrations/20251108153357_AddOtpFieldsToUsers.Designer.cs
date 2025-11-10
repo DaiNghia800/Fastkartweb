@@ -4,6 +4,7 @@ using Fastkart.Models.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251108153357_AddOtpFieldsToUsers")]
+    partial class AddOtpFieldsToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +83,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Brand", (string)null);
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.OptionName", b =>
@@ -108,7 +111,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("OptionName", (string)null);
+                    b.ToTable("OptionName");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>
@@ -132,7 +135,7 @@ namespace Fastkart.Migrations
                     b.HasIndex("OptionNameUid", "Value")
                         .IsUnique();
 
-                    b.ToTable("OptionValue", (string)null);
+                    b.ToTable("OptionValue");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -247,7 +250,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("UnitUid");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
@@ -311,7 +314,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("ProductCategory", (string)null);
+                    b.ToTable("ProductCategory");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductSubCategory", b =>
@@ -373,7 +376,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("CategoryUid");
 
-                    b.ToTable("ProductSubCategory", (string)null);
+                    b.ToTable("ProductSubCategory");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductVariant", b =>
@@ -434,7 +437,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("ProductUid");
 
-                    b.ToTable("ProductVariant", (string)null);
+                    b.ToTable("ProductVariant");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductVariantOptionValue", b =>
@@ -458,7 +461,7 @@ namespace Fastkart.Migrations
                     b.HasIndex("ProductVariantUid", "OptionValueUid")
                         .IsUnique();
 
-                    b.ToTable("ProductVariantOptionValue", (string)null);
+                    b.ToTable("ProductVariantOptionValue");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
@@ -501,7 +504,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.StockStatus", b =>
@@ -551,7 +554,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("StockStatus", (string)null);
+                    b.ToTable("StockStatus");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Unit", b =>
@@ -607,7 +610,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Unit", (string)null);
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
@@ -689,7 +692,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("RoleUid");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>

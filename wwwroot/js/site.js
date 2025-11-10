@@ -633,3 +633,25 @@ $(document).on('click', '.icon-delete', function (e) {
     });
 });
 //end delete Users
+
+//My profile (admin)
+function viewMyProfile(userId){
+    $.ajax({
+        url: '/admin/user/get-user-detail',
+        type: 'GET',
+        data: { id: userId },
+        success: function (response) { 
+            $('#myProfileContent').html(response);
+            $('#myProfileModal').modal('show');
+        },
+        error: function(xhr, status, error){
+            console.error('Error loading profile:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi khi tải dữ liệu",
+                text: "Không thể tải thông tin cá nhân"
+            });
+        }
+    });
+}
+//End my profile (admin)    

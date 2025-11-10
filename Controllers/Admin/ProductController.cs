@@ -1,8 +1,10 @@
 ﻿using Fastkart.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     [Route("admin/product")]
     public class ProductController : Controller
     {

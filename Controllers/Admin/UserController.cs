@@ -1,11 +1,14 @@
 ﻿using Fastkart.Models.Entities;
 using Fastkart.Models.ViewModels;
 using Fastkart.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
     [Route("/admin/user")]
     public class UserController : Controller
     {
@@ -16,11 +19,11 @@ namespace Fastkart.Controllers.Admin
         }
 
         [HttpGet("")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int pageNumber = 1)
         {
-            var listUsers = _userService.GetAllUsers();
-            ViewData["Users"] = listUsers;
-            return View("~/Views/Admin/User/index.cshtml");
+            int pageSize = 5;
+            var paginatedUsers = await _userService.GetAllUsersAsync(pageNumber, pageSize);
+            return View("~/Views/Admin/User/index.cshtml", paginatedUsers);
         }
 
         [HttpGet("create")]
@@ -109,7 +112,18 @@ namespace Fastkart.Controllers.Admin
             {
                 return Json(new { success = false, message = "ID không hợp lệ." });
             }
+            //Lấy ID của user hiện tại đang đăng nhập
+            var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (string.IsNullOrEmpty(currentUserIdClaim) || !int.TryParse(currentUserIdClaim, out int currentUserId))
+            {
+                return Json(new { success = false, message = "Không thể xác định người dùng hiện tại." });
+            }
+
+            if( id == currentUserId)
+            {
+                return Json(new { success = false, message = "Bạn không thể xóa chính tài khoản của mình!" });
+            }   
             var result = await _userService.DeleteUser(id);
 
             if (result)

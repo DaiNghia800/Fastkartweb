@@ -12,6 +12,9 @@ namespace Fastkart.Models.Entities
         public string Address { get; set; }
         public string PasswordHash { get; set; }
         public int RoleUid { get; set; }
+        public string? OtpCode { get; set; }
+        public DateTime? OtpExpiry { get; set; }
+        
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public string CreatedBy { get; set; }

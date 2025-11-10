@@ -402,6 +402,14 @@ namespace Fastkart.Models.EF
                 entity.Property(e => e.PasswordHash)
                     .HasColumnType("nvarchar(max)")
                     .IsRequired();
+                entity.Property(e => e.OtpCode)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .IsRequired(false);
+                entity.Property(e => e.OtpExpiry)
+                    .HasColumnType("datetime")
+                    .IsRequired(false);
+                
                 entity.HasOne(u => u.Role)
                       .WithMany(r => r.Users)
                       .HasForeignKey(u => u.RoleUid)
@@ -424,7 +432,6 @@ namespace Fastkart.Models.EF
                     .HasDefaultValue(false);
 
             });
-
         }
     }
 }
