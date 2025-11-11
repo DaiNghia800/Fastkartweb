@@ -1,9 +1,9 @@
 ﻿using Fastkart.Models.Entities;
+using Fastkart.Models.EF;
 using Fastkart.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using System.Text.RegularExpressions; // Thêm thư viện này
+using System.Text.RegularExpressions;
 
 namespace Fastkart.Controllers.Admin
 {
@@ -11,115 +11,304 @@ namespace Fastkart.Controllers.Admin
     public class ListPageController : Controller
     {
         private readonly IPageService _pageService;
+        private readonly ApplicationDbContext _context;
 
-        public ListPageController(IPageService pageService)
+        public ListPageController(IPageService pageService, ApplicationDbContext context)
         {
             _pageService = pageService;
+            _context = context;
         }
 
+        // ============================================
+        // INDEX - Danh sách pages
+        // ============================================
         [HttpGet("")]
         public IActionResult Index()
         {
-            List<Pages> pageList = _pageService.GetAllPages();
-            return View("~/Views/Admin/ListPage/index.cshtml", pageList);
+            try
+            {
+                List<Pages> pageList = _pageService.GetAllPages();
+                return View("~/Views/Admin/ListPage/index.cshtml", pageList);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error loading pages: {ex.Message}");
+                ViewBag.ErrorMessage = "Unable to load pages. Please try again.";
+                return View("~/Views/Admin/ListPage/index.cshtml", new List<Pages>());
+            }
         }
 
+        // ============================================
+        // CREATE - GET: Hiển thị form tạo mới
+        // ============================================
         [HttpGet("create")]
         public IActionResult Create()
         {
-            return View("~/Views/Admin/ListPage/ListPageCreate.cshtml");
+            // Load danh sách authors (users)
+            LoadAuthors();
+            return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", new Pages());
         }
 
+        // ============================================
+        // CREATE - POST: Xử lý tạo mới
+        // ============================================
         [HttpPost("create")]
-        [ValidateAntiForgeryToken] // <-- Nên thêm để bảo mật
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Pages newPage)
         {
             try
             {
-                // Gán các giá trị mà người dùng không nhập
-                // GÁN CỨNG ĐỂ TEST - Yêu cầu User Uid = 1 tồn tại
-                newPage.AuthorUid = 1;
-                newPage.CreatedBy = "admin";
-                newPage.UpdatedBy = "admin";
-                newPage.CreatedAt = DateTime.Now;
-                newPage.UpdatedAt = DateTime.Now;
-                newPage.PublishedAt = DateTime.Now;
-                newPage.Deleted = false;
-                newPage.Status = "Published";
-                newPage.Slug = GenerateSlug(newPage.Title); // Tạo Slug
+                // Xóa validation cho các trường tự động
+                RemoveAutoFieldsFromValidation();
 
-                // XÓA VALIDATION cho các trường ta vừa tự gán
-                ModelState.Remove(nameof(newPage.Author));
-                ModelState.Remove(nameof(newPage.AuthorUid));
-                ModelState.Remove(nameof(newPage.Slug));
-                // Xóa thêm các trường khác nếu chúng bị validate
-                ModelState.Remove(nameof(newPage.CreatedBy));
-                ModelState.Remove(nameof(newPage.UpdatedBy));
-                // ...
-
-                // Giờ ta có thể kiểm tra validation cho các trường còn lại (Title, Content)
-                if (ModelState.IsValid)
+                // Validate Author
+                if (newPage.AuthorUid <= 0)
                 {
-                    Console.WriteLine("=================================");
-                    Console.WriteLine($"📝 Chuẩn bị lưu Page:");
-                    Console.WriteLine($"  Title: {newPage.Title}");
-                    Console.WriteLine($"  AuthorUid: {newPage.AuthorUid}");
-                    Console.WriteLine("=================================");
-
-                    _pageService.CreatePage(newPage);
-                    Console.WriteLine("✅ LƯU THÀNH CÔNG!");
-                    return RedirectToAction("Index");
+                    ModelState.AddModelError("AuthorUid", "Please select an author");
                 }
 
-                // Nếu IsValid = false, các lỗi (ví dụ Title rỗng) sẽ tự động hiển thị
-                ViewBag.ErrorMessage = "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại.";
-                return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
+                if (!ModelState.IsValid)
+                {
+                    LoadAuthors();
+                    ViewBag.ErrorMessage = "Please check all required fields.";
+                    return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
+                }
+
+                // Gán giá trị tự động
+                newPage.Slug = GenerateSlug(newPage.Title);
+                newPage.CreatedAt = DateTime.Now;
+                newPage.UpdatedAt = DateTime.Now;
+                newPage.CreatedBy = GetCurrentUserName(); // TODO: Lấy từ session/auth
+                newPage.UpdatedBy = GetCurrentUserName();
+                newPage.Deleted = false;
+
+                // Set PublishedAt nếu status = Published
+                if (newPage.Status == "Published")
+                {
+                    newPage.PublishedAt = DateTime.Now;
+                }
+
+                _pageService.CreatePage(newPage);
+
+                Console.WriteLine($"✅ Page created successfully: {newPage.Title}");
+                TempData["SuccessMessage"] = $"Page '{newPage.Title}' created successfully!";
+                return RedirectToAction("Index");
             }
             catch (DbUpdateException dbEx)
             {
                 var innerMessage = dbEx.InnerException?.Message ?? dbEx.Message;
-                Console.WriteLine($"❌ LỖI DATABASE: {innerMessage}");
-                ViewBag.ErrorMessage = $"Lỗi khi lưu vào database: {innerMessage}";
+                Console.WriteLine($"❌ Database error: {innerMessage}");
+
+                LoadAuthors();
+                ViewBag.ErrorMessage = "Database error. Please check if the author exists.";
                 return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ LỖI: {ex.Message}");
-                ViewBag.ErrorMessage = $"Lỗi: {ex.Message}";
+                Console.WriteLine($"❌ Error: {ex.Message}");
+
+                LoadAuthors();
+                ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
                 return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
             }
         }
 
-        // ... (Action Delete của bạn) ...
+        // ============================================
+        // EDIT - GET: Hiển thị form chỉnh sửa
+        // ============================================
+        [HttpGet("edit/{id}")]
+        public IActionResult Edit(int id)
+        {
+            try
+            {
+                var page = _pageService.GetPageById(id);
+
+                if (page == null)
+                {
+                    TempData["ErrorMessage"] = "Page not found.";
+                    return RedirectToAction("Index");
+                }
+
+                LoadAuthors();
+                return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", page);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error loading page: {ex.Message}");
+                TempData["ErrorMessage"] = "Unable to load page for editing.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        // ============================================
+        // EDIT - POST: Xử lý cập nhật
+        // ============================================
+        [HttpPost("edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Pages updatedPage)
+        {
+            try
+            {
+                if (id != updatedPage.Uid)
+                {
+                    return BadRequest("Page ID mismatch");
+                }
+
+                var existingPage = _pageService.GetPageById(id);
+                if (existingPage == null)
+                {
+                    TempData["ErrorMessage"] = "Page not found.";
+                    return RedirectToAction("Index");
+                }
+
+                // Xóa validation
+                RemoveAutoFieldsFromValidation();
+
+                if (!ModelState.IsValid)
+                {
+                    LoadAuthors();
+                    ViewBag.ErrorMessage = "Please check all required fields.";
+                    return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", updatedPage);
+                }
+
+                // Cập nhật thông tin
+                existingPage.Title = updatedPage.Title;
+                existingPage.Content = updatedPage.Content;
+                existingPage.Status = updatedPage.Status;
+                existingPage.AuthorUid = updatedPage.AuthorUid;
+                existingPage.Slug = GenerateSlug(updatedPage.Title);
+                existingPage.UpdatedAt = DateTime.Now;
+                existingPage.UpdatedBy = GetCurrentUserName();
+
+                // Cập nhật PublishedAt nếu chuyển sang Published
+                if (updatedPage.Status == "Published" && existingPage.PublishedAt == null)
+                {
+                    existingPage.PublishedAt = DateTime.Now;
+                }
+
+                _pageService.UpdatePage(existingPage);
+
+                Console.WriteLine($"✅ Page updated: {existingPage.Title}");
+                TempData["SuccessMessage"] = $"Page '{existingPage.Title}' updated successfully!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error updating page: {ex.Message}");
+
+                LoadAuthors();
+                ViewBag.ErrorMessage = $"Error updating page: {ex.Message}";
+                return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", updatedPage);
+            }
+        }
+
+        // ============================================
+        // DELETE - Soft delete (set Deleted = true)
+        // ============================================
+        [HttpGet("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var page = _pageService.GetPageById(id);
+
+                if (page == null)
+                {
+                    TempData["ErrorMessage"] = "Page not found.";
+                    return RedirectToAction("Index");
+                }
+
+                _pageService.DeletePage(id);
+
+                Console.WriteLine($"✅ Page deleted: {page.Title}");
+                TempData["SuccessMessage"] = $"Page '{page.Title}' deleted successfully!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error deleting page: {ex.Message}");
+                TempData["ErrorMessage"] = "Unable to delete page.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        // ============================================
+        // HELPER METHODS
+        // ============================================
 
         /// <summary>
-        /// Hàm tạo Slug tốt hơn, hỗ trợ tiếng Việt
+        /// Load danh sách authors vào ViewBag
+        /// </summary>
+        private void LoadAuthors()
+        {
+            try
+            {
+                ViewBag.Authors = _context.Users
+                    .Where(u => u.Deleted == false)
+                    .Select(u => new { u.Uid, u.FullName })
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error loading authors: {ex.Message}");
+                ViewBag.Authors = new List<dynamic>();
+            }
+        }
+
+        /// <summary>
+        /// Xóa validation cho các trường tự động
+        /// </summary>
+        private void RemoveAutoFieldsFromValidation()
+        {
+            ModelState.Remove("Author");
+            ModelState.Remove("Slug");
+            ModelState.Remove("CreatedAt");
+            ModelState.Remove("UpdatedAt");
+            ModelState.Remove("CreatedBy");
+            ModelState.Remove("UpdatedBy");
+            ModelState.Remove("Deleted");
+            ModelState.Remove("PublishedAt");
+        }
+
+        /// <summary>
+        /// Tạo slug từ title (hỗ trợ tiếng Việt)
         /// </summary>
         private string GenerateSlug(string title)
         {
-            if (string.IsNullOrEmpty(title)) return Guid.NewGuid().ToString();
+            if (string.IsNullOrWhiteSpace(title))
+                return Guid.NewGuid().ToString();
 
             title = title.ToLower().Trim();
 
             // Bỏ dấu tiếng Việt
-            title = Regex.Replace(title, "áàạảãâấầậẩẫăắằặẳẵ", "a");
-            title = Regex.Replace(title, "éèẹẻẽêếềệểễ", "e");
-            title = Regex.Replace(title, "íìịỉĩ", "i");
-            title = Regex.Replace(title, "óòọỏõôốồộổỗơớờợởỡ", "o");
-            title = Regex.Replace(title, "úùụủũưứừựửữ", "u");
-            title = Regex.Replace(title, "ýỳỵỷỹ", "y");
+            title = Regex.Replace(title, "[áàạảãâấầậẩẫăắằặẳẵ]", "a");
+            title = Regex.Replace(title, "[éèẹẻẽêếềệểễ]", "e");
+            title = Regex.Replace(title, "[íìịỉĩ]", "i");
+            title = Regex.Replace(title, "[óòọỏõôốồộổỗơớờợởỡ]", "o");
+            title = Regex.Replace(title, "[úùụủũưứừựửữ]", "u");
+            title = Regex.Replace(title, "[ýỳỵỷỹ]", "y");
             title = Regex.Replace(title, "đ", "d");
 
-            // Xóa các ký tự đặc biệt
+            // Xóa ký tự đặc biệt
             title = Regex.Replace(title, @"[^a-z0-9\s-]", "");
 
-            // Thay thế khoảng trắng bằng gạch nối
+            // Thay khoảng trắng = dấu gạch nối
             title = Regex.Replace(title, @"\s+", "-").Trim('-');
 
-            // Đảm bảo không có 2 dấu gạch nối liền nhau
+            // Xóa dấu gạch nối liên tiếp
             title = Regex.Replace(title, @"-+", "-");
 
             return title;
+        }
+
+        /// <summary>
+        /// Lấy username hiện tại
+        /// TODO: Implement authentication và lấy từ User.Identity.Name
+        /// </summary>
+        private string GetCurrentUserName()
+        {
+            // Tạm thời return "admin", sau này implement authentication
+            return User?.Identity?.Name ?? "admin";
         }
     }
 }

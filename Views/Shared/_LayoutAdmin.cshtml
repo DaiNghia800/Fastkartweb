@@ -343,5 +343,7 @@
     <script src="~/js/chart-custom.js"></script>
     <script src="~/js/sidebar-effect.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
