@@ -6,7 +6,7 @@ namespace Fastkart.Models.ViewModels
     {
         [Required(ErrorMessage = "Họ và tên là bắt buộc")]
         [StringLength(100)]
-        [RegularExpression(@"^[\p{L}\s']+$", ErrorMessage = "Họ và tên không được chứa số hay kí tự đặc biệt.")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Họ và tên không được chứa số hay kí tự đặc biệt.")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Email là bắt buộc")]

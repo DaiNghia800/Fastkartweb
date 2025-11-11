@@ -1372,7 +1372,7 @@ header.close {
     }
 /*end switch */
 /*theme form*/
-.theme-form input[type="text"], input[type="file"], input[type="number"] {
+.theme-form input[type="text"], input[type="file"], input[type="number"], .theme-form input[type="email"], .theme-form input[type="tel"], .theme-form input[type="password"] {
     border-color: #efefef;
     background-color: #f9f9f6 !important;
     font-size: calc(14px + 2 * ((100vw - 320px) / 1600));
