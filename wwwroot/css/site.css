@@ -5955,9 +5955,6 @@ footer .main-footer .footer-contact {
         z-index: -1;
     }
 
-.container-fluid-lg {
-    padding: 0 calc(0.75rem + 148 * (100vw - 20rem) / 1600);
-}
 
 .log-in-section .image-contain {
     display: flex;
