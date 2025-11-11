@@ -43,6 +43,7 @@ namespace Fastkart.Services
             try
             {
                 return _context.Users
+                               .Include(u => u.Role)
                                .AsNoTracking()
                                .FirstOrDefault(u => u.Uid == id);
             }
