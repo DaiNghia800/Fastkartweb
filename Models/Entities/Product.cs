@@ -32,7 +32,10 @@ namespace Fastkart.Models.Entities
         public int? Discount { get; set; }
         public string Thumbnail { get; set; }
         public string Status { get; set; }
-        public int Position { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Vị trí sản phẩm phải lớn hơn 0")]
+        public int? Position { get; set; }
+
         public int BrandUid { get; set; }
         public Brand Brand { get; set; }
 
