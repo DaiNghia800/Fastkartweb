@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251110023131_addTablePermission")]
-    partial class addTablePermission
+    [Migration("20251112162544_fix_conflict_Roles_Users")]
+    partial class fix_conflict_Roles_Users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,7 +117,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Function");
+                    b.ToTable("Functions");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
@@ -150,7 +150,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
@@ -173,7 +173,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionType");
+                    b.ToTable("PermissionTypes");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>

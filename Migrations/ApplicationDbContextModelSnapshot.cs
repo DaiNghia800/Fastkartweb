@@ -80,7 +80,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Brand", (string)null);
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
@@ -171,39 +171,6 @@ namespace Fastkart.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PermissionTypes");
-                    b.Property<string>("ValueType")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("text");
-
-                    b.HasKey("Uid");
-
-                    b.ToTable("OptionName", (string)null);
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>
-                {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
-
-                    b.Property<int>("OptionNameUid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("OptionNameUid", "Value")
-                        .IsUnique();
-
-                    b.ToTable("OptionValue", (string)null);
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -325,7 +292,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("UnitUid");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
@@ -391,7 +358,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("ProductCategory", (string)null);
+                    b.ToTable("ProductCategory");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductSubCategory", b =>
@@ -453,7 +420,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("CategoryUid");
 
-                    b.ToTable("ProductSubCategory", (string)null);
+                    b.ToTable("ProductSubCategory");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
@@ -497,7 +464,6 @@ namespace Fastkart.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("Roles");
-
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.StockStatus", b =>
@@ -547,7 +513,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("StockStatus", (string)null);
+                    b.ToTable("StockStatus");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Unit", b =>
@@ -603,89 +569,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Unit", (string)null);
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
-                {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("Deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ImgUser")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("OtpCode")
-                        .HasMaxLength(6)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(6)");
-
-                    b.Property<DateTime?>("OtpExpiry")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("RoleUid")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(100)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("RoleUid");
-
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
@@ -873,11 +757,6 @@ namespace Fastkart.Migrations
                 {
                     b.Navigation("Permissions");
 
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
-                {
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
