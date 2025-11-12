@@ -1,4 +1,5 @@
 ﻿@using Fastkart.Models.Entities;
+@using System.Text.Json
 @model Roles;
 @{
     Layout = "_LayoutAdmin";
@@ -11,7 +12,7 @@
             <h5>Permission</h5>
         </div>
         <div class="table-responsive">
-            <table class="table theme-table mb-0" table-permission>
+            <table class="table theme-table mb-0" table-permission='@Html.Raw(JsonSerializer.Serialize(ViewData["permissions"]))'>
                 <thead>
                     <tr>
                         <th>Tính năng</th>
@@ -131,7 +132,7 @@
                                 </td>
                             }
                         </tr>
-                        <tr data-name="product-sub-category_view">
+                        <tr data-name="product-sub-category_create">
                             <td>Thêm mới</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
@@ -175,7 +176,7 @@
                                 </td>
                             }
                         </tr>
-                        <tr data-name="role_view">
+                        <tr data-name="role_create">
                             <td>Thêm mới</td>
                             @foreach (Roles role in ViewBag.roles)
                             {

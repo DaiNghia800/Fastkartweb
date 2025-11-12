@@ -1,5 +1,5 @@
 ﻿using Fastkart.Models.Entities;
-using Fastkart.Services;
+using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop.Implementation;
 using Slugify;
@@ -77,14 +77,16 @@ namespace Fastkart.Controllers.Admin
         public IActionResult Permission()
         {
             var listRole = _roleService.GetAllRole();
+            var permissions = _roleService.GetPermissions();
             ViewData["roles"] = listRole;
+            ViewData["permissions"] = permissions;
             return View("~/Views/Admin/Role/Permission.cshtml");
         }
 
         [HttpPost("permission")]
         public JsonResult PremissionPost([FromBody] JsonElement data)
         {
-
+            _roleService.UpdatePermission(data);
             return Json(new { code = "success" });
         }
     }

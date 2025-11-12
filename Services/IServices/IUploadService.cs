@@ -1,4 +1,4 @@
-﻿namespace Fastkart.Services
+﻿namespace Fastkart.Services.IServices
 {
     public interface IUploadService
     {

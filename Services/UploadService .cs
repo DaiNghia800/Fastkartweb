@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Fastkart.Models.Entities;
+using Fastkart.Services.IServices;
 using Microsoft.Extensions.Options;
 
 namespace Fastkart.Services

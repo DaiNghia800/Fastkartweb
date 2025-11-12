@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.Json;
 
-namespace Fastkart.Services
+namespace Fastkart.Services.IServices
 {
     public interface IProductService
     {
