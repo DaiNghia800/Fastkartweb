@@ -1,5 +1,5 @@
 ﻿using Fastkart.Models.Entities;
-using Fastkart.Services;
+using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
 using System.Text.Json;

@@ -1,49 +1,87 @@
-﻿@{
+﻿@model Fastkart.Models.ViewModels.UserCreateViewModel
+@{
     Layout = "_LayoutAdmin";
     ViewData["title"] = "Create User";
 }
 
 <section class="product-create">
-    <form action="/" method="post" class="theme-form theme-form-2">
+    <form asp-controller="User" asp-action="Create" method="post" enctype="multipart/form-data" class="theme-form theme-form-2">
         <div class="row">
             <div class="col-8 mx-auto">
                 <div class="card">
                     <div class="card-header2">
                         <h5>Add New User</h5>
                     </div>
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-3"></div>
+
                     <div class="row mb-4 align-items-center">
-                        <label for="name" class="col-3 form-label-title">First Name</label>
+                        <label asp-for="FullName" class="col-3 form-label-title">Full Name <span class="text-danger">*</span></label>
                         <div class="col-9">
-                            <input class="form-control" type="text" name="name" value="" id="name" />
+                            <input class="form-control" type="text" asp-for="FullName" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="email" class="col-3 form-label-title">Email Address</label>
+                        <label asp-for="Email" class="col-3 form-label-title">Email <span class="text-danger">*</span></label>
                         <div class="col-9">
-                            <input class="form-control" type="text" name="email" value="" id="email" />
+                            <input class="form-control" type="email" asp-for="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="password" class="col-3 form-label-title">Password</label>
+                        <label asp-for="Address" class="col-3 form-label-title">Address</label>
                         <div class="col-9">
-                            <input class="form-control" type="text" name="password" value="" id="password"/>
+                            <input class="form-control" type="text" asp-for="Address" />
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
-                        <label for="role" class="col-3 form-label-title">Role</label>
+                        <label asp-for="PhoneNumber" class="col-3 form-label-title">Phone Number</label>
                         <div class="col-9">
-                            <select id="role" class="js-example-basic-single w-100">
-                                <option disabled value="">Static Menu</option>
-                                <option value="">Simple</option>
-                                <option value="">Classified</option>
+                            <input class="form-control" type="tel" asp-for="PhoneNumber" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="Password" class="col-3 form-label-title">Password <span class="text-danger">*</span></label>
+                        <div class="col-9">
+                            <input class="form-control" type="password" asp-for="Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="ConfirmPassword" class="col-3 form-label-title">Xác nhận mật khẩu <span class="text-danger">*</span></label>
+                        <div class="col-9">
+                            <input class="form-control" type="password" asp-for="ConfirmPassword" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="ImgFile" class="col-3 form-label-title">User Image</label>
+                        <div class="col-9">
+                            <input asp-for="ImgFile" class="form-control" type="file" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="RoleUid" class="col-3 form-label-title">Role <span class="text-danger">*</span></label>
+                        <div class="col-9">
+                            <select asp-for="RoleUid" class="js-example-basic-single w-100"
+                                    asp-items="@(ViewData["RolesList"] as SelectList)">
+                                <option value="">-- Chọn một quyền --</option>
                             </select>
+                            <span asp-validation-for="RoleUid" class="text-danger"></span>
                         </div>
                     </div>
-                <div class="d-flex justify-content-end mb-3">
-                    <button type="submit" class="btn text-white theme-bg-color ms-auto">Add Product</button>
+
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="submit" class="btn text-white theme-bg-color ms-auto">Add User</button>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
-
 </section>
+

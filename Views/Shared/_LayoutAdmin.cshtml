@@ -1,5 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using Fastkart.Helpers
+@using Fastkart.Services.IServices
+@inject IUserService UserService
 
+@{
+    var currentUser = default(Fastkart.Models.Entities.Users);
+    var userId = 0;
+
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+        {
+            currentUser = UserService.GetUserById(userId);
+        }
+    }
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -75,55 +93,91 @@
                     <li class="mode">
                         <i class="fa-regular fa-moon"></i>
                     </li>
-                    <li class="profile-box position-relative me-0 pe-0">
-                        <div class="profile d-flex align-items-center">
-                            <img src="/images/4.jpg" alt="" class="user-img img-fluid" />
-                            <div class="user-name">
-                                <span>Emay Walter</span>
-                                <p>
-                                    Admin
-                                    <i class="fa-solid fa-angle-down"></i>
-                                </p>
+                    @if (currentUser != null)
+                    {
+                        <li class="profile-box position-relative me-0 pe-0">
+                            <div class="profile d-flex align-items-center">
+                                @if (!string.IsNullOrEmpty(currentUser.ImgUser))
+                                {
+                                    <img src="@currentUser.ImgUser" alt="@currentUser.FullName" class="user-img img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="/images/users/default-avatar.png" alt="@currentUser.FullName" class="user-img img-fluid" />
+                                }
+                                <div class="user-name">
+                                    <span>@currentUser.FullName</span>
+                                    <p>
+                                        @(currentUser.Role?.RoleName ?? "Admin")
+                                        <i class="fa-solid fa-angle-down"></i>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <ul class="profile-dropdown">
-                            <li>
-                                <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    <span>Users</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
-                                    <span>Orders</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                                    <span>Spports Tickets</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                                    <span>Settings</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                    <span>Log out</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                            <ul class="profile-dropdown">
+                                <li>
+                                    <a href="javascript:void(0)" onclick="viewMyProfile(@currentUser.Uid)" style="cursor:pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        <span>My Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/user" style="cursor:pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/orders" style="cursor:pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive">
+                                            <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                                            <rect x="1" y="3" width="22" height="5"></rect>
+                                            <line x1="10" y1="12" x2="14" y2="12"></line>
+                                        </svg>
+                                        <span>Orders</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/settings" style="cursor:pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                        </svg>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Logout" id="btnLogout" style="cursor:pointer;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                            <polyline points="16 17 21 12 16 7"></polyline>
+                                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                                        </svg>
+                                        <span>Log out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="profile-box position-relative me-0 pe-0">
+                            <div class="profile d-flex align-items-center">
+                                <img src="/images/users/default-avatar.png" alt="Guest" class="user-img img-fluid" />
+                                <div class="user-name">
+                                    <span>Guest</span>
+                                    <p>Not logged in</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -153,218 +207,267 @@
                 </div>
                 <nav class="sidebar-main">
                     <ul class="sidebar-links list-unstyled p-0">
-                        <li class="sidebar-list">
-                            <a href="/admin/dashboard" class="sidebar-link @(Context.Request.Path == "/admin/dashboard" ? "active" : "")">
-                                <i class="fa-regular fa-house"></i>
-                                <span class="text-capitalize">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseProduct" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/product") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseProduct">
-                                <i class="fa-solid fa-store"></i>
-                                <span class="text-capitalize">Products</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/product") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product") ? "show" : "")" id="collapseProduct">
-                                <li>
-                                    <a href="/admin/product" class="text-capitalize">
-                                        Product
+                        @{
+                            
+                            <li class="sidebar-list">
+                                <a href="/admin/dashboard" class="sidebar-link @(Context.Request.Path == "/admin/dashboard" ? "active" : "")">
+                                    <i class="fa-regular fa-house"></i>
+                                    <span class="text-capitalize">Dashboard</span>
+                                </a>
+                            </li>
+                            if (User.HasClaim("permission", "product_view") || User.HasClaim("permission", "product_create"))
+                            {
+                                <li class="sidebar-list">
+                                    <a href="#collapseProduct" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/product") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseProduct">
+                                        <i class="fa-solid fa-store"></i>
+                                        <span class="text-capitalize">Products</span>
+                                        <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/product") ? "active" : "")">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </div>
                                     </a>
+                                    <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product") ? "show" : "")" id="collapseProduct">
+                                        <li>
+                                            @if (!User.HasClaim("permission", "product_view"))
+                                            {
+                                                <a href="/admin/product" class="text-capitalize">
+                                                    Product
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                        <li>
+                                            @if (!User.HasClaim("permission", "product_create"))
+                                            {
+                                                <a href="/admin/product/create" class="text-capitalize">
+                                                    Add new products
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="/admin/product/create" class="text-capitalize">
-                                        Add new products
+                            }
+                            if (User.HasClaim("permission", "product-category_view") || User.HasClaim("permission", "product-category_create"))
+                            {
+                                <li class="sidebar-list">
+                                    <a href="#collapseCategory" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCategory">
+                                        <i class="fa-solid fa-list"></i>
+                                        <span class="text-capitalize">Category</span>
+                                        <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "active" : "")">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </div>
                                     </a>
+                                    <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "show" : "")" id="collapseCategory">
+                                        <li>
+                                            @if (User.HasClaim("permission", "product-category_view"))
+                                            {
+                                                <a href="/admin/product-category" class="text-capitalize">
+                                                    Category List
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                        <li>
+                                            @if (User.HasClaim("permission", "product-category_view"))
+                                            {
+                                                <a href="/admin/product-category/create" class="text-capitalize">
+                                                    Add new category
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseCategory" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCategory">
-                                <i class="fa-solid fa-list"></i>
-                                <span class="text-capitalize">Category</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product-category") ? "show" : "")" id="collapseCategory">
-                                <li>
-                                    <a href="/admin/product-category" class="text-capitalize">
-                                        Category List
+                            }
+                            if (User.HasClaim("permission", "product-sub-category_view") || User.HasClaim("permission", "product-sub-category_view"))
+                            {
+                                <li class="sidebar-list">
+                                    <a href="#collapseSubcategory" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSubcategory">
+                                        <i class="fa-regular fa-rectangle-list"></i>
+                                        <span class="text-capitalize">SubCategory</span>
+                                        <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </div>
                                     </a>
+                                    <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "show" : "")" id="collapseSubcategory">
+                                        <li>
+                                            @if (User.HasClaim("permission", "product-sub-category_view"))
+                                            {
+                                                <a href="/admin/sub-category" class="text-capitalize">
+                                                    SubCategory List
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                        <li>
+                                            @if (User.HasClaim("permission", "product-sub-category_create"))
+                                            {
+                                                <a href="/admin/sub-category/create" class="text-capitalize">
+                                                    Add new SubCategory
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="/admin/product-category/create" class="text-capitalize">
-                                        Add new category
+                            }
+                                                        
+                            <li class="sidebar-list">
+                                <a href="#collapseAtributes" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseAtributes">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    <span class="text-capitalize">Attributes</span>
+                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "show" : "")" id="collapseAtributes">
+                                    <li>
+                                        <a href="/admin/attributes" class="text-capitalize">
+                                            Attributes
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/attributes/create" class="text-capitalize">
+                                            Add Attributes
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sidebar-list">
+                                <a href="#collapseUser" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/user") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseUser">
+                                    <i class="fa-regular fa-user"></i>
+                                    <span class="text-capitalize">Users</span>
+                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/user") ? "active" : "")">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/user") ? "show" : "")" id="collapseUser">
+                                    <li>
+                                        <a href="/admin/user" class="text-capitalize">
+                                            All users
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/user/create" class="text-capitalize">
+                                            Add new user
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @if (User.HasClaim("permission", "role_view") || User.HasClaim("permission", "role_create") || User.HasClaim("permission", "role_permission"))
+                            {   <li class="sidebar-list">
+                                    <a href="#collapseRole" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseRole">
+                                        <i class="fa-regular fa-user"></i>
+                                        <span class="text-capitalize">Role</span>
+                                        <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </div>
                                     </a>
+                                    <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/role") ? "show" : "")" id="collapseRole">
+                                        <li>
+                                            @if (User.HasClaim("permission", "role_view"))
+                                            {
+                                                <a href="/admin/role" class="text-capitalize">
+                                                    All roles
+                                                </a>
+                                            }
+                                        </li>
+                                        <li>
+                                            @if (User.HasClaim("permission", "role_create"))
+                                            {
+                                                <a href="/admin/role/create" class="text-capitalize">
+                                                    Add new role
+                                                </a>
+                                            }
+                                        </li>
+                                        <li>
+                                            @if (User.HasClaim("permission", "role_permission"))
+                                            {
+                                                <a href="/admin/role/permission" class="text-capitalize">
+                                                    Permission
+                                                </a>
+                                            }
+                                            
+                                        </li>
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseSubcategory" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSubcategory">
-                                <i class="fa-regular fa-rectangle-list"></i>
-                                <span class="text-capitalize">SubCategory</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/sub-category") ? "show" : "")" id="collapseSubcategory">
-                                <li>
-                                    <a href="/admin/sub-category" class="text-capitalize">
-                                        SubCategory List
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/sub-category/create" class="text-capitalize">
-                                        Add new SubCategory
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseAtributes" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseAtributes">
-                                <i class="fa-solid fa-sliders"></i>
-                                <span class="text-capitalize">Attributes</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "show" : "")" id="collapseAtributes">
-                                <li>
-                                    <a href="/admin/attributes" class="text-capitalize">
-                                        Attributes
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/attributes/create" class="text-capitalize">
-                                        Add Attributes
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseUser" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/user") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseUser">
-                                <i class="fa-regular fa-user"></i>
-                                <span class="text-capitalize">Users</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/user") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/user") ? "show" : "")" id="collapseUser">
-                                <li>
-                                    <a href="/admin/user" class="text-capitalize">
-                                        All users
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/user/create" class="text-capitalize">
-                                        Add new user
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseRole" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseRole">
-                                <i class="fa-regular fa-user"></i>
-                                <span class="text-capitalize">Role</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/role") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/role") ? "show" : "")" id="collapseRole">
-                                <li>
-                                    <a href="/admin/role" class="text-capitalize">
-                                        All roles
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/role/create" class="text-capitalize">
-                                        Add new role
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/role/permission" class="text-capitalize">
-                                        Permission
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseOrders" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseOrders">
-                                <i class="fa-solid fa-archive"></i>
-                                <span class="text-capitalize">Orders</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "show" : "")" id="collapseOrders">
-                                <li>
-                                    <a href="/admin/orders" class="text-capitalize">
-                                        Order List
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/orders/detail" class="text-capitalize">
-                                        Order Detail
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/orders/tracking" class="text-capitalize">
-                                        Order Tracking
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseCoupons" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCoupons">
-                                <i class="fa-solid fa-tag"></i>
-                                <span class="text-capitalize">Coupons</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "show" : "")" id="collapseCoupons">
-                                <li>
-                                    <a href="/admin/coupons" class="text-capitalize">
-                                        Coupon List
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/coupons/create" class="text-capitalize">
-                                        Create Coupon
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="/admin/product-review" class="sidebar-link @(Context.Request.Path == "/admin/product-review" ? "active" : "")">
-                                <i class="fa-solid fa-star"></i>
-                                <span class="text-capitalize">Product Review</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="#collapseSettings" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSettings">
-                                <i class="fa-solid fa-cog"></i>
-                                <span class="text-capitalize">Settings</span>
-                                <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "active" : "")">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </a>
-                            <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "show" : "")" id="collapseSettings">
-                                <li>
-                                    <a href="/admin/settings/profile" class="text-capitalize">
-                                        Profile Setting
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-list">
-                            <a href="/admin/list-page" class="sidebar-link @(Context.Request.Path == "/admin/list-page" ? "active" : "")">
-                                <i class="fa-solid fa-list"></i>
-                                <span class="text-capitalize">List Page</span>
-                            </a>
-                        </li>
+                            }
+                            <li class="sidebar-list">
+                                <a href="#collapseOrders" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseOrders">
+                                    <i class="fa-solid fa-archive"></i>
+                                    <span class="text-capitalize">Orders</span>
+                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "active" : "")">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/orders") ? "show" : "")" id="collapseOrders">
+                                    <li>
+                                        <a href="/admin/orders" class="text-capitalize">
+                                            Order List
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/orders/detail" class="text-capitalize">
+                                            Order Detail
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/orders/tracking" class="text-capitalize">
+                                            Order Tracking
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sidebar-list">
+                                <a href="#collapseCoupons" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCoupons">
+                                    <i class="fa-solid fa-tag"></i>
+                                    <span class="text-capitalize">Coupons</span>
+                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "show" : "")" id="collapseCoupons">
+                                    <li>
+                                        <a href="/admin/coupons" class="text-capitalize">
+                                            Coupon List
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/coupons/create" class="text-capitalize">
+                                            Create Coupon
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sidebar-list">
+                                <a href="/admin/product-review" class="sidebar-link @(Context.Request.Path == "/admin/product-review" ? "active" : "")">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span class="text-capitalize">Product Review</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-list">
+                                <a href="#collapseSettings" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSettings">
+                                    <i class="fa-solid fa-cog"></i>
+                                    <span class="text-capitalize">Settings</span>
+                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "active" : "")">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "show" : "")" id="collapseSettings">
+                                    <li>
+                                        <a href="/admin/settings/profile" class="text-capitalize">
+                                            Profile Setting
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sidebar-list">
+                                <a href="/admin/list-page" class="sidebar-link @(Context.Request.Path == "/admin/list-page" ? "active" : "")">
+                                    <i class="fa-solid fa-list"></i>
+                                    <span class="text-capitalize">List Page</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </nav>
             </div>
@@ -375,12 +478,27 @@
         </main>
     </div>
 
+
+    <div class="modal fade" id="myProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">My Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="myProfileContent">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p class="mb-0 text-center">Copyright 2022 © Fastkart theme by pixelstrap</p>
     </footer>
 
     <script src="/lib/jquery/jquery.min.js"></script>
-
+    <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>  
+    <partial name="_ValidationScriptsPartial" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -388,9 +506,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="/lib/tinymce/tinymce.min.js"></script>
     <script src="/lib/slick/slick.min.js"></script>
-    <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.all.min.js"></script>
     <script src="~/js/chart-custom.js"></script>
     <script src="~/js/sidebar-effect.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/login.js" asp-append-version="true"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

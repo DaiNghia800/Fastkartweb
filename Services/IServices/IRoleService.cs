@@ -1,6 +1,8 @@
 ﻿using Fastkart.Models.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
-namespace Fastkart.Services
+namespace Fastkart.Services.IServices
 {
     public interface IRoleService
     {
@@ -9,5 +11,7 @@ namespace Fastkart.Services
         Roles GetRole(int id);
         void EditRole(Roles role, int id);
         void DeleteRole(int id);
+        void UpdatePermission(JsonElement data);
+        IEnumerable<object> GetPermissions();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Fastkart.Services;
+﻿using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin

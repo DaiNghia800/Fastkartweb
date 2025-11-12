@@ -1,11 +1,13 @@
 ﻿using Fastkart.Models.Entities;
-using Fastkart.Services;
+using Microsoft.AspNetCore.Authorization;
+using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
 using System.Text.Json;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize]
     [Route("admin/product")]
     public class ProductController : Controller
     {

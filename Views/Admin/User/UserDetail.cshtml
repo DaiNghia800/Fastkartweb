@@ -1,0 +1,57 @@
+﻿@model Fastkart.Models.Entities.Users
+
+<div class="row">
+    <div class="col-md-4 text-center border-end">
+        <img src="@Model.ImgUser" alt="@Model.FullName" class="img-fluid rounded-circle mb-3"
+             style="width: 150px; height: 150px; object-fit: cover;" />
+        <h5 class="mb-1">@Model.FullName</h5>
+        <p class="text-muted mb-0">@Model.Role</p>
+    </div>
+
+    <div class="col-md-8">
+        <div class="user-detail-info px-3">
+
+            <h6 class="text-primary fw-bold mb-3 pt-2">Thông tin liên hệ</h6>
+            <div class="mb-3">
+                <label class="fw-bold d-block">Email:</label>
+                <span class="text-muted">@Model.Email</span>
+            </div>
+            <div class="mb-3">
+                <label class="fw-bold d-block">Số điện thoại:</label>
+                <span class="text-muted">@Model.PhoneNumber</span>
+            </div>
+            <div class="mb-3">
+                <label class="fw-bold d-block">Địa chỉ:</label>
+                <span class="text-muted">@Model.Address</span>
+            </div>
+
+            <hr>
+
+            <h6 class="text-primary fw-bold mb-3">Thông tin hệ thống</h6>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold d-block">Ngày tạo:</label>
+                    <span class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold d-block">Tạo bởi:</label>
+                    <span class="text-muted">
+                        @(string.IsNullOrEmpty(Model.CreatedBy) ? "N/A" : Model.CreatedBy)
+                    </span>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold d-block">Cập nhật (lần cuối):</label>
+                    <span class="text-muted">
+                        @(Model.UpdatedAt == Model.CreatedAt ? "Chưa cập nhật" : Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm"))
+                    </span>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="fw-bold d-block">Cập nhật (bởi):</label>
+                    <span class="text-muted">
+                        @(string.IsNullOrEmpty(Model.UpdatedBy) ? "N/A" : Model.UpdatedBy)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1522,7 +1522,7 @@ header.close {
 }
 /*end switch */
 /*theme form*/
-.theme-form input[type="text"], input[type="file"], input[type="number"] {
+.theme-form input[type="text"], input[type="file"], input[type="number"], .theme-form input[type="email"], .theme-form input[type="tel"], .theme-form input[type="password"] {
     border-color: #efefef;
     background-color: #f9f9f6 !important;
     font-size: calc(14px + 2 * ((100vw - 320px) / 1600));
@@ -1878,7 +1878,8 @@ h5.card-title {
 }
 /*end table order */
 
- Bố cục checkout chính 
+
+
 .fk-chk-container {
     display: flex;
     flex-wrap: wrap;  Cho phép xuống hàng trên di động 
@@ -1956,7 +1957,7 @@ h5.card-title {
         border-color: var(--brand-color);
     }
 
- Huy hiệu (Home, Office) 
+
 .fk-chk-badge {
     display: inline-block;
     padding: 2px 8px;
@@ -1974,7 +1975,7 @@ h5.card-title {
         background-color: #ff6b6b;
     }
 
- ==== CỘT BÊN PHẢI (SIDEBAR) ==== 
+
 .fk-chk-summary-box {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -2106,3 +2107,459 @@ h5.card-title {
         order: 1;
     }
 }
+
+/* Log-in */
+.log-in-section {
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 0;
+}
+
+    .log-in-section::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-image: url(../images/log-in-bg.png);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+.container-fluid-lg {
+    padding: 0 calc(12px + 148 * (100vw - 320px) / 1600);
+}
+
+.log-in-section .image-contain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.log-in-section .log-in-box {
+    background-color: #f8f8f8;
+    padding: calc(16px + 34 * (100vw - 320px) / 1600);
+    border-radius: calc(8px + 4 * (100vw - 320px) / 1600);
+}
+
+    .log-in-section .log-in-box .log-in-title {
+        margin-bottom: calc(12px + 8 * (100vw - 320px) / 1600);
+    }
+
+        .log-in-section .log-in-box .log-in-title h3 {
+            margin-bottom: calc(1px + 5 * (100vw - 320px) / 1600);
+            font-size: calc(18px + 3 * (100vw - 320px) / 1600);
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        .log-in-section .log-in-box .log-in-title h4,
+        .log-in-section .log-in-box .log-in-title h5 {
+            color: #4a5568;
+            margin-top: 8px;
+        }
+
+        .log-in-section .log-in-box .log-in-title h4 {
+            font-size: calc(17px + 1 * (100vw - 320px) / 1600);
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+.log-in-section .log-in-form .form-control {
+    border: none;
+}
+
+.theme-form-floating .form-control,
+.theme-form-floating .form-select {
+    height: calc(51px + 3 * (100vw - 320px) / 1600);
+    line-height: normal;
+}
+
+.theme-form-floating label {
+    font-size: calc(13px + 3 * (100vw - 320px) / 1600);
+    color: #4a5568;
+    border: none;
+}
+
+.log-in-section .log-in-box .remember-box label {
+    font-size: 16px;
+}
+
+.log-in-section .log-in-box .forgot-password {
+    font-size: 16px;
+    font-weight: 500;
+    display: block;
+}
+
+.log-in-section .log-in-box .forgot-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.log-in-section a {
+    color: #0da487;
+    transition: .5s ease;
+    text-decoration: none;
+}
+
+.log-in-section .log-in-box .remember-box {
+    display: flex;
+    align-items: center;
+}
+
+    .log-in-section .log-in-box .remember-box .check-box {
+        display: block;
+        margin-top: -6px;
+    }
+
+.checkbox_animated {
+    cursor: pointer;
+    position: relative;
+    margin-right: 16px;
+    height: 100%;
+}
+
+    .checkbox_animated:before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 6px;
+        transition: transform .4s cubic-bezier(0.45, 1.8, 0.5, 0.75), -webkit-transform .4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
+        transform: rotate(-45deg) scale(0, 0);
+        left: 4px;
+        top: 4px;
+        z-index: 1;
+        border: 2px solid #0da487;
+        border-top-style: none;
+        border-right-style: none;
+    }
+
+.form-floating {
+    line-height: 2;
+}
+
+.checkbox_animated:checked:before {
+    transform: rotate(-45deg) scale(1, 1);
+}
+
+.checkbox_animated:after {
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    top: -2px;
+    left: 0;
+    background-color: #fff;
+    border: 2px solid #ececec;
+    cursor: pointer;
+}
+
+.btn-animation.hp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    border-radius: 5px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0);
+    transition: all .3s ease;
+    position: relative;
+    background: #ff6b6b;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff4f4f 100%);
+    border: none;
+    z-index: 0;
+}
+
+    .btn-animation.hp::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        border-radius: 5px;
+        background: #ff4f4f;
+        background: linear-gradient(90deg, #ff4f4f 0%, #ff6b6b 100%);
+        transition: all .3s ease;
+    }
+
+    .btn-animation.hp:hover {
+        color: #fff;
+    }
+
+        .btn-animation.hp:hover::after {
+            top: 0;
+            height: 100%;
+        }
+
+.log-in-section .log-in-box .other-log-in {
+    margin-top: 15px;
+    text-align: center;
+    position: relative;
+}
+
+    .log-in-section .log-in-box .other-log-in::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        width: 100%;
+        height: 1px;
+        left: 0;
+        background-color: #ddd;
+        z-index: 0;
+    }
+
+    .log-in-section .log-in-box .other-log-in h6 {
+        color: #4a5568;
+        position: relative;
+        background-color: #f9f9f9;
+        padding: 0 14px;
+        display: inline-block;
+        text-transform: uppercase;
+        font-size: calc(13px + 1 * (100vw - 320px) / 1600);
+        line-height: 1.2;
+        margin: 0;
+        font-weight: 400;
+    }
+
+.log-in-section .log-in-box .log-in-button {
+    margin-top: 20px;
+    padding: 1px 0;
+}
+
+    .log-in-section .log-in-box .log-in-button ul {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        gap: 15px;
+        align-items: center;
+    }
+
+        .log-in-section .log-in-box .log-in-button ul li {
+            display: block;
+            width: 100%;
+        }
+
+            .log-in-section .log-in-box .log-in-button ul li a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: calc(14px + 2 * (100vw - 320px) / 1600);
+                color: #222;
+                border-radius: 5px;
+                padding: calc(10px + 6 * (100vw - 320px) / 1600) calc(18px + 12 * (100vw - 320px) / 1600);
+                flex-wrap: wrap;
+                gap: calc(8px + 2 * (100vw - 320px) / 1600);
+                background-color: #fff;
+            }
+
+                .log-in-section .log-in-box .log-in-button ul li a img {
+                    width: calc(18px + 6 * (100vw - 320px) / 1600);
+                }
+
+.log-in-section .log-in-box .sign-up-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+    .log-in-section .log-in-box .sign-up-box h4 {
+        color: #4a5568;
+        font-size: calc(14px + 2 * (100vw - 320px) / 1600);
+        margin-bottom: calc(0px + 3 * (100vw - 320px) / 1600);
+        line-height: 1.2;
+        margin: 0;
+        font-weight: 400;
+    }
+
+    .log-in-section .log-in-box .sign-up-box a {
+        font-weight: 500;
+        font-size: calc(15px + 2 * (100vw - 320px) / 1600);
+        margin-bottom: -4px;
+        display: block;
+    }
+/*End Log-in*/
+/* Otp */
+.log-in-section .otp-section {
+    /* display: -webkit-box;
+  display: -ms-flexbox; */
+    display: flex;
+    /* -webkit-box-align: center;
+  -ms-flex-align: center; */
+    align-items: center;
+}
+
+.log-in-section {
+    overflow-x: hidden;
+    /* display: -webkit-box; */
+    /* display: -ms-flexbox; */
+    display: flex;
+    /* -webkit-box-align: center; */
+    /* -ms-flex-align: center; */
+    align-items: center;
+    position: relative;
+    z-index: 0;
+}
+
+    .log-in-section::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-image: url("../images/log-in-bg.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: -1;
+    }
+
+    .log-in-section .image-contain {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        height: 100%;
+    }
+
+    .log-in-section .log-in-box {
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f8f8;
+        padding: calc(16px + 34*(100vw - 320px)/1600);
+        border-radius: calc(8px + 4*(100vw - 320px)/1600);
+        margin-left: 40px;
+    }
+
+        .log-in-section .log-in-box .log-in-title {
+            margin-bottom: calc(12px + 8*(100vw - 320px)/1600);
+        }
+
+            .log-in-section .log-in-box .log-in-title h3 {
+                margin-bottom: calc(1px + 5*(100vw - 320px)/1600);
+                font-size: calc(18px + 3*(100vw - 320px)/1600);
+            }
+
+            .log-in-section .log-in-box .log-in-title h5 {
+                display: flex;
+                gap: 10px;
+                color: #4a5568;
+                margin-top: 8px;
+                font-size: calc(15px + 1*(100vw - 320px)/1600);
+            }
+
+    .log-in-section .inputs {
+        margin: calc(-2px + -10*(100vw - 320px)/1600);
+        display: flex;
+    }
+
+        .log-in-section .inputs input {
+            margin: calc(2px + 6*(100vw - 320px)/1600);
+            border: none;
+            text-align: center;
+        }
+
+        .log-in-section .inputs .form-control {
+            background-color: #fff;
+            font-size: 14px;
+            display: block;
+            width: calc(100%/6);
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-clip: padding-box;
+            appearance: none;
+            border-radius: .25rem;
+            /* aspect-ratio: 1/1; */
+            transition: all .3s ease-in-out;
+        }
+
+.send-box h5 {
+    font-size: calc(15px + 1*(100vw - 320px)/1600);
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 400;
+    display: flex;
+    gap: 5px;
+}
+
+.send-box a {
+    color: #0da487;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-1  {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: calc(7px + 7*(100vw - 320px)/1600) calc(14px + 18*(100vw - 320px)/1600);
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0);
+    transition: all .3s ease;
+    position: relative;
+    border: none;
+    font-size: calc(14px + 4*(100vw - 320px)/1600);
+    z-index: 0;
+    white-space: nowrap;
+}
+
+    .btn:hover {
+        color: #fff;
+    }
+
+.btn-animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    border-radius: 5px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0);
+    transition: all .3s ease;
+    position: relative;
+    background: #ff6b6b;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff4f4f 100%);
+    border: none;
+    z-index: 0;
+}
+
+    .btn-animation::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        color: #fff;
+        border-radius: 5px;
+        background: #ff4f4f;
+        background: linear-gradient(90deg, #ff4f4f 0%, #ff6b6b 100%);
+        transition: all .3s ease;
+    }
+
+    .btn-animation:hover::after {
+        top: 0;
+        height: 100%;
+    }
+
+/* End otp */
+

@@ -1,7 +1,7 @@
 ﻿using Fastkart.Models.Entities;
 using System.Text.Json;
 
-namespace Fastkart.Services
+namespace Fastkart.Services.IServices
 {
     public interface ISubCategoryService
     {

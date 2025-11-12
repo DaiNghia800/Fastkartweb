@@ -503,5 +503,215 @@ if (tablePermission) {
                 })
         });
     }
+    //display default
+    let dataPermission = tablePermission.getAttribute("table-permission");
+    dataPermission = JSON.parse(dataPermission)
+    dataPermission.forEach(item => {
+        item.permissions.forEach(permission => {
+            const input = document.querySelector(`tr[data-name="${permission}"] input[data-id="${item.id}"]`);
+            input.checked = true;
+        })
+    })
+    //end display default
 }
 //end permission
+
+//search All user
+$(document).ready(function () {
+    $("#searchInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#userTableBody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+//end search All user
+
+//show user detail 
+$(document).ready(function () {
+    $('#userDetailModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const userId = button.data('user-id');
+        const contentDiv = $('#userDetailContent');
+
+        // Hiển thị loading
+        contentDiv.html(`
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
+            </div>
+        `);
+        $.ajax({
+            url: '/admin/user/get-user-detail',
+            type: 'GET',
+            data: { id: userId },
+            success: function (responseHtml) {
+                contentDiv.html(responseHtml);
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi khi tải dữ liệu",
+                    text: res.message
+                });
+            }
+        });
+    });
+});
+//end show user detail
+
+//show user edit 
+$(document).ready(function () {
+    $('#userEditModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const userId = button.data('user-id');
+        const contentDiv = $('#userEditContent');
+
+        // Hiển thị loading
+        contentDiv.html(`
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
+            </div>
+        `);
+
+        $.ajax({
+            url: '/admin/user/get-user-edit',
+            type: 'GET',
+            data: { id: userId },
+            success: function (responseHtml) {
+                contentDiv.html(responseHtml);
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi khi tải dữ liệu",
+                    text: "Không thể tải form chỉnh sửa"
+                });
+            }
+        });
+    });
+
+    // Xử lý submit form edit
+    $(document).on('submit', '#userEditForm', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: '/admin/user/update',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thành công",
+                        text: response.message || "Cập nhật thông tin thành công"
+                    }).then(() => {
+                        $('#userEditModal').modal('hide');
+                        location.reload(); // Reload trang để cập nhật dữ liệu
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi",
+                        text: response.message || "Có lỗi xảy ra"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi",
+                    text: "Không thể cập nhật thông tin"
+                });
+            }
+        });
+    });
+});
+//end show user edit
+
+//delete Users
+// (Bên dưới code submit form edit)
+
+// Xử lý sự kiện nhấn nút Xóa
+$(document).on('click', '.icon-delete', function (e) {
+    e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
+
+    const button = $(this);
+    const userId = button.data('user-id');
+
+    Swal.fire({
+        title: 'Bạn có chắc không?',
+        text: "Bạn sẽ không thể hoàn tác hành động này!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Vâng, hãy xóa nó!',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: '/admin/user/delete',
+                type: 'POST',
+                data: { id: userId }, // Dữ liệu gửi đi
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Đã xóa!',
+                            response.message,
+                            'success'
+                        );
+                        // Xóa hàng <tr> cha của nút vừa bấm
+                        button.closest('tr').fadeOut(500, function () {
+                            $(this).remove();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Lỗi!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function () {
+                    Swal.fire(
+                        'Lỗi!',
+                        'Không thể kết nối đến máy chủ.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+});
+//end delete Users
+
+//My profile (admin)
+function viewMyProfile(userId){
+    $.ajax({
+        url: '/admin/user/get-user-detail',
+        type: 'GET',
+        data: { id: userId },
+        success: function (response) { 
+            $('#myProfileContent').html(response);
+            $('#myProfileModal').modal('show');
+        },
+        error: function(xhr, status, error){
+            console.error('Error loading profile:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi khi tải dữ liệu",
+                text: "Không thể tải thông tin cá nhân"
+            });
+        }
+    });
+}
+//End my profile (admin)    

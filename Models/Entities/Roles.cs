@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Fastkart.Models.Entities
+
 {
     public class Roles
     {

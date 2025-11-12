@@ -1,5 +1,6 @@
 ﻿using Fastkart.Models.Entities;
-using Fastkart.Services;
+using Microsoft.AspNetCore.Authorization;
+using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using System.Text.Json;
 namespace Fastkart.Controllers.Admin
 {
     [Route("/admin/product-category")]
+    [Authorize]
     public class ProductCategoryController : Controller
     {
         private readonly IProductCategoryService _productCategoryService;
