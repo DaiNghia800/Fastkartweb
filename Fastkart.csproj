@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Areas\**" />
+    <Compile Remove="lib\**" />
     <Compile Remove="wwwroot\Admin\**" />
     <Content Remove="Areas\**" />
+    <Content Remove="lib\**" />
     <Content Remove="wwwroot\Admin\**" />
     <EmbeddedResource Remove="Areas\**" />
+    <EmbeddedResource Remove="lib\**" />
     <EmbeddedResource Remove="wwwroot\Admin\**" />
     <None Remove="Areas\**" />
+    <None Remove="lib\**" />
     <None Remove="wwwroot\Admin\**" />
   </ItemGroup>
 
@@ -45,7 +49,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="lib\" />
   </ItemGroup>
 
 </Project>

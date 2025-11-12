@@ -11,25 +11,406 @@
     <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/lib/slick/slick.css" />
     <link rel="stylesheet" href="/lib/slick/slick-theme.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Fastkart.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+    @* <link rel="stylesheet" href="~/Fastkart.styles.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="~/assets/css/style.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fastkart</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <div class="theme-option">
+            <div class="back-to-top" id="back-to-top">
+                <a>
+                    <i class="fas fa-chevron-up text-white"></i>
+                </a>
+            </div>
+        </div>
+        <!-- Top Bar -->
+        <div class="header-notification overflow-hidden text-white text-center position-relative py-2">
+            <div class="wrap-notification">
+                <div class="item">
+                    <p class="item-notify m-0">Free shipping on all your order. We deliver you enjoy</p>
+                </div>
+                <div class="item">
+                    <p class="item-notify m-0">
+                        <strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
+                        every single day on Weekends.<strong class="ms-1">
+                            New Coupon Code: Fast024
+                        </strong>
+                    </p>
+                </div>
+                <div class="item">
+                    <p class="item-notify m-0">Free shipping on all your order. We deliver you enjoy</p>
+                </div>
+                <div class="item">
+                    <p class="item-notify m-0">
+                        <strong class="me-1">Welcome to Fastkart!</strong>Wrap new offers/gift
+                        every single day on Weekends.<strong class="ms-1">
+                            New Coupon Code: Fast024
+                        </strong>
+                    </p>
+                </div>
+                <div class="item">
+                    <p class="item-notify m-0">Free shipping on all your order. We deliver you enjoy</p>
+                </div>
+            </div>
+            <button class="close-notification position-absolute top-50 btn-lab">
+                <span class="d-sm-inline d-none">Close</span>
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Header -->
+        <header class="">
+            <!-- Side Menu -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="sideMenu">
+                <div class="offcanvas-header navbar-shadow">
+                    <h5 class="offcanvas-title">Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="nav-link">Home</a></li>
+                        <li><a href="#" class="nav-link">Shop</a></li>
+                        <li><a href="#" class="nav-link">About</a></li>
+                        <li><a href="#" class="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="container py-3">
+                <div class="row align-items-center justify-content-sm-between">
+                    <div class="col-md-1 col-sm-1 col-2 d-block d-sm-none">
+                        <button class="navbar-toggler d-xl-none d-block p-0" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#sideMenu">
+                            <span class="navbar-toggle">
+                                <i class="fa-solid fa-bars"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Logo -->
+                    <div class="col-md-2  col-sm-2 col-8 text-sm-left text-center">
+                        <a href="#" target="_blank" rel="noopener noreferrer">
+                            <img class="img-logo" src="./assets/images/logo-fastkart.png" alt="logo">
+                        </a>
+                    </div>
+
+                    <div class="col-md-1 col-sm-1 col-2 d-block d-sm-none">
+                        <button class="navbar-toggler d-xl-none d-block p-0" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#sideMenu">
+                            <span class="navbar-toggle">
+                                <i class="fa-solid fa-bars"></i>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Search box -->
+                    <div class="d-none d-xl-flex col-xl-6 align-items-center">
+                        <div class="location-box-2">
+                            <button class="loca-btn" data-bs-toggle="modal" data-bs-target="#locationModal">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                                     fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <form class="d-flex form-search flex-1 position-relative">
+                            <input class="form-control" type="search"
+                                   placeholder="Search for product, delivered to your door..." aria-label="Search">
+                            <button class="loca-btn search-button">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+                                     fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Icons & Dropdowns -->
+                    <div class="col-md-7 col-sm-7 col-xl-4 d-sm-flex d-none justify-content-end align-items-center gap-3 p-0">
+                        <div class="dropdown-dollar d-flex align-items-center">
+                            <div class="dropdown">
+                                <button class="" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <span>Language</span> <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="d-block">
+                                        <a id="eng" class="dropdown-item">English</a>
+                                    </li>
+                                    <li class="d-block">
+                                        <a id="hin" class="dropdown-item">Hindi</a>
+                                    </li>
+                                    <li class="d-block">
+                                        <a id="guj" class="dropdown-item">Gujarati</a>
+                                    </li>
+                                    <li class="d-block">
+                                        <a id="arb" class="dropdown-item">Arabic</a>
+                                    </li>
+                                    <li class="d-block">
+                                        <a id="rus" class="dropdown-item">Russia</a>
+                                    </li>
+                                    <li class="d-block">
+                                        <a class="dropdown-item">Chinese</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button class="m-0" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown">
+                                    <span>Dollar</span> <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a id="usd" class="dropdown-item">USD</a>
+                                    </li>
+                                    <li>
+                                        <a id="inr" class="dropdown-item">INR</a>
+                                    </li>
+                                    <li>
+                                        <a id="eur" class="dropdown-item">EUR</a>
+                                    </li>
+                                    <li>
+                                        <a id="aud" class="dropdown-item">AUD</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="option-list">
+                            <ul class="list">
+                                <li class="position-relative">
+                                    <a href="#" target="_blank" rel="noopener noreferrer">
+                                        <span class="badge-number">2</span>
+                                        <i class="fa-solid fa-right-left"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a href="#" target="_blank" rel="noopener noreferrer">
+                                        <span class="badge-number">1</span>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a href="#" target="_blank" rel="noopener noreferrer">
+                                        <span class="badge-number">4</span>
+                                        <i class="fa-solid fa-bag-shopping"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </button> -->
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav gap-3">
+                        <li class="nav-item d-flex align-items-center position-relative">
+                            <i class="fa-solid fa-border-all all-icon"></i>
+                            <a class="nav-link nav-category color-black-custom" href="#">All Categories</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                About us
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                Product
+                                <i class="fa-solid fa-angle-down"></i>
+                            </a>
+                            <div class="dropdown-menu menu-product">
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                        <div class="dropdown-column m-0">
+                                            <h5 class="dropdown-header">
+                                                Product Pages
+                                            </h5>
+                                            <a class="dropdown-item" href="product-left-thumbnail.html">
+                                                Product
+                                                Thumbnail
+                                            </a>
+                                            <a class="dropdown-item" href="product-4-image.html">
+                                                Product
+                                                Images
+                                            </a>
+                                            <a class="dropdown-item" href="product-slider.html">
+                                                Product
+                                                Slider
+                                            </a>
+                                            <a class="dropdown-item" href="product-sticky.html">
+                                                Product
+                                                Sticky
+                                            </a>
+                                            <a class="dropdown-item" href="product-accordion.html">Product Accordion</a>
+                                            <a class="dropdown-item" href="product-circle.html">
+                                                Product
+                                                Tab
+                                            </a>
+                                            <a class="dropdown-item" href="product-digital.html">
+                                                Product
+                                                Digital
+                                            </a>
+
+                                            <h5 class="custom-mt dropdown-header">
+                                                Product Features
+                                            </h5>
+                                            <a class="dropdown-item" href="product-circle.html">
+                                                Bundle
+                                                (Cross Sale)
+                                            </a>
+                                            <a class="dropdown-item" href="product-left-thumbnail.html">
+                                                Hot Stock
+                                                Progress <label class="menu-label">New</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-sold-out.html">
+                                                SOLD
+                                                OUT
+                                            </a>
+                                            <a class="dropdown-item" href="product-circle.html">
+                                                Sale Countdown
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <div class="dropdown-column m-0">
+                                            <h5 class="dropdown-header">
+                                                Product Variants Style
+                                            </h5>
+                                            <a class="dropdown-item" href="product-rectangle.html">Variant Rectangle</a>
+                                            <a class="dropdown-item" href="product-circle.html">
+                                                Variant
+                                                Circle <label class="menu-label">New</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-color-image.html">
+                                                Variant Image
+                                                Swatch
+                                            </a>
+                                            <a class="dropdown-item" href="product-color.html">
+                                                Variant
+                                                Color
+                                            </a>
+                                            <a class="dropdown-item" href="product-radio.html">
+                                                Variant
+                                                Radio Button
+                                            </a>
+                                            <a class="dropdown-item" href="product-dropdown.html">Variant Dropdown</a>
+                                            <h5 class="custom-mt dropdown-header">
+                                                Product Features
+                                            </h5>
+                                            <a class="dropdown-item" href="product-left-thumbnail.html">
+                                                Sticky
+                                                Checkout
+                                            </a>
+                                            <a class="dropdown-item" href="product-dynamic.html">
+                                                Dynamic
+                                                Checkout
+                                            </a>
+                                            <a class="dropdown-item" href="product-sticky.html">
+                                                Secure
+                                                Checkout
+                                            </a>
+                                            <a class="dropdown-item" href="product-bundle.html">
+                                                Active
+                                                Product view
+                                            </a>
+                                            <a class="dropdown-item" href="product-bundle.html">
+                                                Active
+                                                Last Orders
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <div class="dropdown-column m-0">
+                                            <h5 class="dropdown-header">
+                                                Product Features
+                                            </h5>
+                                            <a class="dropdown-item" href="product-image.html">
+                                                Product
+                                                Simple
+                                            </a>
+                                            <a class="dropdown-item" href="product-rectangle.html">
+                                                Product Classified <label class="menu-label">New</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-size-chart.html">
+                                                Size
+                                                Chart <label class="menu-label">New</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-size-chart.html">
+                                                Delivery &amp;
+                                                Return
+                                            </a>
+                                            <a class="dropdown-item" href="product-size-chart.html">Product Review</a>
+                                            <a class="dropdown-item" href="product-expert.html">
+                                                Ask
+                                                an Expert
+                                            </a>
+                                            <h5 class="custom-mt dropdown-header">
+                                                Product Features
+                                            </h5>
+                                            <a class="dropdown-item" href="product-bottom-thumbnail.html">
+                                                Product
+                                                Tags
+                                            </a>
+                                            <a class="dropdown-item" href="product-image.html">
+                                                Store
+                                                Information
+                                            </a>
+                                            <a class="dropdown-item" href="product-image.html">
+                                                Social
+                                                Share <label class="menu-label warning-label">Hot</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-left-thumbnail.html">
+                                                Related Products
+                                                <label class="menu-label warning-label">Hot</label>
+                                            </a>
+                                            <a class="dropdown-item" href="product-right-thumbnail.html">
+                                                Wishlist &amp;
+                                                Compare
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 d-xl-block d-none">
+                                        <div class="dropdown-column m-0">
+                                            <div class="menu-img-banner">
+                                                <a class="text-title" href="product-circle.html">
+                                                    <img src="./assets/images/mega-menu.png" alt="banner">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                Blog
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                Contact
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center color-black-custom" href="#">
+                                Faq
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -41,6 +422,258 @@
             @RenderBody()
         </main>
     </div>
+    <footer class="section-t-space footer-section-2">
+        <div class="container">
+            <div class="main-footer">
+                <div class="row g-md-4 gy-sm-5 gy-2">
+                    <div class="col-xxl-3 col-xl-4 col-sm-6">
+                        <a href="index.html" class="foot-logo">
+                            <img src="./assets/images/logo-fastkart.png" class="img-fluid" alt="">
+                        </a>
+                        <p class="information-text">
+                            it is a long established fact that a reader will be distracted
+                            by the readable content.
+                        </p>
+                        <ul class="social-icon">
+                            <li>
+                                <a href="www.facebook.com">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="www.goolge.com">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="www.twitter.com">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="www.instagram.com">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="www.pinterest.com">
+                                    <i class="fab fa-pinterest-p"></i>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="social-app mt-sm-4 mt-3 mb-4">
+                            <ul>
+                                <li>
+                                    <a href="https://play.google.com/store/apps" target="_blank">
+                                        <img src="./assets/images/playstore.svg" class="blur-up lazyloaded" alt="">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.apple.com/in/app-store/" target="_blank">
+                                        <img src="./assets/images/appstore.svg" class="blur-up lazyloaded" alt="">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-2 col-xl-4 col-sm-6">
+                        <div class="footer-title">
+                            <h4>About Fastkart</h4>
+                        </div>
+                        <ul class="footer-list footer-contact mb-sm-0 mb-3">
+                            <li>
+                                <a href="about-us.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>About Us
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact-us.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Contact Us
+                                </a>
+                            </li>
+                            <li>
+                                <a href="term_condition.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Terms &amp; Coditions
+                                </a>
+                            </li>
+                            <li>
+                                <a href="careers.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Careers
+                                </a>
+                            </li>
+                            <li>
+                                <a href="blog-list.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Latest Blog
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xxl-2 col-xl-4 col-sm-6">
+                        <div class="footer-title">
+                            <h4>Useful Link</h4>
+                        </div>
+                        <ul class="footer-list footer-contact mb-sm-0 mb-3">
+                            <li>
+                                <a href="order-success.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Your Order
+                                </a>
+                            </li>
+                            <li>
+                                <a href="user-dashboard.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Your Account
+                                </a>
+                            </li>
+                            <li>
+                                <a href="order-tracking.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Track Orders
+                                </a>
+                            </li>
+                            <li>
+                                <a href="wishlist.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Your Wishlist
+                                </a>
+                            </li>
+                            <li>
+                                <a href="faq.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>FAQs
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xxl-2 col-xl-4 col-sm-6">
+                        <div class="footer-title">
+                            <h4>Categories</h4>
+                        </div>
+                        <ul class="footer-list footer-contact mb-sm-0 mb-3">
+                            <li>
+                                <a href="vegetables-demo.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Fresh Vegetables
+                                </a>
+                            </li>
+                            <li>
+                                <a href="spice-demo.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Hot Spice
+                                </a>
+                            </li>
+                            <li>
+                                <a href="bags-demo.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>Brand New Bags
+                                </a>
+                            </li>
+                            <li>
+                                <a href="bakery-demo.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>New Bakery
+                                </a>
+                            </li>
+                            <li>
+                                <a href="grocery-demo.html" class="footer-contain-2">
+                                    <i class="fas fa-angle-right"></i>New Grocery
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xxl-3 col-xl-4 col-sm-6">
+                        <div class="footer-title">
+                            <h4>Store infomation</h4>
+                        </div>
+                        <ul class="footer-address footer-contact">
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <div class="inform-box flex-start-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-map-pin">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <p>Fastkart Demo Store, Demo store india 345 - 659</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <div class="inform-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-phone">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        <p>Call us: 123-456-7890</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <div class="inform-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                            </path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <p>Email Us: Support@Fastkart.com</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <div class="inform-box">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-printer">
+                                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2">
+                                            </path>
+                                            <rect x="6" y="14" width="12" height="8"></rect>
+                                        </svg>
+                                        <p>Fax: 123456</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-footer section-small-space">
+                <div class="left-footer">
+                    <p>2022 Copyright By Themeforest Powered By Pixelstrap</p>
+                </div>
+                <div class="right-footer">
+                    <ul class="payment-box">
+                        <li>
+                            <img src="./assets/images/visa.png" alt="">
+                        </li>
+                        <li>
+                            <img src="./assets/images/discover.png" alt="">
+                        </li>
+                        <li>
+                            <img src="./assets/images/american.png" alt="">
+                        </li>
+                        <li>
+                            <img src="./assets/images/master-card.png" alt="">
+                        </li>
+                        <li>
+                            <img src="./assets/images/giro-pay.png" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 
     <footer class="">
@@ -66,6 +699,6 @@
     <script src="~/js/sidebar-effect.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/login.js" asp-append-version="true"></script>
-
+    <script src="~/assets/js/script.js"></script>
 </body>
 </html>

@@ -7,12 +7,8 @@
       "destination": "wwwroot/lib/tinymce"
     },
     {
-      "library": "jquery@3.6.4",
-      "destination": "wwwroot/lib/jquery"
-    },
-    {
       "library": "twitter-bootstrap@5.3.8",
-      "destination": "wwwroot/lib/bootstrap"
+      "destination": "wwwroot/lib/twitter-bootstrap"
     },
     {
       "library": "jquery-validate@1.21.0",
