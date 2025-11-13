@@ -72,7 +72,7 @@ namespace Fastkart.Controllers.Login
                         ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(30) : null
                     };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authProperties);
-                    string redirectUrl = (accounts.Role.RoleName == WebConstants.ROLE_CUSTOMER) ? "/home" : "/admin/dashboard";
+                    string redirectUrl = (accounts.Role.RoleName == WebConstants.ROLE_CUSTOMER) ? "/" : "/admin/dashboard";
                     return Json(new { status = WebConstants.SUCCESS, success = true, message = "Đăng nhập thành công", redirectUrl = redirectUrl });
                 }
                 else

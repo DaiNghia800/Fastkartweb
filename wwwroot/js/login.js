@@ -385,30 +385,12 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         console.log('Signup form submitted');
 
-        if ($(this).valid && !$(this).valid()) {
-            console.log('Form validation failed');
-            return false;
-        }
-
-        const agreeToTerms = $('#AgreeToTerms').is(':checked');
-        if (!agreeToTerms) {
-            Swal.fire({
-                icon: "warning",
-                title: "Thông báo",
-                text: "Bạn phải đồng ý với điều khoản và chính sách bảo mật để tiếp tục"
-            });
-            $('#AgreeToTerms').addClass('is-invalid');
-            return false;
-        } else {
-            $('#AgreeToTerms').removeClass('is-invalid');
-        }
-
+        // Tạo form data để gửi lên server
         const formData = {
-            FullName: $('input[name="FullName"]').val(),
-            Email: $('input[name="Email"]').val(),
+            FullName: $('input[name="FullName"]').val().trim(),
+            Email: $('input[name="Email"]').val().trim(),
             Password: $('input[name="Password"]').val(),
-            ConfirmPassword: $('input[name="ConfirmPassword"]').val(),
-            AgreeToTerms: agreeToTerms
+            ConfirmPassword: $('input[name="ConfirmPassword"]').val()
         };
 
         console.log('Signup data:', formData);

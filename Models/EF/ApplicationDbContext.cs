@@ -33,7 +33,8 @@ namespace Fastkart.Models.EF
                     .HasMaxLength(255)
                     .IsRequired();
                 entity.Property(e => e.Thumbnail)
-                    .HasMaxLength(255)
+                    .HasColumnType("nvarchar(max)")
+                    .IsUnicode(false)
                     .IsRequired(false);
                 entity.Property(e => e.Description)
                     .HasColumnType("nvarchar(max)")
@@ -110,8 +111,9 @@ namespace Fastkart.Models.EF
                     .HasMaxLength(255)
                     .IsRequired();
                 entity.Property(e => e.Logo)
-                    .HasMaxLength(255)
-                    .IsRequired();
+                    .HasColumnType("nvarchar(max)")
+                    .IsUnicode(false)
+                    .IsRequired(false);
                 entity.Property(e => e.Description)
                     .HasColumnType("nvarchar(max)")
                     .IsRequired(false);

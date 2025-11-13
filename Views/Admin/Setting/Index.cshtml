@@ -1,67 +1,78 @@
-﻿@{
+﻿@model Fastkart.Models.ViewModels.ProfileUpdateViewModel
+@{
     Layout = "_LayoutAdmin";
     ViewData["title"] = "Profile Setting";
 }
 
+<form id="profileUpdateForm" asp-controller="Setting" asp-action="UpdateProfile" method="post" enctype="multipart/form-data" class="theme-form">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Uid" />
 
-
-<form class="theme-form">
     <div class="card">
         <div class="header-title">
             <h5>Profile Setting</h5>
         </div>
         <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
             <div class="row">
-
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="firstName">First Name</label>
+                    <label asp-for="FullName" class="col-sm-3 col-form-label text-sm-end">Full Name</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="firstName" placeholder="Enter Your First Name">
+                        <input type="text" class="form-control" asp-for="FullName" placeholder="Enter Your Full Name">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="lastName">Last Name</label>
+                    <label asp-for="PhoneNumber" class="col-sm-3 col-form-label text-sm-end">Your Phone Number</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter Your Last Name">
+                        <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Enter Your Number">
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="phone">Your Phone Number</label>
+                    <label asp-for="Email" class="col-sm-3 col-form-label text-sm-end">Enter Email Address</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="phone" placeholder="Enter Your Number">
+                        <input type="email" class="form-control" asp-for="Email" placeholder="Enter Your Email Address">
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="email">Enter Email Address</label>
+                    <label asp-for="Address" class="col-sm-3 col-form-label text-sm-end">Address</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" id="email" placeholder="Enter Your Email Address">
+                        <input type="text" class="form-control" asp-for="Address" placeholder="Enter Your Address">
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="photo">Photo</label>
+                    <label asp-for="Photo" class="col-sm-3 col-form-label text-sm-end">Photo</label>
                     <div class="col-sm-9">
-                        <input class="form-control" type="file" id="photo">
+                        <input class="form-control" type="file" asp-for="Photo">
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                <h6 class="text-muted mb-3">Change Password (Optional)</h6>
+
+                <div class="row mb-3">
+                    <label asp-for="Password" class="col-sm-3 col-form-label text-sm-end">Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" asp-for="Password" id="password" placeholder="Enter New Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <small class="text-muted">Leave blank if you do not want to change your password</small>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="password">Password</label>
+                    <label asp-for="ConfirmPassword" class="col-sm-3 col-form-label text-sm-end">Confirm Password</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" id="password" placeholder="Enter Your Password">
+                        <input type="password" class="form-control" asp-for="ConfirmPassword" id="confirmPassword" placeholder="Confirm New Password">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
-
-                <div class="row mb-3">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="confirmPassword">Confirm Password</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Enter Your Confirm Password">
-                    </div>
-                </div>
-
             </div>
         </div>
         <div class="card-footer">

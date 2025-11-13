@@ -715,3 +715,213 @@ function viewMyProfile(userId){
     });
 }
 //End my profile (admin)    
+//Profile Settings
+$(document).ready(function () {
+    const profileForm = $('#profileUpdateForm');
+
+    if (profileForm.length > 0) {
+        // Real-time password validation
+        $('#password, #confirmPassword').on('input', function () {
+            const password = $('#password').val();
+            const confirmPassword = $('#confirmPassword').val();
+
+            if (password && confirmPassword) {
+                if (password !== confirmPassword) {
+                    $('#confirmPassword').addClass('is-invalid');
+                    const errorSpan = $('#confirmPassword').next('.text-danger');
+                    if (errorSpan.length) {
+                        errorSpan.text('Mật khẩu xác nhận không khớp');
+                    }
+                } else {
+                    $('#confirmPassword').removeClass('is-invalid');
+                    const errorSpan = $('#confirmPassword').next('.text-danger');
+                    if (errorSpan.length) {
+                        errorSpan.text('');
+                    }
+                }
+            }
+        });
+
+        // Validate phone number (chỉ cho phép số và bắt đầu bằng 0)
+        $('input[name="PhoneNumber"]').on('input', function () {
+            let value = $(this).val();
+            // Chỉ cho phép số
+            value = value.replace(/[^0-9]/g, '');
+            // Giới hạn 10 ký tự
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            $(this).val(value);
+        });
+
+        // Validate email real-time
+        $('input[name="Email"]').on('blur', function () {
+            const email = $(this).val();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const errorSpan = $(this).next('.text-danger');
+
+            if (email && !emailRegex.test(email)) {
+                $(this).addClass('is-invalid');
+                if (errorSpan.length) {
+                    errorSpan.text('Email không đúng định dạng');
+                }
+            } else {
+                $(this).removeClass('is-invalid');
+                if (errorSpan.length) {
+                    errorSpan.text('');
+                }
+            }
+        });
+
+        // Preview uploaded photo
+        $('input[name="Photo"]').on('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Kiểm tra kích thước file (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "File quá lớn",
+                        text: "Kích thước file không được vượt quá 5MB"
+                    });
+                    $(this).val('');
+                    return;
+                }
+
+                // Kiểm tra loại file
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Định dạng không hợp lệ",
+                        text: "Chỉ chấp nhận file ảnh (JPG, PNG, GIF)"
+                    });
+                    $(this).val('');
+                    return;
+                }
+            }
+        });
+
+        // Clear password fields khi click vào password
+        $('#password').on('focus', function () {
+            if (!$(this).val()) {
+                $('#confirmPassword').val('');
+                $('#confirmPassword').removeClass('is-invalid');
+            }
+        });
+
+        // Profile Update Form Submit Handler
+        profileForm.on('submit', function (e) {
+            e.preventDefault();
+
+            const password = $('#password').val();
+            const confirmPassword = $('#confirmPassword').val();
+
+            // Validate password nếu có nhập
+            if (password && password.length > 0) {
+                // Bắt buộc phải có confirm password
+                if (!confirmPassword || confirmPassword.length === 0) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Thiếu xác nhận mật khẩu",
+                        text: "Vui lòng nhập xác nhận mật khẩu khi thay đổi mật khẩu."
+                    });
+                    return false;
+                }
+
+                // Kiểm tra khớp
+                if (password !== confirmPassword) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Mật khẩu không khớp",
+                        text: "Mật khẩu và xác nhận mật khẩu phải giống nhau."
+                    });
+                    return false;
+                }
+
+                // Kiểm tra độ mạnh của password
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+                if (!passwordRegex.test(password)) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Mật khẩu không đủ mạnh",
+                        text: "Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt."
+                    });
+                    return false;
+                }
+            }
+
+            // Show loading
+            Swal.fire({
+                title: 'Đang cập nhật...',
+                text: 'Vui lòng chờ trong giây lát.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Submit form
+            const formData = new FormData(this);
+            
+            // Debug: Kiểm tra URL
+            const formAction = $(this).attr('action') || '/admin/setting/profile';
+            console.log('Form action URL:', formAction);
+
+            $.ajax({
+                url: formAction, 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    Swal.close();
+                    if (response.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thành công",
+                            text: response.message || "Cập nhật thông tin thành công!",
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi",
+                            text: response.message || "Cập nhật thất bại"
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.close();
+                    console.error('Update profile error:', xhr);
+                    console.error('Status:', xhr.status);
+                    console.error('Response:', xhr.responseText);
+
+                    let errorMessage = "Không thể cập nhật thông tin. Vui lòng thử lại.";
+
+                    // Parse error từ server
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse.message) {
+                            errorMessage = errorResponse.message;
+                        }
+                    } catch (e) {
+                        console.log('Could not parse error response');
+                    }
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi kết nối",
+                        text: errorMessage
+                    });
+                }
+            });
+
+            return false;
+        });
+    }
+});
+//end Profile Settings
