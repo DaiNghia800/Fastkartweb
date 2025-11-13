@@ -22,7 +22,6 @@ namespace Fastkart.Models.ViewModels
 
         public IFormFile? Photo { get; set; }
 
-        // Password fields - chỉ validate khi có giá trị
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$",
         ErrorMessage = "Password must be at least 6 characters with 1 uppercase, 1 lowercase, 1 number and 1 special character.")]
         public string? Password { get; set; }

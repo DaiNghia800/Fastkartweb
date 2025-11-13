@@ -634,3 +634,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 //end logout
+//login for user
+$(document).ready(function () {
+    // Toggle profile dropdown
+    $('.profile-box .profile').on('click', function (e) {
+        e.stopPropagation();
+        $(this).siblings('.profile-dropdown').toggle();
+    });
+
+    // Close dropdown when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.profile-box').length) {
+            $('.profile-dropdown').hide();
+        }
+    });
+
+    // Logout confirmation for frontend
+    $(document).on('click', '#btnLogoutFrontend', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn đăng xuất?',
+            text: "Phiên làm việc của bạn sẽ kết thúc.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = $(this).attr('href');
+            }
+        });
+    });
+});
+//end login for user

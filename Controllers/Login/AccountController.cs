@@ -30,7 +30,7 @@ namespace Fastkart.Controllers.Login
                 }
                 else if (userRole == WebConstants.ROLE_CUSTOMER)
                 {
-                    return Redirect("/home");
+                    return Redirect("/");
                 }
             }
 
@@ -225,7 +225,7 @@ namespace Fastkart.Controllers.Login
                 // 7. Redirect dựa trên Role
                 string redirectUrl = user.Role.RoleName == WebConstants.ROLE_ADMIN
                     ? "/admin/dashboard"
-                    : "/home";
+                    : "/";
 
                 return Redirect(redirectUrl);
             }
