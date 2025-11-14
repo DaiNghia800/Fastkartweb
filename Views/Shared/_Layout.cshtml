@@ -9,6 +9,7 @@
     {
         currentUser = UserService.GetUserById(userId);
     }
+    var pageTitle = ViewData["Title"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +29,30 @@
     <link rel="stylesheet" href="~/assets/css/style.css" />
 </head>
 <body>
+    @if (!string.IsNullOrEmpty(pageTitle) && pageTitle.ToLower() != "home")
+    {
+        <section class="breadcrumb-section pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-contain">
+                            <h2>@pageTitle</h2>
+                            <nav>
+                                <ol class="breadcrumb mb-0 d-flex align-items-center">
+                                    <li class="breadcrumb-item">
+                                        <a href="/">
+                                            <i class="fa-solid fa-house"></i>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">@pageTitle</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
     <header>
         <div class="theme-option">
             <div class="back-to-top" id="back-to-top">
