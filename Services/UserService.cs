@@ -361,11 +361,10 @@ namespace Fastkart.Services
                         _context.Users.Update(existingUser);
                         await _context.SaveChangesAsync();
 
-                        return (existingUser, null); // Thành công - Đã link password
+                        return (existingUser, null);
                     }
                     else
                     {
-                        // User đã có password - Không cho đăng ký lại
                         return (null, "Email này đã được sử dụng.");
                     }
                 }
@@ -591,6 +590,77 @@ namespace Fastkart.Services
             } catch(Exception ex)
             {
                 return new List<string>();
+            }
+        }
+        public async Task<bool> UpdateProfile(ProfileUpdateViewModel model)
+        {
+            try
+            {
+                var existingUser = await _context.Users.FindAsync(model.Uid);
+                if (existingUser == null)
+                {
+                    return false;
+                }
+
+                // Cập nhật Full Name
+                if (!string.IsNullOrEmpty(model.FullName))
+                {
+                    existingUser.FullName = model.FullName.Trim();
+                }
+
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    existingUser.Email = model.Email;
+                }
+
+                if (!string.IsNullOrEmpty(model.PhoneNumber))
+                {
+                    existingUser.PhoneNumber = model.PhoneNumber;
+                }
+
+                if (!string.IsNullOrEmpty(model.Address))
+                {
+                    existingUser.Address = model.Address;
+                }
+
+                // Xử lý upload ảnh
+                if (model.Photo != null && model.Photo.Length > 0)
+                {
+                    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.Photo.CopyToAsync(fileStream);
+                    }
+
+                    existingUser.ImgUser = "/images/users/" + uniqueFileName;
+                }
+
+                // Chỉ cập nhật mật khẩu nếu có nhập
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+                }
+
+                existingUser.UpdatedAt = DateTime.Now;
+                existingUser.UpdatedBy = existingUser.FullName;
+
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }

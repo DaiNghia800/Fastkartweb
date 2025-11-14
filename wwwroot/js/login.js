@@ -385,30 +385,12 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         console.log('Signup form submitted');
 
-        if ($(this).valid && !$(this).valid()) {
-            console.log('Form validation failed');
-            return false;
-        }
-
-        const agreeToTerms = $('#AgreeToTerms').is(':checked');
-        if (!agreeToTerms) {
-            Swal.fire({
-                icon: "warning",
-                title: "Thông báo",
-                text: "Bạn phải đồng ý với điều khoản và chính sách bảo mật để tiếp tục"
-            });
-            $('#AgreeToTerms').addClass('is-invalid');
-            return false;
-        } else {
-            $('#AgreeToTerms').removeClass('is-invalid');
-        }
-
+        // Tạo form data để gửi lên server
         const formData = {
-            FullName: $('input[name="FullName"]').val(),
-            Email: $('input[name="Email"]').val(),
+            FullName: $('input[name="FullName"]').val().trim(),
+            Email: $('input[name="Email"]').val().trim(),
             Password: $('input[name="Password"]').val(),
-            ConfirmPassword: $('input[name="ConfirmPassword"]').val(),
-            AgreeToTerms: agreeToTerms
+            ConfirmPassword: $('input[name="ConfirmPassword"]').val()
         };
 
         console.log('Signup data:', formData);
@@ -652,3 +634,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 //end logout
+//login for user
+$(document).ready(function () {
+    // Toggle profile dropdown
+    $('.profile-box .profile').on('click', function (e) {
+        e.stopPropagation();
+        $(this).siblings('.profile-dropdown').toggle();
+    });
+
+    // Close dropdown when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.profile-box').length) {
+            $('.profile-dropdown').hide();
+        }
+    });
+
+    // Logout confirmation for frontend
+    $(document).on('click', '#btnLogoutFrontend', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn đăng xuất?',
+            text: "Phiên làm việc của bạn sẽ kết thúc.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = $(this).attr('href');
+            }
+        });
+    });
+});
+//end login for user

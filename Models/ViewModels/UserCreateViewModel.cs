@@ -4,36 +4,35 @@ namespace Fastkart.Models.ViewModels
 {
     public class UserCreateViewModel
     {
-        [Required(ErrorMessage = "Họ và tên là bắt buộc")]
+        [Required(ErrorMessage = "Full name is required.")]
         [StringLength(100)]
-        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Họ và tên không được chứa số hay kí tự đặc biệt.")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Full name must not contain numbers or special characters.")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Email là bắt buộc")]
-        // [EmailAddress] đã xử lý việc kiểm tra định dạng
-        [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
-        [Display(Name = "Số điện thoại")]
+        [Display(Name = "Phone number")]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Số điện thoại không hợp lệ. Phải bắt đầu bằng 0 và có 10 chữ số.")]
+        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Invalid phone number. It must start with 0 and contain 10 digits.")]
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
 
-        [Required(ErrorMessage = "Mật khẩu là bắt buộc")]
-        [StringLength(100)] // Giữ lại độ dài tối đa
+        [Required(ErrorMessage = "Password is required.")]
+        [StringLength(100)]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$",
-            ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.")]
-        [DataType(DataType.Password)] // Giúp ẩn ký tự khi nhập
+            ErrorMessage = "Password must be at least 6 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Xác nhận mật khẩu")] // Tên hiển thị
-        [Compare("Password", ErrorMessage = "Mật khẩu và mật khẩu xác nhận không khớp.")]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Bạn phải chọn quyền cho người dùng")]
+        [Required(ErrorMessage = "You must select a role for the user.")]
         public int RoleUid { get; set; }
 
         public IFormFile? ImgFile { get; set; }

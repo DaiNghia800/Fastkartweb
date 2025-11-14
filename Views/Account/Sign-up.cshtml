@@ -6,7 +6,7 @@
     ViewData["Title"] = "Sign Up";
 }
 <section class="log-in-section background-image-2 section-b-space">
-    <div class="container-fluid-lg w-100">
+    <div class="container w-100">
         <div class="row">
             <div class="col-xxl-6 col-xl-5 col-lg-6 d-lg-block d-none ms-auto">
                 <div class="image-contain">
@@ -35,7 +35,7 @@
                                            asp-for="FullName"
                                            placeholder="Full Name"
                                            required
-                                           data-msg-required="Vui lòng nhập họ và tên">
+                                           data-msg-required="Please enter your full name">
                                     <label asp-for="FullName">Full Name</label>
                                     <span asp-validation-for="FullName" class="text-danger"></span>
                                 </div>
@@ -48,8 +48,8 @@
                                            asp-for="Email"
                                            placeholder="Email Address"
                                            required
-                                           data-msg-required="Vui lòng nhập email"
-                                           data-msg-email="Email không đúng định dạng">
+                                           data-msg-required="Please enter your email"
+                                           data-msg-email="Invalid email format">
                                     <label asp-for="Email">Email Address</label>
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
@@ -62,7 +62,7 @@
                                            asp-for="Password"
                                            placeholder="Password"
                                            required
-                                           data-msg-required="Vui lòng nhập mật khẩu"
+                                           data-msg-required="Please enter a password"
                                            minlength="6">
                                     <label asp-for="Password">Password</label>
                                     <span asp-validation-for="Password" class="text-danger"></span>
@@ -76,28 +76,11 @@
                                            asp-for="ConfirmPassword"
                                            placeholder="Confirm Password"
                                            required
-                                           data-msg-required="Vui lòng xác nhận mật khẩu"
+                                           data-msg-required="Please confirm your password"
                                            data-rule-equalTo="input[name='Password']"
-                                           data-msg-equalTo="Mật khẩu xác nhận không khớp">
+                                           data-msg-equalTo="Password confirmation does not match">
                                     <label asp-for="ConfirmPassword">Confirm Password</label>
                                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="forgot-box">
-                                    <div class="form-check ps-0 m-0 remember-box">
-                                        <input class="checkbox_animated check-box"
-                                               type="checkbox"
-                                               asp-for="AgreeToTerms"
-                                               id="AgreeToTerms"
-                                               required
-                                               data-msg-required="Bạn phải đồng ý với điều khoản và chính sách bảo mật">
-                                        <label class="form-check-label" for="AgreeToTerms">
-                                            I agree with <span>Terms </span> and <span>Privacy</span>
-                                        </label>
-                                    </div>
-                                    <span asp-validation-for="AgreeToTerms" class="text-danger d-block"></span>
                                 </div>
                             </div>
 

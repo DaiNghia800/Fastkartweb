@@ -8,85 +8,85 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Fastkart.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedInitialDataaa : Migration
+    public partial class mergemainn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Brand",
-                columns: table => new
-                {
-                    Uid = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BrandName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Logo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brand", x => x.Uid);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Brand",
+            //    columns: table => new
+            //    {
+            //        Uid = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        BrandName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+            //        Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+            //        Logo = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
+            //        Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+            //        CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+            //        UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+            //        CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+            //        UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Brand", x => x.Uid);
+            //    });
 
-            migrationBuilder.CreateTable(
-                name: "Functions",
-                columns: table => new
-                {
-                    Uid = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Active")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Functions", x => x.Uid);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Functions",
+            //    columns: table => new
+            //    {
+            //        Uid = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+            //        Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Active")
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Functions", x => x.Uid);
+            //    });
 
-            migrationBuilder.CreateTable(
-                name: "PermissionTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PermissionTypes", x => x.Id);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "PermissionTypes",
+            //    columns: table => new
+            //    {
+            //        Id = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+            //        Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_PermissionTypes", x => x.Id);
+            //    });
 
-            migrationBuilder.CreateTable(
-                name: "ProductCategory",
-                columns: table => new
-                {
-                    Uid = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Thumbnail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductCategory", x => x.Uid);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "ProductCategory",
+            //    columns: table => new
+            //    {
+            //        Uid = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        CategoryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+            //        Thumbnail = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
+            //        Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+            //        Position = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+            //        Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+            //        CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+            //        UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+            //        CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+            //        UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_ProductCategory", x => x.Uid);
+            //    });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -329,7 +329,8 @@ namespace Fastkart.Migrations
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -450,15 +451,15 @@ namespace Fastkart.Migrations
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Uid", "BrandUid", "CreatedBy", "Description", "Discount", "Exchangeable", "IsFeatured", "Price", "ProductName", "Refundable", "Sku", "Slug", "Status", "StockQuantity", "StockStatusUid", "SubCategoryUid", "Thumbnail", "UnitUid", "UpdatedAt", "UpdatedBy", "Weight" },
-                values: new object[] { 1, 1, null, null, 0, true, true, 35000m, "Ớt chuông đỏ", true, null, "ot-chuong-do", "Active", 100, 1, 1, "/images/products/bell-pepper.jpg", 1, null, null, 1.0 });
+                values: new object[] { 1, 1, null, null, 0, true, true, 35000m, "Ớt chuông đỏ", true, null, "ot-chuong-do", "Active", 100, 1, 1, "https://themes.pixelstrap.com/fastkart/assets/images/veg-3/cate1/1.png", 1, null, null, 1.0 });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "Uid", "BrandUid", "CreatedBy", "Description", "Discount", "Exchangeable", "Price", "ProductName", "Refundable", "Sku", "Slug", "Status", "StockQuantity", "StockStatusUid", "SubCategoryUid", "Thumbnail", "UnitUid", "UpdatedAt", "UpdatedBy", "Weight" },
                 values: new object[,]
                 {
-                    { 2, 1, null, null, 0, true, 28000m, "Bông cải xanh", true, null, "bong-cai-xanh", "Active", 100, 1, 1, "/images/products/broccoli.jpg", 1, null, null, 1.0 },
-                    { 3, 1, null, null, 0, true, 22000m, "Cà rốt hữu cơ", true, null, "ca-rot-huu-co", "Active", 100, 1, 1, "/images/products/carrot.jpg", 1, null, null, 1.0 }
+                    { 2, 1, null, null, 0, true, 28000m, "Bông cải xanh", true, null, "bong-cai-xanh", "Active", 100, 1, 1, "https://themes.pixelstrap.com/fastkart/assets/images/veg-3/cate1/6.png", 1, null, null, 1.0 },
+                    { 3, 1, null, null, 0, true, 22000m, "Cà rốt hữu cơ", true, null, "ca-rot-huu-co", "Active", 100, 1, 1, "https://themes.pixelstrap.com/fastkart/assets/images/veg-3/pro1/3.png", 1, null, null, 1.0 }
                 });
 
             migrationBuilder.CreateIndex(

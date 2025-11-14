@@ -19,6 +19,7 @@ namespace Fastkart.Services.IServices
         Task<(bool Success, string Message)> VerifyOtpAsync(string email, string otpCode);
         Task<(bool Success, string Message)> ResetPasswordAsync(string email, string otpCode, string newPassword);
         List<string> getPermissionRole(int roleId);
+        Task<bool> UpdateProfile(ProfileUpdateViewModel model);
     }
 }
 
