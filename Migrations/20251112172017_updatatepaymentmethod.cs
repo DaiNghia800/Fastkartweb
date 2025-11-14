@@ -5,24 +5,24 @@
 namespace Fastkart.Migrations
 {
     /// <inheritdoc />
-    public partial class addRoleName_And_Users_4 : Migration
+    public partial class updatatepaymentmethod : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                table: "Users",
-                column: "Email",
-                unique: true);
+            migrationBuilder.AddColumn<string>(
+                name: "PaymentMethod",
+                table: "Order",
+                type: "nvarchar(max)",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Users_Email",
-                table: "Users");
+            migrationBuilder.DropColumn(
+                name: "PaymentMethod",
+                table: "Order");
         }
     }
 }

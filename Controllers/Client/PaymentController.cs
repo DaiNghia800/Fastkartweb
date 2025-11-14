@@ -1,84 +1,149 @@
-﻿using Fastkart.Services;
+﻿using Fastkart.Models.EF; 
+using Fastkart.Models.Entities;  
+using Fastkart.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore; 
 using Newtonsoft.Json;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Security.Claims;
 
 namespace Fastkart.Controllers
 {
     [Route("payment")]
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly MoMoService _momoService;
         private readonly IConfiguration _config;
         private readonly ILogger<PaymentController> _logger;
-
-        public PaymentController(MoMoService momoService, IConfiguration config, ILogger<PaymentController> logger)
+        private readonly ApplicationDbContext _context;
+        private readonly CartService _cartService;
+        public PaymentController(
+            MoMoService momoService,
+            IConfiguration config,
+            ILogger<PaymentController> logger,
+            ApplicationDbContext context, 
+            CartService cartService)      
         {
             _momoService = momoService;
             _config = config;
             _logger = logger;
+            _context = context;         
+            _cartService = cartService;   
         }
 
-        // ======= B1: Tạo link thanh toán MoMo (ĐÃ SỬA ĐỂ NHẬN DỮ LIỆU ĐỘNG) =======
         [HttpGet("momo")]
-        public async Task<IActionResult> PayWithMoMo([FromQuery] long amount, [FromQuery] string orderInfo)
+        public async Task<IActionResult> PayWithMoMo([FromQuery] string addressId)
         {
-            // Tạo một OrderId mới, duy nhất tại đây
-            string orderId = DateTime.Now.Ticks.ToString();
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var cartItems = _cartService.GetCartItems();
+            if (cartItems == null || !cartItems.Any())
+            {
+                return RedirectToAction("Index", "Cart");
+            }
 
-            // Sử dụng thông tin từ client (trang checkout gửi qua)
-            // Nếu không có thì mới dùng giá trị mặc định để test
-            long paymentAmount = (amount > 0) ? amount : 50000;
-            string paymentInfo = !string.IsNullOrEmpty(orderInfo)
-                ? orderInfo
-                : "Thanh toán đơn hàng " + orderId;
+            long subtotal = _cartService.GetSubtotal();
+            long shippingFee = 25000;      
+            long couponDiscount = 10000; 
+            long finalTotal = subtotal + shippingFee - couponDiscount;
 
-            var payUrl = await _momoService.CreatePaymentAsync(paymentAmount, orderId, paymentInfo);
+            var newOrder = new Order
+            {
+                OrderDate = DateTime.Now,
+                Status = "Pending_Payment",
+                TotalAmount = (decimal)finalTotal,
+                PaymentMethod = "MoMo",
+                ShippingAddress = addressId,
+                UserUid = userId
+            };
+
+            foreach (var item in cartItems)
+            {
+                _context.OrderItem.Add(new OrderItem
+                {
+                    Order = newOrder,
+                    ProductUid = item.ProductId,
+                    Quantity = item.Quantity,
+                    PriceAtPurchase = item.Price
+                });
+            }
+
+            await _context.SaveChangesAsync(); 
+
+            string orderId = $"{newOrder.Uid}_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
+
+            string orderInfo = "Thanh toán đơn hàng #" + orderId;
+            long paymentAmount = finalTotal; 
+
+            var payUrl = await _momoService.CreatePaymentAsync(paymentAmount, orderId, orderInfo);
             _logger.LogInformation("Redirecting to MoMo PayUrl: {url}", payUrl);
 
             return Redirect(payUrl);
         }
 
-        // ======= B2: Người dùng được redirect về (hiển thị kết quả) =======
         [HttpGet("return")]
-        public IActionResult PaymentReturn()
+        public async Task<IActionResult> PaymentReturn() 
         {
             var query = Request.Query;
+            string resultCode = query["resultCode"].ToString();
+            string orderIdFromMoMo = query["orderId"].ToString();
 
-            ViewBag.Result = query["resultCode"] == "0"
-                ? "✅ Thanh toán thành công!"
-                : "❌ Thanh toán thất bại hoặc bị hủy.";
+            Order order = null;
+
+            var mainOrderId = orderIdFromMoMo.Split('_')[0];
+            if (long.TryParse(mainOrderId, out long dbOrderId))
+            {
+                order = await _context.Order
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                    .FirstOrDefaultAsync(o => o.Uid == dbOrderId);
+            }
+
+
+            if (resultCode == "0")
+            {
+                ViewBag.Result = "Thanh toán thành công!";
+                if (order != null)
+                {
+                    _cartService.ClearCart();
+                }
+            }
+            else
+            {
+                ViewBag.Result = "Thanh toán thất bại hoặc bị hủy.";
+                ViewBag.Message = query["message"];
+            }
 
             ViewBag.OrderId = query["orderId"];
             ViewBag.Amount = query["amount"];
-            ViewBag.Message = query["message"];
 
-            _logger.LogInformation("PaymentReturn Query: {query}", JsonConvert.SerializeObject(query));
-
-            return View("Result");
+            return View("Result", order);
         }
 
-        // ======= B3: MoMo gọi ngược về server để xác thực chữ ký =======
         [HttpPost("notify")]
+        [AllowAnonymous]
         public async Task<IActionResult> PaymentNotify()
         {
             using var reader = new StreamReader(Request.Body, Encoding.UTF8);
             var body = await reader.ReadToEndAsync();
 
             _logger.LogInformation("MoMo Notify Received: {body}", body);
-
             var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
             if (data == null)
             {
                 return BadRequest(new { message = "Invalid JSON" });
             }
 
-            // Lấy key từ appsettings.json
             var secretKey = _config["MoMo:SecretKey"];
             var accessKey = _config["MoMo:AccessKey"];
 
-            // === Dựng lại chuỗi đúng thứ tự theo tài liệu chính thức ===
             var rawHash =
                 $"accessKey={accessKey}" +
                 $"&amount={data["amount"]}" +
@@ -103,18 +168,35 @@ namespace Fastkart.Controllers
 
             if (mySignature == momoSig && data["resultCode"]?.ToString() == "0")
             {
-                _logger.LogInformation("✅ MoMo payment verified successfully!");
-                // 👉 Cập nhật đơn hàng trong DB tại đây
+                _logger.LogInformation("MoMo signature verified!");
+
+                string orderIdStr = data["orderId"]?.ToString();
+                var mainOrderId = orderIdStr?.Split('_')[0];
+                if (long.TryParse(mainOrderId, out long dbOrderId))
+                {
+                    var order = await _context.Order.FirstOrDefaultAsync(o => o.Uid == dbOrderId);
+
+                    if (order != null && order.Status == "Pending_Payment")
+                    {
+                        order.Status = "Paid"; 
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation("Order {OrderId} status updated to Paid.", dbOrderId);
+                    }
+                    else if (order != null)
+                    {
+                        _logger.LogWarning("Order {OrderId} already processed or status is not Pending. Status: {Status}", dbOrderId, order.Status);
+                    }
+                }
+
                 return Ok(new { message = "Payment verified successfully" });
             }
             else
             {
-                _logger.LogWarning("❌ Invalid signature or payment failed!");
+                _logger.LogWarning("Invalid signature or payment failed!");
                 return BadRequest(new { message = "Invalid signature" });
             }
         }
 
-        // ======= Hàm hash HMAC SHA256 =======
         private static string CreateSignature(string key, string data)
         {
             var encoding = new UTF8Encoding();

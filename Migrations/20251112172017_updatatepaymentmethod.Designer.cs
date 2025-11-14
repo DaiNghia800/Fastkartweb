@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251110023131_addTablePermission")]
-    partial class addTablePermission
+    [Migration("20251112172017_updatatepaymentmethod")]
+    partial class updatatepaymentmethod
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,63 @@ namespace Fastkart.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("Brand");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            BrandName = "Fresho",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Logo = "fresho.png",
+                            Slug = "fresho",
+                            Status = "Active",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<int>("UserUid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("UserUid");
+
+                    b.ToTable("Cart");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<int>("CartUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("CartUid");
+
+                    b.HasIndex("ProductUid");
+
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
@@ -117,7 +174,105 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Uid");
 
-                    b.ToTable("Function");
+                    b.ToTable("Functions");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("UserUid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("UserUid");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<int>("OrderUid")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PriceAtPurchase")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("ProductUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("OrderUid");
+
+                    b.HasIndex("ProductUid");
+
+                    b.ToTable("OrderItem");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Payment", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("BankTransactionCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderUid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QrPaymentCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("OrderUid");
+
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
@@ -150,7 +305,7 @@ namespace Fastkart.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
@@ -173,7 +328,7 @@ namespace Fastkart.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionType");
+                    b.ToTable("PermissionTypes");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -296,6 +451,71 @@ namespace Fastkart.Migrations
                     b.HasIndex("UnitUid");
 
                     b.ToTable("Product");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            BrandUid = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Discount = 0,
+                            Exchangeable = true,
+                            IsFeatured = true,
+                            Price = 35000m,
+                            ProductName = "Ớt chuông đỏ",
+                            Refundable = true,
+                            Slug = "ot-chuong-do",
+                            Status = "Active",
+                            StockQuantity = 100,
+                            StockStatusUid = 1,
+                            SubCategoryUid = 1,
+                            Thumbnail = "/images/products/bell-pepper.jpg",
+                            UnitUid = 1,
+                            Weight = 1.0
+                        },
+                        new
+                        {
+                            Uid = 2,
+                            BrandUid = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Discount = 0,
+                            Exchangeable = true,
+                            IsFeatured = false,
+                            Price = 28000m,
+                            ProductName = "Bông cải xanh",
+                            Refundable = true,
+                            Slug = "bong-cai-xanh",
+                            Status = "Active",
+                            StockQuantity = 100,
+                            StockStatusUid = 1,
+                            SubCategoryUid = 1,
+                            Thumbnail = "/images/products/broccoli.jpg",
+                            UnitUid = 1,
+                            Weight = 1.0
+                        },
+                        new
+                        {
+                            Uid = 3,
+                            BrandUid = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Discount = 0,
+                            Exchangeable = true,
+                            IsFeatured = false,
+                            Price = 22000m,
+                            ProductName = "Cà rốt hữu cơ",
+                            Refundable = true,
+                            Slug = "ca-rot-huu-co",
+                            Status = "Active",
+                            StockQuantity = 100,
+                            StockStatusUid = 1,
+                            SubCategoryUid = 1,
+                            Thumbnail = "/images/products/carrot.jpg",
+                            UnitUid = 1,
+                            Weight = 1.0
+                        });
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
@@ -362,6 +582,18 @@ namespace Fastkart.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("ProductCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            CategoryName = "Rau củ",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Slug = "rau-cu",
+                            Status = "Active",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductSubCategory", b =>
@@ -424,6 +656,20 @@ namespace Fastkart.Migrations
                     b.HasIndex("CategoryUid");
 
                     b.ToTable("ProductSubCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            CategoryUid = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Description = "Rau củ tươi",
+                            Slug = "rau-cu-tuoi",
+                            Status = "Active",
+                            SubCategoryName = "Rau củ tươi",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
@@ -517,6 +763,17 @@ namespace Fastkart.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("StockStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Status = true,
+                            StockName = "Còn hàng",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Unit", b =>
@@ -573,6 +830,18 @@ namespace Fastkart.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("Unit");
+
+                    b.HasData(
+                        new
+                        {
+                            Uid = 1,
+                            Abbreviation = "kg",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Deleted = false,
+                            Status = "Active",
+                            UnitName = "Kilogram",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
@@ -655,6 +924,77 @@ namespace Fastkart.Migrations
                     b.HasIndex("RoleUid");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.CartItem", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Payment", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Order", "Order")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
@@ -741,9 +1081,21 @@ namespace Fastkart.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>

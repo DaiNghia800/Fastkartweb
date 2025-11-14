@@ -1,83 +1,39 @@
-﻿@* @{
-    ViewData["Title"] = "Kết quả thanh toán MoMo";
-}
-
-<div style="font-family: Arial; text-align: center; margin-top: 50px;">
-    <h2>@ViewBag.Result</h2>
-    <p>Đơn hàng: <b>@ViewBag.OrderId</b></p>
-    <p>Số tiền: <b>@ViewBag.Amount</b> VNĐ</p>
-    <p>Thông báo: @ViewBag.Message</p>
-    <a href="/" style="display:inline-block;margin-top:20px;padding:10px 20px;background:#0094ff;color:white;border-radius:6px;text-decoration:none;">Quay về trang chủ</a>
-</div> *@
-
+﻿@model Fastkart.Models.Entities.Order
 @{
-    ViewData["Title"] = "Cảm ơn bạn đã đặt hàng";
-
-    // --- DỮ LIỆU GIẢ ĐỊNH ---
-    // (Sau này bạn sẽ thay bằng dữ liệu thật từ Controller)
-    ViewBag.OrderId = "#12345-ABC";
-    ViewBag.Subtotal = 900000;
-    ViewBag.Discount = -200000;
-    ViewBag.Shipping = 0;
-    ViewBag.Total = 700000;
-
-    var demoItems = new[] {
-        new {
-            Name = "Green Capsicum #1",
-            Qty = 1,
-            Price = 350000,
-            Image = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/1.jpg"
-        },
-        new {
-            Name = "Organic Orange #2",
-            Qty = 1,
-            Price = 350000,
-            Image = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/4.jpg"
-        }
-    };
+    ViewData["Title"] = "Kết quả đặt hàng";
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/style_thankyou.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
+<div class="ty-page-container">
+    <div class="ty-email-wrapper">
 
-    <div class="ty-page-container">
-        <div class="ty-email-wrapper">
+        <section class="ty-thankyou-block">
+            <img src="https://themes.pixelstrap.com/fastkart/email-templete/images/order-success-poster.png" alt="Delivery Scooter">
 
-            <header class="ty-header">
-                Fastkart
-            </header>
+            <h2 style="@(ViewBag.Result != null)">
+                @(ViewBag.Result ?? "Đã xảy ra lỗi")
+            </h2>
+            <p>
+                @ViewBag.Message <br />
+                Mã đơn hàng: <b>@ViewBag.OrderId</b>
+            </p>
+            <a href="/" class="btn btn-animation btn-process" style="display:inline-block;margin-top:20px;padding:10px 20px;background:#0094ff;color:white;border-radius:6px;text-decoration:none;">Quay về trang chủ</a>
+        </section>
 
-            <section class="ty-thankyou-block">
-                <img src="https://themes.pixelstrap.com/fastkart/assets/images/vegetable/delivery.png" alt="Delivery Scooter">
-                <h2>Cảm ơn bạn đã đặt hàng!</h2>
-                <p>
-                    Bạn sẽ nhận được email khi đơn hàng được vận chuyển.
-                    Nếu có bất kỳ câu hỏi nào, hãy gọi chúng tôi theo số 1900-8888.
-                </p>
-            </section>
-
+        @if (Model != null)
+        {
             <section class="ty-info-boxes">
                 <div class="ty-info-box">
                     <h3>Địa chỉ giao hàng</h3>
                     <p>
-                        268 Cambridge Lane New Albany,
-                        IN 47150268 Cambridge Lane
-                        New Albany, IN 47150
+                        @Model.ShippingAddress
                     </p>
                 </div>
                 <div class="ty-info-box">
                     <h3>Chi tiết đơn hàng</h3>
                     <p>
-                        Bạn sẽ nhận được email khi đơn hàng được vận chuyển.
-                        Nếu có bất kỳ câu hỏi nào, hãy gọi chúng tôi theo số 1900-8888.
+                        Mã đơn hàng CSDL: <b>#@Model.Uid</b><br />
+                        Trạng thái: <b>@Model.Status</b>
                     </p>
                 </div>
             </section>
@@ -87,15 +43,15 @@
                 <div class="ty-shipped-items">
                     <h3>Các sản phẩm đã đặt</h3>
                     <ul>
-                        @foreach (var item in demoItems)
+                        @foreach (var item in Model.OrderItems)
                         {
                             <li class="ty-item">
-                                <img src="@item.Image" alt="@item.Name">
+                                <img src="@(item.Product?.Thumbnail ?? "/images/placeholder.jpg")" alt="@(item.Product?.ProductName ?? "Sản phẩm")">
                                 <div class="ty-item-info">
-                                    <strong>@item.Name</strong>
-                                    <span>SL: @item.Qty</span>
+                                    <strong>@(item.Product?.ProductName ?? "Không tìm thấy tên")</strong>
+                                    <span>SL: @item.Quantity</span>
                                 </div>
-                                <span class="ty-item-price">@item.Price.ToString("N0") ₫</span>
+                                <span class="ty-item-price">@item.PriceAtPurchase.ToString("N0") ₫</span>
                             </li>
                         }
                     </ul>
@@ -104,52 +60,23 @@
                 <div class="ty-order-summary">
                     <h3>Tóm tắt đơn hàng</h3>
                     <div class="ty-summary-details">
-                        <div>
-                            <span>Tạm tính</span>
-                            <span>@ViewBag.Subtotal.ToString("N0") ₫</span>
-                        </div>
-                        <div>
-                            <span>Giảm giá</span>
-                            <span>@ViewBag.Discount.ToString("N0") ₫</span>
-                        </div>
-                        <div>
-                            <span>Vận chuyển</span>
-                            <span>@ViewBag.Shipping.ToString("N0") ₫</span>
-                        </div>
                         <div class="ty-summary-total">
                             <span>Tổng cộng</span>
-                            <span>@ViewBag.Total.ToString("N0") ₫</span>
+                            <span>@Model.TotalAmount.ToString("N0") ₫</span>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <section class="ty-promo-banner">
-                <h3>Nhận ngay 25% cho đơn hàng tiếp theo</h3>
-                <a href="#" class="ty-promo-btn">Awesome</a>
+        }
+        else
+        {
+            <section class="ty-info-boxes">
+                <div class="ty-info-box" style="flex-basis: 100%; text-align: center;">
+                    <h3>Không thể tải chi tiết đơn hàng</h3>
+                    <p>Không tìm thấy chi tiết cho đơn hàng <b>@ViewBag.OrderId</b> trong CSDL.</p>
+                </div>
             </section>
+        }
 
-            <footer class="ty-footer">
-                <h4>Shop For Fastkart</h4>
-                <div class="ty-footer-links">
-                    <a href="#">Contact Us</a>
-                    <a href="#">Unsubscribe</a>
-                    <a href="#">Privacy Policy</a>
-                </div>
-                <div class="ty-social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                </div>
-                <p class="ty-copyright">
-                    WANT TO CHANGE HOW YOU RECEIVE THESE EMAILS?<br>
-                    2021-22 COPY RIGHT BY THEMEFOREST POWERD BY PIXELSTRAP
-                </p>
-            </footer>
-
-        </div>
     </div>
-
-</body>
-</html>
+</div>

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 Console.WriteLine($"ENVIRONMENT: {builder.Environment.EnvironmentName}");
-
+builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,9 +29,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     })
     .AddCookie("External", options =>
     {
-       options.Cookie.IsEssential = true;
-       options.Cookie.SameSite = SameSiteMode.None;
-       options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.IsEssential = true;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     })
     .AddGoogle(googleOptions =>
     {
@@ -77,6 +77,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy =>
@@ -88,7 +89,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<MoMoService>();
-
+builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
@@ -98,12 +99,7 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.AddScoped<IUploadService, UploadService>();
 
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+// (KHỐI AddSession BỊ TRÙNG LẶP Ở ĐÂY ĐÃ ĐƯỢC XÓA)
 
 
 var app = builder.Build();
@@ -125,24 +121,18 @@ app.UseHttpMethodOverride();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Kích hoạt Session (đã được đăng ký ở trên)
 app.UseSession();
+// Routing
+app.MapControllerRoute(
+    name: "Admin",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    // Route cho khu vực (Area) Admin
-    endpoints.MapControllerRoute(
-      name: "Admin",
-      pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
-    );
+app.MapControllerRoute(
+    name: "Account",
+    pattern: "{controller=Account}/{action=Index}/{id?}");
 
-    // Route cho Account (Quan trọng cho Login/Signup)
-    endpoints.MapControllerRoute(
-        name: "Account",
-        pattern: "{controller=Account}/{action=Index}/{id?}");
-
-    // Route mặc định (Luôn để ở cuối cùng)
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();

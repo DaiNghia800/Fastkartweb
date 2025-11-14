@@ -1,64 +1,41 @@
-﻿@* Khối C# ở đầu trang để tạo dữ liệu giả và tính toán *@
+﻿@model Fastkart.Models.Entities.CheckoutPageViewModel
 @{
     ViewData["Title"] = "Trang dat hang";
+    Layout = "_Layout"; // Đảm bảo bạn có file Layout này
 
-    // 1. TẠO DỮ LIỆU GIẢ (DEMO DATA)
-    // Tôi tạo một danh sách sản phẩm giả định ngay tại đây
-    var demoCartItems = new[] {
-        new {
-            TenSP = "Ớt chuông đỏ",
-            SoLuong = 2,
-            DonGia = 30000L, // Chữ 'L' để C# hiểu đây là kiểu 'long' (cho VND)
-            HinhAnh = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/1.jpg"
-        },
-        new {
-            TenSP = "Cà tím",
-            SoLuong = 1,
-            DonGia = 15000L,
-            HinhAnh = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/2.jpg"
-        },
-        new {
-            TenSP = "Hành tây",
-            SoLuong = 3,
-            DonGia = 10000L,
-            HinhAnh = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/3.jpg"
-        },
-         new {
-            TenSP = "Khoai tây",
-            SoLuong = 1,
-            DonGia = 22000L,
-            HinhAnh = "https://themes.pixelstrap.com/fastkart/assets/images/product/category/4.jpg"
-        }
-    };
+    // --- SỬA 1: Phải truy cập 'Model.CartItems' ---
+    long subtotal = Model.CartItems.Sum(item => item.Total);
 
-    // 2. TÍNH TOÁN TỔNG TIỀN (VND - DÙNG long)
-    long subtotal = 0;
-    long shipping = 25000;      // Phí ship giả
-    long tax = 0;               // Giả sử 0 thuế
-    long couponDiscount = 10000; // Giảm giá giả
+    // CÁC PHÍ NÀY PHẢI GIỐNG VỚI LOGIC BẠN SẼ CODE TRONG OrderController
+    long shippingFee = 25000;      // Phí ship (ví dụ)
+    long couponDiscount = 10000; // Giảm giá (ví dụ)
 
-    // Tính tổng phụ từ giỏ hàng giả
-    foreach (var item in demoCartItems)
-    {
-        subtotal += (item.SoLuong * item.DonGia);
-    }
-
-    // Tính tổng cuối cùng
-    long total = subtotal + shipping + tax - couponDiscount;
+    long total = subtotal + shippingFee - couponDiscount;
     if (total < 0) total = 0; // Đảm bảo không bị âm
 }
+<section class="breadcrumb-section pt-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-contain">
+                    <h2>Checkout</h2>
+                    <nav>
+                        <ol class="breadcrumb mb-0 d-flex align-items-center">
+                            <li class="breadcrumb-item">
+                                <a href="index.html">
+                                    <i class="fa-solid fa-house"></i>
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">Checkout</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="~/css/style_checkout.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-
+<section class="container">
     <form id="checkoutForm" method="post" action="/order/submit">
         <main class="fk-chk-container">
             <div class="fk-chk-form-column">
@@ -66,24 +43,27 @@
                 <section class="fk-chk-section">
                     <h2>Delivery Address</h2>
                     <div class="fk-chk-card-list">
-                        <div class="fk-chk-option-card fk-chk-selected">
-                            <input type="radio" name="addressId" id="addr1_new" value="8424_James_Lane" checked>
-                            <label for="addr1_new">
-                                <strong>Jack Jennas</strong> <span class="fk-chk-badge fk-chk-badge-home">Home</span>
-                                <p>Address: 8424 James Lane South San Francisco, CA 94080</p>
-                                <p>Pin Code: +380</p>
-                                <p>Phone: + 380 (0564) 53-29-68</p>
-                            </label>
-                        </div>
-                        <div class="fk-chk-option-card">
-                            <input type="radio" name="addressId" id="addr2_new" value="Nakhimovskiy_RN">
-                            <label for="addr2_new">
-                                <strong>Jack Jennas</strong> <span class="fk-chk-badge fk-chk-badge-office">Office</span>
-                                <p>Address: Nakhimovskiy R-N / Lastovaya UL., bld. 5/A, appt. 12</p>
-                                <p>Pin Code: +380</p>
-                                <p>Phone: + 380 (0564) 53-29-68</p>
-                            </label>
-                        </div>
+                        @if (Model.AddressesAsStrings != null && Model.AddressesAsStrings.Any())
+                        {
+                            foreach (var addressString in Model.AddressesAsStrings)
+                            {
+                                // SỬA 2: Dùng một ID duy nhất (ví dụ Index) thay cho @userId
+                                var uniqueRadioId = "addr_" + Model.AddressesAsStrings.IndexOf(addressString);
+
+                                <div class="fk-chk-option-card fk-chk-selected">
+                                    <input type="radio" name="addressId" id="@uniqueRadioId" value="@addressString" checked>
+                                    <label for="@uniqueRadioId">
+                                        <strong>Địa chỉ của bạn</strong>
+                                        <span class="fk-chk-badge fk-chk-badge-home">Default</span>
+                                        <p>Address: @addressString</p>
+                                    </label>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Bạn chưa cập nhật địa chỉ. Vui lòng <a href="/user/profile">cập nhật hồ sơ</a>.</p>
+                        }
                     </div>
                 </section>
 
@@ -94,12 +74,6 @@
                             <input type="radio" name="deliveryOption" id="del1_new" value="Standard" checked>
                             <label for="del1_new">
                                 <strong>Standard Delivery Option</strong>
-                            </label>
-                        </div>
-                        <div class="fk-chk-option-card">
-                            <input type="radio" name="deliveryOption" id="del2_new" value="Future">
-                            <label for="del2_new">
-                                <strong>Future Delivery Option</strong>
                             </label>
                         </div>
                     </div>
@@ -129,13 +103,13 @@
                     <h3>Order Summary</h3>
 
                     <ul class="fk-chk-item-list">
-                        @foreach (var item in demoCartItems)
+                        @foreach (var item in Model.CartItems)
                         {
                             <li>
-                                <img src="@item.HinhAnh" alt="@item.TenSP">
+                                <img src="@item.Image" alt="@item.ProductName">
                                 <div>
-                                    <span>@item.TenSP X @item.SoLuong</span>
-                                    <span>@((item.SoLuong * item.DonGia).ToString("N0")) ₫</span>
+                                    <span>@item.ProductName X @item.Quantity</span>
+                                    <span>@item.Total.ToString("N0") ₫</span>
                                 </div>
                             </li>
                         }
@@ -148,11 +122,7 @@
                         </div>
                         <div>
                             <span>Phí vận chuyển</span>
-                            <span>@shipping.ToString("N0") ₫</span>
-                        </div>
-                        <div>
-                            <span>Thuế</span>
-                            <span>@tax.ToString("N0") ₫</span>
+                            <span>@shippingFee.ToString("N0") ₫</span>
                         </div>
                         <div class="fk-chk-coupon-row">
                             <span>Giảm giá</span>
@@ -165,50 +135,30 @@
                     </div>
                 </div>
 
-                <div class="fk-chk-summary-box">
-                    <h3>Available Offers</h3>
-                    <ul class="fk-chk-offer-list">
-                        <li>Combo: Hạt hạnh nhân California, 100g...</li>
-                        <li>Combo: Hạt điều Royal, 100g + Mật ong, 500g</li>
-                    </ul>
-                </div>
-
                 <input type="hidden" id="jsOrderTotal" value="@total" />
 
                 <button type="submit" class="fk-chk-place-order-btn">Place Order</button>
             </div>
         </main>
     </form>
+</section>
 
+@section Scripts {
     <script>
         document.getElementById('checkoutForm').addEventListener('submit', function(event) {
 
-            // Lấy phương thức thanh toán đã chọn
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-            // Nếu là 'MoMo' (hoặc 'NetBanking' tùy bạn đặt value)
             if (paymentMethod === 'MoMo') {
-
-                // 1. Ngăn form submit mặc định (tới /order/submit)
                 event.preventDefault();
 
-                // 2. Lấy tổng số tiền từ input ẩn
-                const totalAmount = document.getElementById('jsOrderTotal').value;
+                const addressId = document.querySelector('input[name="addressId"]:checked').value;
 
-                // 3. Tạo thông tin đơn hàng
-                const orderInfo = "Thanh toan don hang " + new Date().getTime();
-
-                // 4. Chuyển hướng người dùng đến PaymentController
-                const redirectUrl = `/payment/momo?amount=${totalAmount}&orderInfo=${encodeURIComponent(orderInfo)}`;
+                const redirectUrl = `/payment/momo?addressId=${encodeURIComponent(addressId)}`;
 
                 console.log('Redirecting to MoMo: ' + redirectUrl);
                 window.location.href = redirectUrl;
             }
-
-            // 5. Nếu là 'COD', không làm gì cả (event.preventDefault() không được gọi),
-            //    form sẽ submit bình thường đến action="/order/submit"
         });
     </script>
-
-</body>
-</html>
+}

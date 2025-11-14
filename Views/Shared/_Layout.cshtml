@@ -418,7 +418,7 @@
         </nav>
     </header>
     <div class="">
-        <main role="main" class="pb-3">
+        <main role="main" class="">
             @RenderBody()
         </main>
     </div>
@@ -693,5 +693,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/login.js" asp-append-version="true"></script>
     <script src="~/assets/js/script.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

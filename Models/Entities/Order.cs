@@ -12,6 +12,8 @@
         public string ShippingAddress { get; set; }
         public string Status { get; set; } // (Pending, Processing, Shipped...)
 
+        public string PaymentMethod { get; set; }
+
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
         // Một đơn hàng có thể có nhiều thanh toán (hoặc 1)
