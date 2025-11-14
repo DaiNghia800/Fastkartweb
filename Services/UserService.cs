@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.DotNet.Scaffolding.Shared;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Net;
 using System.Net.Mail;
+using System.Text.Json;
 
 namespace Fastkart.Services
 {
@@ -18,12 +20,14 @@ namespace Fastkart.Services
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly IUploadService _uploadService;
 
-        public UserService(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public UserService(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, IUploadService uploadService)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _uploadService = uploadService;
         }
 
         public async Task<PaginatedList<Users>> GetAllUsersAsync(int pageIndex, int pageSize)
@@ -55,57 +59,57 @@ namespace Fastkart.Services
             }
         }
 
-        public async Task<bool> UpdateUser(Users userModel, IFormFile? imgFile)
+        public async Task<bool> UpdateUser(Users userModel, List<IFormFile>? imgFiles)
         {
             try
             {
-                // 1. Tìm bản ghi gốc trong CSDL
                 var existingUser = await _context.Users.FindAsync(userModel.Uid);
                 if (existingUser == null)
                 {
-                    return false; // Không tìm thấy user
+                    return false;
                 }
 
-                // 2. Xử lý upload file ảnh MỚI (nếu có)
-                if (imgFile != null && imgFile.Length > 0)
+                // XỬ LÝ ẢNH - HỖ TRỢ NHIỀU ẢNH
+                var imageUrls = new List<string>();
+
+                // Parse ảnh cũ từ JSON
+                if (!string.IsNullOrEmpty(userModel.ImgUser))
                 {
-                    // (Bạn nên xóa file ảnh cũ ở đây nếu có)
-
-                    // Tạo đường dẫn
-                    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-                    if (!Directory.Exists(uploadPath))
+                    try
                     {
-                        Directory.CreateDirectory(uploadPath);
+                        imageUrls = JsonSerializer.Deserialize<List<string>>(userModel.ImgUser) ?? new List<string>();
                     }
-
-                    // Tạo tên file duy nhất
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + imgFile.FileName;
-                    string filePath = Path.Combine(uploadPath, uniqueFileName);
-
-                    // Lưu file
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    catch
                     {
-                        await imgFile.CopyToAsync(fileStream);
+                        // Nếu format cũ (string đơn), convert sang array
+                        imageUrls.Add(userModel.ImgUser);
                     }
-
-                    // Cập nhật đường dẫn ảnh mới
-                    userModel.ImgUser = "/images/users/" + uniqueFileName;
                 }
 
-                // 3. Cập nhật các thuộc tính
+                // Upload ảnh mới
+                if (imgFiles != null && imgFiles.Any())
+                {
+                    foreach (var file in imgFiles)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var url = await _uploadService.UploadImageAsync(file);
+                            imageUrls.Add(url);
+                        }
+                    }
+                }
+
+                // Lưu dưới dạng JSON array
+                existingUser.ImgUser = imageUrls.Count > 0 ? JsonSerializer.Serialize(imageUrls) : "[]";
+
                 existingUser.FullName = userModel.FullName;
                 existingUser.Email = userModel.Email;
                 existingUser.PhoneNumber = userModel.PhoneNumber;
                 existingUser.Address = userModel.Address;
                 existingUser.RoleUid = userModel.RoleUid;
-                existingUser.ImgUser = userModel.ImgUser; // Cập nhật (dù là ảnh mới hay đường dẫn cũ)
-
-                // 4. Cập nhật thông tin hệ thống
                 existingUser.UpdatedAt = DateTime.Now;
-                //existingUser.UpdatedBy = Users.Identity.Name ?? "admin"; // Lấy tên user admin đang đăng nhập (hoặc 1 giá trị mặc định)
-                existingUser.UpdatedBy = "admin"; // Lấy tên user admin đang đăng nhập (hoặc 1 giá trị mặc định)
+                existingUser.UpdatedBy = "admin";
 
-                // 5. Lưu thay đổi
                 _context.Users.Update(existingUser);
                 await _context.SaveChangesAsync();
 
@@ -113,7 +117,7 @@ namespace Fastkart.Services
             }
             catch (Exception ex)
             {
-                // (Nên log lỗi ex ở đây)
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -160,51 +164,54 @@ namespace Fastkart.Services
 
                 if (existingUser != null)
                 {
-                    // ✅ Kiểm tra xem user này có phải từ external login không
                     if (existingUser.PasswordHash == null ||
                         existingUser.PasswordHash.StartsWith("EXTERNAL_LOGIN_"))
                     {
                         // Cho phép admin thêm password cho user này
                         existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
-                        existingUser.FullName = model.FullName; // Update thông tin
+                        existingUser.FullName = model.FullName;
+                        existingUser.ImgUser = existingUser.ImgUser;
                         existingUser.PhoneNumber = model.PhoneNumber;
                         existingUser.Address = model.Address;
                         existingUser.RoleUid = model.RoleUid;
                         existingUser.UpdatedAt = DateTime.Now;
                         existingUser.UpdatedBy = "admin";
 
-                        // Xử lý ảnh (nếu có)
-                        if (model.ImgFile != null && model.ImgFile.Length > 0)
-                        {
-                            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-                            if (!Directory.Exists(uploadPath))
-                            {
-                                Directory.CreateDirectory(uploadPath);
-                            }
+                        //// XỬ LÝ NHIỀU ẢNH
+                        //var imageUrls = new List<string>();
 
-                            string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImgFile.FileName;
-                            string filePath = Path.Combine(uploadPath, uniqueFileName);
+                        //if (!string.IsNullOrEmpty(model.ImgUser))
+                        //{
+                        //    try
+                        //    {
+                        //        imageUrls = JsonSerializer.Deserialize<List<string>>(model.ImgUser) ?? new List<string>();
+                        //    }
+                        //    catch
+                        //    {
+                        //        imageUrls.Add(model.ImgUser);
+                        //    }
+                        //}
 
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await model.ImgFile.CopyToAsync(fileStream);
-                            }
-                            existingUser.ImgUser = "/images/users/" + uniqueFileName;
-                        }
+                        //if (model.ImgFile != null && model.ImgFile.Length > 0)
+                        //{
+                        //    var url = await _uploadService.UploadImageAsync(model.ImgFile);
+                        //    imageUrls.Add(url);
+                        //}
 
-                        _context.Users.Update(existingUser);
+                        //existingUser.ImgUser = imageUrls.Count > 0 ? JsonSerializer.Serialize(imageUrls) : "[]";
+
+                        //_context.Users.Update(existingUser);
                         await _context.SaveChangesAsync();
 
-                        return (true, null); // Thành công - Đã link password
+                        return (true, null);
                     }
                     else
                     {
-                        // User đã có password (tài khoản local) - Không cho phép trùng
                         return (false, "Email này đã được sử dụng cho tài khoản local.");
                     }
                 }
 
-                // 2. Nếu không có user nào → Tạo mới như bình thường
+                // 2. Tạo user mới
                 var newUser = new Users
                 {
                     FullName = model.FullName,
@@ -212,6 +219,7 @@ namespace Fastkart.Services
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
                     RoleUid = model.RoleUid,
+                    ImgUser = model.ImgUser,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -220,29 +228,35 @@ namespace Fastkart.Services
                     Deleted = false
                 };
 
-                if (model.ImgFile != null && model.ImgFile.Length > 0)
-                {
-                    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-                    if (!Directory.Exists(uploadPath))
-                    {
-                        Directory.CreateDirectory(uploadPath);
-                    }
+                //// XỬ LÝ NHIỀU ẢNH CHO USER MỚI
+                //var newImageUrls = new List<string>();
 
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImgFile.FileName;
-                    string filePath = Path.Combine(uploadPath, uniqueFileName);
+                //if (!string.IsNullOrEmpty(model.ImgUser))
+                //{
+                //    try
+                //    {
+                //        newImageUrls = JsonSerializer.Deserialize<List<string>>(model.ImgUser) ?? new List<string>();
+                //    }
+                //    catch
+                //    {
+                //        newImageUrls.Add(model.ImgUser);
+                //    }
+                //}
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.ImgFile.CopyToAsync(fileStream);
-                    }
-                    newUser.ImgUser = "/images/users/" + uniqueFileName;
-                }
-                else
-                {
-                    newUser.ImgUser = "/images/users/default-avatar.png";
-                }
+                //if (model.ImgFile != null && model.ImgFile.Length > 0)
+                //{
+                //    var url = await _uploadService.UploadImageAsync(model.ImgFile);
+                //    newImageUrls.Add(url);
+                //}
 
+                //if (newImageUrls.Count == 0)
+                //{
+                //    newImageUrls.Add("https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png");
+                //}
+
+                //newUser.ImgUser = JsonSerializer.Serialize(newImageUrls);
                 await _context.Users.AddAsync(newUser);
+          
                 await _context.SaveChangesAsync();
 
                 return (true, null);
@@ -253,6 +267,7 @@ namespace Fastkart.Services
                 return (false, "Đã xảy ra lỗi hệ thống. Vui lòng thử lại.");
             }
         }
+
         public Users Login(string username, string password)
         {
             try
@@ -322,7 +337,7 @@ namespace Fastkart.Services
                     CreatedBy = createdByValue,
                     UpdatedBy = createdByValue,
                     Deleted = false,
-                    ImgUser = "/images/users/default-avatar.png"
+                    ImgUser = "[\"https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png\"]"
                 };
 
                 await _context.Users.AddAsync(newUser);
@@ -389,7 +404,7 @@ namespace Fastkart.Services
                     CreatedBy = "SelfRegister",
                     UpdatedBy = "SelfRegister",
                     Deleted = false,
-                    ImgUser = "/images/users/default-avatar.png"
+                    ImgUser = "[\"https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png\"]"
                 };
 
                 await _context.Users.AddAsync(newUser);
@@ -587,7 +602,8 @@ namespace Fastkart.Services
                     .Where(p => p.RoleId == roleId)
                     .Select(p => p.Function.Code + "_" + p.PermissionType.Code)
                     .ToList();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new List<string>();
             }
@@ -626,21 +642,26 @@ namespace Fastkart.Services
                 // Xử lý upload ảnh
                 if (model.Photo != null && model.Photo.Length > 0)
                 {
-                    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-                    if (!Directory.Exists(uploadPath))
+                    var imageUrls = new List<string>();
+
+                    // Parse ảnh cũ
+                    if (!string.IsNullOrEmpty(existingUser.ImgUser))
                     {
-                        Directory.CreateDirectory(uploadPath);
+                        try
+                        {
+                            imageUrls = JsonSerializer.Deserialize<List<string>>(existingUser.ImgUser) ?? new List<string>();
+                        }
+                        catch
+                        {
+                            imageUrls.Add(existingUser.ImgUser);
+                        }
                     }
 
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                    string filePath = Path.Combine(uploadPath, uniqueFileName);
+                    // Thêm ảnh mới
+                    var newUrl = await _uploadService.UploadImageAsync(model.Photo);
+                    imageUrls.Add(newUrl);
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.Photo.CopyToAsync(fileStream);
-                    }
-
-                    existingUser.ImgUser = "/images/users/" + uniqueFileName;
+                    existingUser.ImgUser = JsonSerializer.Serialize(imageUrls);
                 }
 
                 // Chỉ cập nhật mật khẩu nếu có nhập

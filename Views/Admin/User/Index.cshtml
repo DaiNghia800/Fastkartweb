@@ -1,4 +1,5 @@
 ﻿@using Fastkart.Models.Entities
+@using System.Text.Json
 @model Fastkart.Helpers.PaginatedList<Fastkart.Models.Entities.Users>
 @{
     Layout = "_LayoutAdmin";
@@ -44,7 +45,18 @@
                             <tr>
                                 <td>
                                     <div class="table-img">
-                                        <img src="@users.ImgUser" alt="" class="img-fluid" />
+                                        @{
+                                            var thumbnails = string.IsNullOrWhiteSpace(users.ImgUser)
+                                            ? new List<string>()
+                                            : JsonSerializer.Deserialize<List<string>>(users.ImgUser);
+
+                                            var firstImg = thumbnails.FirstOrDefault();
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(firstImg))
+                                        {
+                                            <img src=@firstImg alt=@users.FullName class="img-fluid" />
+                                        }
                                     </div>
                                 </td>
                                 <td class="text-start">

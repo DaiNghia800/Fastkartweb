@@ -5,7 +5,7 @@
 }
 
 <section class="product-create">
-    <form asp-controller="User" asp-action="Create" method="post" enctype="multipart/form-data" class="theme-form theme-form-2">
+    <form asp-controller="User" asp-action="Create" method="post" enctype="multipart/form-data" id="mainForm" class="theme-form theme-form-2">
         <div class="row">
             <div class="col-8 mx-auto">
                 <div class="card">
@@ -61,7 +61,8 @@
                     <div class="row mb-4 align-items-center">
                         <label asp-for="ImgFile" class="col-3 form-label-title">User Image</label>
                         <div class="col-9">
-                            <input asp-for="ImgFile" class="form-control" type="file" />
+                            <div id="my-dropzone" class="dropzone"></div>
+                            <input type="hidden" name="ImgUser" id="Thumbnail">
                         </div>
                     </div>
 
@@ -77,7 +78,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end mb-3">
-                        <button type="submit" class="btn text-white theme-bg-color ms-auto">Add User</button>
+                        <button type="submit" class="btn text-white theme-bg-color ms-auto" button-save>Add User</button>
                     </div>
                 </div>
             </div>

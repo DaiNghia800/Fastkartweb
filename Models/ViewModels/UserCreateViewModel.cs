@@ -36,5 +36,6 @@ namespace Fastkart.Models.ViewModels
         public int RoleUid { get; set; }
 
         public IFormFile? ImgFile { get; set; }
+        public string? ImgUser { get; set; }
     }
 }

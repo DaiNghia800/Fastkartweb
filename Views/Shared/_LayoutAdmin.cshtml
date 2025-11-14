@@ -1,6 +1,8 @@
 ﻿@using System.Security.Claims
 @using Fastkart.Helpers
+@using Fastkart.Models.Entities
 @using Fastkart.Services.IServices
+@using System.Text.Json
 @inject IUserService UserService
 
 @{
@@ -97,9 +99,19 @@
                     {
                         <li class="profile-box position-relative me-0 pe-0">
                             <div class="profile d-flex align-items-center">
-                                @if (!string.IsNullOrEmpty(currentUser.ImgUser))
+                                @{
+                                    Users users = currentUser;
+                                    var thumbnails = string.IsNullOrWhiteSpace(users.ImgUser)
+                                    ? new List<string>()
+                                    : JsonSerializer.Deserialize<List<string>>(users.ImgUser);
+
+                                    var firstImg = thumbnails.FirstOrDefault();
+                                }
+
+                                @if (!string.IsNullOrEmpty(firstImg))
                                 {
-                                    <img src="@currentUser.ImgUser" alt="@currentUser.FullName" class="user-img img-fluid" />
+                                    <img src=@firstImg alt=@users.FullName class="img-fluid rounded-circle mb-3"
+                                         style="width: 50px; height: 50px; object-fit: cover;  " />
                                 }
                                 else
                                 {
@@ -227,7 +239,7 @@
                                     </a>
                                     <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product") ? "show" : "")" id="collapseProduct">
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_view"))
+                                            @if (User.HasClaim("permission", "product_view"))
                                             {
                                                 <a href="/admin/product" class="text-capitalize">
                                                     Product
@@ -236,7 +248,7 @@
                                             
                                         </li>
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_create"))
+                                            @if (User.HasClaim("permission", "product_create"))
                                             {
                                                 <a href="/admin/product/create" class="text-capitalize">
                                                     Add new products

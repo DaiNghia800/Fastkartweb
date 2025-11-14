@@ -90,9 +90,9 @@ namespace Fastkart.Controllers.Admin
         }
 
         [HttpPost("update")]
-        public async Task<IActionResult> UpdateInfoUser([FromForm] Users userModel, IFormFile? imgFile)
+        public async Task<IActionResult> UpdateInfoUser([FromForm] Users userModel, List<IFormFile>? imgFiles)
         {
-            bool result = await _userService.UpdateUser(userModel, imgFile);
+            bool result = await _userService.UpdateUser(userModel, imgFiles);
 
             if (result)
             {
@@ -120,10 +120,10 @@ namespace Fastkart.Controllers.Admin
                 return Json(new { success = false, message = "Không thể xác định người dùng hiện tại." });
             }
 
-            if( id == currentUserId)
+            if (id == currentUserId)
             {
                 return Json(new { success = false, message = "Bạn không thể xóa chính tài khoản của mình!" });
-            }   
+            }
             var result = await _userService.DeleteUser(id);
 
             if (result)

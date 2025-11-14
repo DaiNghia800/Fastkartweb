@@ -1,53 +1,44 @@
 ﻿@model Fastkart.Models.Entities.Users
 
-<input type="hidden" asp-for="Uid" />
+<form id="userEditForm">
+    <input type="hidden" asp-for="Uid" />
+    <input type="hidden" asp-for="CreatedAt" />
+    <input type="hidden" asp-for="CreatedBy" />
 
-<input type="hidden" asp-for="CreatedAt" />
-<input type="hidden" asp-for="CreatedBy" />
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-control" asp-for="FullName">
+        </div>
 
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" asp-for="Email">
+        </div>
 
-<div class="row">
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Họ và tên</label>
-        <input type="text" class="form-control" asp-for="FullName">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input type="tel" class="form-control" asp-for="PhoneNumber">
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Quyền (Role)</label>
+            <select asp-for="RoleUid" class="form-select"
+                    asp-items="@(ViewData["RolesList"] as SelectList)">
+                <option value="">-- Chọn một quyền --</option>
+            </select>
+        </div>
+
+        <div class="col-12 mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <textarea class="form-control" asp-for="Address" rows="3"></textarea>
+        </div>
+
+        <div class="col-12 mb-3">
+            <label class="form-label">Ảnh đại diện (Có thể chọn nhiều ảnh)</label>
+            <div id="my-dropzone" class="dropzone"></div>
+            <input type="hidden" name="ImgUser" id="UserThumbnail"
+                   data-thumbnail='@(string.IsNullOrEmpty(Model.ImgUser) ? "[]" : Model.ImgUser)'>
+        </div>
     </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" asp-for="Email">
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Số điện thoại</label>
-        <input type="tel" class="form-control" asp-for="PhoneNumber">
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Quyền (Role)</label>
-
-        <select asp-for="RoleUid" class="form-select"
-                asp-items="@(ViewData["RolesList"] as SelectList)">
-
-            <option value="">-- Chọn một quyền --</option>
-
-        </select>
-    </div>
-
-    <div class="col-12 mb-3">
-        <label class="form-label">Địa chỉ</label>
-        <textarea class="form-control" asp-for="Address" rows="3"></textarea>
-    </div>
-
-    <div class="col-12 mb-3">
-        <label class="form-label">Ảnh đại diện (đổi nếu muốn)</label>
-        <input type="file" name="imgFile" class="form-control" />
-
-        @if (!string.IsNullOrEmpty(Model.ImgUser))
-        {
-            <div class="mt-2">
-                <img src="@Model.ImgUser" alt="Ảnh cũ" style="width: 80px; height: 80px; object-fit: cover;" />
-            </div>
-        }
-        <input type="hidden" asp-for="ImgUser" />
-    </div>
-</div>
+</form>
