@@ -9,6 +9,7 @@
     {
         currentUser = UserService.GetUserById(userId);
     }
+    var pageTitle = ViewData["Title"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +29,7 @@
     <link rel="stylesheet" href="~/assets/css/style.css" />
 </head>
 <body>
-    <header>
+       
         <div class="theme-option">
             <div class="back-to-top" id="back-to-top">
                 <a>
@@ -441,12 +442,36 @@
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="">
-        <main role="main" class="">
-            @RenderBody()
-        </main>
-    </div>
+        @if (!string.IsNullOrEmpty(pageTitle) && pageTitle.ToLower() != "home")
+    {
+        <section class="breadcrumb-section pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-contain">
+                            <h2>@pageTitle</h2>
+                            <nav>
+                                <ol class="breadcrumb mb-0 d-flex align-items-center">
+                                    <li class="breadcrumb-item">
+                                        <a href="/">
+                                            <i class="fa-solid fa-house"></i>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">@pageTitle</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+        <div class="">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     <!-- My Profile Modal -->
     <div class="modal fade" id="myProfileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -753,6 +778,5 @@
     <script src="~/js/login.js" asp-append-version="true"></script>
     <script src="~/js/customer.js" asp-append-version="true"></script>
     <script src="~/assets/js/script.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
