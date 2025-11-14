@@ -5,30 +5,72 @@
     ViewData["title"] = "List Page";
 }
 
+<style>
+    .page-link-view {
+        color: #009289;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+        .page-link-view:hover {
+            color: #007067;
+            text-decoration: underline;
+        }
+
+    .external-icon {
+        font-size: 0.75rem;
+        margin-left: 5px;
+        opacity: 0.7;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .status-published {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-draft {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-pending {
+        background: #cce5ff;
+        color: #004085;
+    }
+</style>
+
 <section class="list-page-area">
     <div class="card card-table">
         <div class="header-title">
             <h5>List Page</h5>
-            <a href="/admin/list-page/create" class="btn btn-primary" style="margin-left: auto;">
-                <i class="fa fa-plus"></i> Add New Page
-            </a>
         </div>
         <div class="table-responsive">
             <div class="table-search">
                 <label>
                     Search
-                    <input type="text" name="name" value="" />
+                    <input type="text" id="searchInput" name="name" placeholder="Search pages..." />
                 </label>
             </div>
-            <table class="table theme-table mb-0">
+            <table class="table theme-table mb-0" id="pageTable">
                 <thead>
                     <tr>
                         <th>
-                            <input class="form-check-input" type="checkbox" value="">
+                            <input class="form-check-input" type="checkbox" id="selectAll">
                         </th>
                         <th class="text-start">Title</th>
+                        <th class="text-start">URL Slug</th>
                         <th class="text-start">Author</th>
-                        <th class="text-start">Date</th>
+                        <th class="text-start">Status & Date</th>
                         <th>Options</th>
                     </tr>
                 </thead>
@@ -40,31 +82,49 @@
                         {
                             <tr>
                                 <td>
-                                    <input class="form-check-input" type="checkbox" value="@item.Uid">
+                                    <input class="form-check-input row-checkbox" type="checkbox" value="@item.Uid">
                                 </td>
                                 <td class="text-start">
-                                    <i class="fa-solid fa-blog me-2"></i> @item.Title
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fa-solid fa-file-lines" style="color: #009289;"></i>
+                                        <div>
+                                            <a href="/page/@item.Slug" target="_blank" class="page-link-view" title="Xem trang">
+                                                @item.Title
+                                                <i class="fa fa-external-link-alt external-icon"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td class="text-start">
+                                    <code style="background: #f0f8f7; padding: 4px 8px; border-radius: 4px; color: #009289; font-size: 0.9rem;">
+                                        /@item.Slug
+                                    </code>
+                                </td>
+
+                                <td class="text-start">
+                                    <i class="fa fa-user" style="color: #6c757d; margin-right: 5px;"></i>
                                     @(item.Author != null ? item.Author.FullName : "N/A")
                                 </td>
 
                                 <td class="text-start">
-                                    <span>@item.Status</span>
-                                    <small class="d-block text-muted">
+                                    <span class="status-badge status-@item.Status.ToLower()">
+                                        @item.Status
+                                    </span>
+                                    <small class="d-block text-muted mt-1">
+                                        <i class="fa fa-clock" style="margin-right: 3px;"></i>
                                         @item.CreatedAt.ToString("dd-MM-yyyy 'at' h:mm tt")
                                     </small>
                                 </td>
                                 <td>
                                     <ul>
                                         <li>
-                                            <a href="/admin/list-page/edit/@item.Uid" class="icon-edit">
+                                            <a href="/admin/list-page/edit/@item.Uid" class="icon-edit" title="Edit page">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"></path></svg>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="/admin/list-page/delete/@item.Uid" class="icon-delete" onclick="return confirm('Bạn có chắc muốn xóa page này?')">
+                                            <a href="/admin/list-page/delete/@item.Uid" class="icon-delete" onclick="return confirm('Bạn có chắc muốn xóa page này?')" title="Delete page">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
                                             </a>
                                         </li>
@@ -76,7 +136,10 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center">Chưa có dữ liệu. <a href="/admin/list-page/create">Thêm page mới</a></td>
+                            <td colspan="6" class="text-center" style="padding: 40px;">
+                                <i class="fa fa-inbox" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+                                <p style="color: #999;">Chưa có dữ liệu.</p>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -84,3 +147,24 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchText = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#pageTable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+
+        // Select all checkbox
+        document.getElementById('selectAll').addEventListener('change', function(e) {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
+        });
+    </script>
+}

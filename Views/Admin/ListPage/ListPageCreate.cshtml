@@ -6,558 +6,239 @@
 }
 
 <style>
-    /* ===================================
-           CONTAINER & CARD LAYOUT
-        =================================== */
     .page-form-container {
-        /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-        min-height: 100vh;
-        padding: 40px 0;
+        padding: 20px 0;
     }
 
     .page-form-card {
         background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         overflow: hidden;
-        animation: slideUp 0.5s ease-out;
     }
 
-    @@keyframes slideUp {
-        from
-
-    {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    }
-
-    /* ===================================
-           HEADER SECTION
-        =================================== */
     .page-form-header {
         background: linear-gradient(135deg, #009289 0%, #0da487 100%);
         color: white;
-        padding: 35px 40px;
-        position: relative;
-        overflow: hidden;
-		display: flex;
-		justify-content: space-between;
+        padding: 25px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-        .page-form-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
+        .page-form-header h5 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
         }
 
-    @@keyframes pulse {
-        0%, 100%
-
-    {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-
-    }
-
-    .page-form-header h5 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin: 0;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        position: relative;
-        z-index: 1;
-    }
-
-    .page-form-header .btn-outline-secondary {
-        background: rgba(255,255,255,0.2);
-        border: 2px solid rgba(255,255,255,0.5);
-        color: white;
-        font-weight: 600;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 1;
-    }
-
-        .page-form-header .btn-outline-secondary:hover {
-            background: white;
-            color: #0da487 !important;
-			transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .page-form-header .btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            font-weight: 600;
+            padding: 8px 20px;
         }
 
-    /* ===================================
-           BODY SECTION
-        =================================== */
-    .page-form-body {
-        padding: 50px 40px;
-        background: #fafbfc;
-    }
+            .page-form-header .btn:hover {
+                background: white;
+                color: #009289;
+            }
 
     .card-body {
-        padding: 40px;
+        padding: 30px;
     }
 
-    /* ===================================
-           FORM CONTROLS
-        =================================== */
     .form-label {
-        font-weight: 700;
+        font-weight: 600;
         color: #2d3748;
-        margin-bottom: 10px;
-        font-size: 1rem;
-        letter-spacing: 0.3px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
     }
 
     .form-control, .form-select {
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 14px 18px;
-        font-size: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.95rem;
         transition: all 0.3s ease;
-        background: white;
     }
 
-        .form-control:hover, .form-select:hover {
-            border-color: #cbd5e0;
-        }
-
         .form-control:focus, .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
-            background: white;
-            outline: none;
+            border-color: #009289;
+            box-shadow: 0 0 0 3px rgba(0, 146, 137, 0.1);
         }
 
     .form-control-lg {
-        padding: 18px 22px;
-        font-size: 1.2rem;
+        padding: 12px 16px;
+        font-size: 1.1rem;
         font-weight: 600;
-        border-radius: 14px;
     }
 
+    /* Cải thiện textarea */
     textarea.form-control {
-        font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-        line-height: 1.8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
         resize: vertical;
+        min-height: 400px;
     }
 
-    /* ===================================
-           SIDEBAR CARDS
-        =================================== */
-    .card {
-        border: none;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        margin-bottom: 25px;
+    .content-editor-wrapper {
+        position: relative;
     }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    .editor-toolbar {
+        background: #f8f9fa;
+        padding: 10px;
+        border: 1px solid #e2e8f0;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .editor-btn {
+        padding: 6px 12px;
+        border: 1px solid #cbd5e0;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+    }
+
+        .editor-btn:hover {
+            background: #009289;
+            color: white;
+            border-color: #009289;
         }
 
+    .editor-textarea {
+        border-radius: 0 0 8px 8px !important;
+        border-top: none !important;
+    }
+
+    .card {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+    }
+
     .card-header {
-        background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
-        padding: 18px 24px;
-        border-bottom: 2px solid #e2e8f0;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e2e8f0;
     }
 
         .card-header h6 {
             font-weight: 700;
             color: #2d3748;
             margin: 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-    .card-body {
-        padding: 24px;
-        background: white;
-    }
-
-    /* ===================================
-           PREVIEW SECTION
-        =================================== */
-    .preview-content,
-    #contentPreview {
-        background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
-        padding: 25px;
-        border-radius: 12px;
-        max-height: 450px;
-        overflow-y: auto;
-        border: 2px solid #e2e8f0;
-        transition: all 0.3s ease;
-    }
-
-        .preview-content:hover,
-        #contentPreview:hover {
-            border-color: #cbd5e0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        /* Custom Scrollbar */
-        .preview-content::-webkit-scrollbar,
-        #contentPreview::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        .preview-content::-webkit-scrollbar-track,
-        #contentPreview::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-
-        .preview-content::-webkit-scrollbar-thumb,
-        #contentPreview::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #009289 0%, #0da487 100%);
-            border-radius: 10px;
-        }
-
-            .preview-content::-webkit-scrollbar-thumb:hover,
-            #contentPreview::-webkit-scrollbar-thumb:hover {
-                background: linear-gradient(135deg, #0da487 0%, #009289 100%);
-            }
-
-    /* ===================================
-           BUTTONS
-        =================================== */
-    .btn {
-		display: inline-block;
-        vertical-align: middle;
-        border-radius: 12px;
-        padding: 14px 32px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        border: none;
-        position: relative;
-        overflow: hidden !important;
-    }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #009289 0%, #0da487 100%);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-		color: white;
-    }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-            background: linear-gradient(135deg, #009289 0%, #0da487 100%);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-    .btn-secondary {
-        background: linear-gradient(135deg, #009289 0%, #0da487 100%);
-        box-shadow: 0 4px 15px rgba(113, 128, 150, 0.3);
-		color: white;
-    }
-
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(113, 128, 150, 0.4);
-            background: linear-gradient(135deg, #009289 0%, #0da487 100%);
-			color: white;
-        }
-
-    .btn-outline-danger {
-        border: 2px solid #f56565;
-        color: #f56565;
-        background: transparent;
-        box-shadow: none;
-    }
-
-        .btn-outline-danger:hover {
-            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
-            color: white;
-            border-color: transparent;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
-        }
-
-    .btn-lg {
-        padding: 16px 40px;
-        font-size: 1.1rem;
-    }
-
-    /* ===================================
-           ALERTS
-        =================================== */
-    .alert {
-        border-radius: 14px;
-        border: none;
-        padding: 18px 24px;
-        margin-bottom: 25px;
-        font-weight: 600;
-        animation: slideDown 0.4s ease-out;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    @@keyframes slideDown {
-        from
-
-    {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    }
-
-    .alert-danger {
-        background: linear-gradient(135deg, #fed7d7 0%, #fc8181 100%);
-        color: #742a2a;
-    }
-
-    .alert-success {
-        background: linear-gradient(135deg, #c6f6d5 0%, #68d391 100%);
-        color: #22543d;
-    }
-
-    /* ===================================
-           SLUG PREVIEW
-        =================================== */
-    .slug-preview,
-    #slugPreview {
-        background: linear-gradient(135deg, #ebf4ff 0%, #e0e7ff 100%) !important;
-        border: 2px dashed #667eea !important;
-        color: #4c51bf;
-        font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-        #slugPreview:focus {
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
-        }
-
-    /* ===================================
-           FORM GROUPS
-        =================================== */
-    .mb-3, .mb-4 {
-        position: relative;
-    }
-
-    .mb-3 {
-        margin-bottom: 1.5rem !important;
-    }
-
-    .mb-4 {
-        margin-bottom: 2rem !important;
-    }
-
-    /* ===================================
-           TEXT UTILITIES
-        =================================== */
-    .text-danger {
-        color: #f56565 !important;
-        font-weight: 600;
-    }
-
-    .text-muted {
-        color: #718096 !important;
-    }
-
-    small.text-muted {
-        font-size: 0.9rem;
-        display: block;
-        margin-top: 8px;
-        font-weight: 500;
-    }
-
-    /* ===================================
-           ACTION BUTTONS SECTION
-        =================================== */
-    .action-buttons {
-        background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
-        padding: 30px 40px;
-        border-top: 2px solid #e2e8f0;
-        border-radius: 0 0 20px 20px;
-        margin-top: 30px;
-    }
-
-    /* ===================================
-           VALIDATION STYLES
-        =================================== */
-    .invalid-feedback {
-        display: none;
-        font-size: 0.9rem;
-        color: #f56565;
-        margin-top: 8px;
-        font-weight: 600;
-    }
-
-    .was-validated .form-control:invalid {
-        border-color: #f56565;
-        box-shadow: 0 0 0 4px rgba(245, 101, 101, 0.15);
-    }
-
-        .was-validated .form-control:invalid ~ .invalid-feedback {
-            display: block;
-        }
-
-    .was-validated .form-control:valid {
-        border-color: #48bb78;
-        box-shadow: 0 0 0 4px rgba(72, 187, 120, 0.15);
-    }
-
-    /* ===================================
-           ICON ENHANCEMENTS
-        =================================== */
-    .fa-solid, .fa {
-        transition: all 0.3s ease;
-    }
-
-    .btn:hover .fa-solid,
-    .btn:hover .fa {
-        transform: scale(1.2);
-    }
-
-    /* ===================================
-           SELECT DROPDOWN
-        =================================== */
-    .form-select {
-        cursor: pointer;
-        /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); */
-    }
-
-        .form-select:focus {
-            /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); */
-        }
-
-        /* ===================================
-           HOVER EFFECTS
-        =================================== */
-        .form-control:hover,
-        .form-select:hover {
-            /* transform: translateY(-2px); */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            transform: translateY(-2px);
-        }
-
-    /* ===================================
-           RESPONSIVE DESIGN
-        =================================== */
-    @@media (max-width: 991px) {
-        .page-form-container
-
-    {
-        padding: 20px 0;
-    }
-
-    .page-form-header {
-        padding: 25px 20px;
-    }
-
-        .page-form-header h5 {
-            font-size: 1.4rem;
+            font-size: 1rem;
         }
 
     .card-body {
         padding: 20px;
     }
 
+    .btn {
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-primary {
+        background: #009289;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: #007b73;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 146, 137, 0.3);
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+    .btn-outline-danger {
+        border: 2px solid #dc3545;
+        color: #dc3545;
+        background: transparent;
+    }
+
+        .btn-outline-danger:hover {
+            background: #dc3545;
+            color: white;
+        }
+
     .btn-lg {
-        padding: 14px 30px;
+        padding: 12px 30px;
         font-size: 1rem;
     }
 
+    .alert {
+        border-radius: 8px;
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        font-weight: 500;
     }
 
-    @@media (max-width: 576px) {
-        .page-form-header h5
+    .alert-danger {
+        background: #fee;
+        color: #c33;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    #slugPreview {
+        background: #f0f8f7 !important;
+        color: #009289;
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+    }
+
+    .slug-info {
+        background: #e8f5f4;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #00695c;
+    }
+
+    .action-buttons {
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 2px solid #f0f0f0;
+    }
+
+    @@media (max-width: 991px) {
+        .card-body
 
     {
-        font-size: 1.2rem;
+        padding: 20px;
     }
 
-    .form-control, .form-select {
-        padding: 12px 16px;
-        font-size: 0.95rem;
+    textarea.form-control {
+        min-height: 300px;
     }
 
-    .btn {
-        padding: 12px 24px;
-        font-size: 0.95rem;
-    }
-
-    .d-flex.justify-content-between {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    }
-
-    /* ===================================
-           LOADING ANIMATION (BONUS)
-        =================================== */
-    .form-control.loading,
-    .form-select.loading {
-        position: relative;
-        pointer-events: none;
-        opacity: 0.6;
-    }
-
-    /* ===================================
-           FOCUS WITHIN ENHANCEMENT
-        =================================== */
-    .mb-3:focus-within .form-label,
-    .mb-4:focus-within .form-label {
-        color: #667eea;
-        transform: scale(1.05);
-        transform-origin: left;
-        transition: all 0.3s ease;
     }
 </style>
 
@@ -566,37 +247,37 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-form-card">
-                    <div class="page-form-header d-flex justify-content-between align-items-center">
+                    <div class="page-form-header">
                         <h5>
-                            <i class="fa-solid fa-@(isEdit ? "edit" : "plus-circle") me-2"></i>
+                            <i class="fa fa-@(isEdit ? "edit" : "plus-circle") me-2"></i>
                             @(isEdit ? "Edit Page" : "Create New Page")
                         </h5>
-                        <a href="/admin/list-page" class="btn btn-outline-secondary btn-sm" style="color: white; border-color: white;">
+                        <a href="/admin/list-page" class="btn btn-sm">
                             <i class="fa fa-arrow-left me-2"></i> Back to List
                         </a>
                     </div>
 
                     <div class="card-body">
-                        @* HIỂN THỊ LỖI NẾU CÓ *@
+                        @* HIỂN THỊ THÔNG BÁO *@
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fa fa-check-circle me-2"></i>
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
                         @if (ViewBag.ErrorMessage != null)
                         {
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                                <strong>Error!</strong> @ViewBag.ErrorMessage
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                @ViewBag.ErrorMessage
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         }
 
-                        @if (ViewBag.SuccessMessage != null)
-                        {
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <i class="fa-solid fa-circle-check me-2"></i>
-                                <strong>Success!</strong> @ViewBag.SuccessMessage
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        }
-
-                        <form method="post" class="theme-form needs-validation" novalidate>
+                        <form method="post" class="needs-validation" novalidate>
                             <input type="hidden" asp-for="Uid" />
 
                             <div class="row">
@@ -604,7 +285,7 @@
                                 <div class="col-lg-8">
                                     <!-- Title -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold" asp-for="Title">
+                                        <label class="form-label" asp-for="Title">
                                             Page Title <span class="text-danger">*</span>
                                         </label>
                                         <input class="form-control form-control-lg"
@@ -613,55 +294,82 @@
                                                placeholder="Enter page title (e.g., About Us, Contact)"
                                                required>
                                         <span asp-validation-for="Title" class="text-danger small"></span>
-                                        <div class="invalid-feedback">Please enter a page title.</div>
                                     </div>
 
-                                    <!-- Content -->
+                                    <!-- Content Editor -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold" asp-for="Content">
+                                        <label class="form-label" asp-for="Content">
                                             Page Content <span class="text-danger">*</span>
                                         </label>
-                                        <textarea class="form-control"
-                                                  asp-for="Content"
-                                                  rows="5"
-                                                  id="pageContent"
-                                                  placeholder="Enter page content here. You can use HTML for formatting."
-                                                  required></textarea>
+
+                                        <div class="content-editor-wrapper">
+                                            <div class="editor-toolbar">
+                                                <button type="button" class="editor-btn" onclick="insertTag('h2', 'Heading 2')" title="Heading 2">
+                                                    <i class="fa fa-heading"></i> H2
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertTag('h3', 'Heading 3')" title="Heading 3">
+                                                    <i class="fa fa-heading"></i> H3
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertTag('p', 'Paragraph text')" title="Paragraph">
+                                                    <i class="fa fa-paragraph"></i>
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertTag('strong', 'Bold text')" title="Bold">
+                                                    <i class="fa fa-bold"></i>
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertTag('em', 'Italic text')" title="Italic">
+                                                    <i class="fa fa-italic"></i>
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertList('ul')" title="Bullet List">
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertList('ol')" title="Numbered List">
+                                                    <i class="fa fa-list-ol"></i>
+                                                </button>
+                                                <button type="button" class="editor-btn" onclick="insertLink()" title="Insert Link">
+                                                    <i class="fa fa-link"></i>
+                                                </button>
+                                            </div>
+
+                                            <textarea class="form-control editor-textarea"
+                                                      asp-for="Content"
+                                                      id="pageContent"
+                                                      placeholder="Enter your page content here. You can use HTML tags for formatting."
+                                                      required></textarea>
+                                        </div>
+
                                         <span asp-validation-for="Content" class="text-danger small"></span>
-                                        <div class="invalid-feedback">Please enter page content.</div>
-                                        <small class="text-muted">
-                                            <i class="fa-solid fa-info-circle"></i>
-                                            HTML tags are supported. Preview will be shown on the right.
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="fa fa-info-circle"></i>
+                                            Tip: Use the toolbar above to quickly insert HTML tags, or write HTML directly.
                                         </small>
                                     </div>
                                 </div>
 
                                 <!-- RIGHT COLUMN - Sidebar -->
                                 <div class="col-lg-4">
-                                    <!-- Publish Settings Card -->
-                                    <div class="card mb-3 border">
-                                        <div class="card-header bg-light">
-                                            <h6 class="mb-0"><i class="fa-solid fa-gear me-2"></i>Publish Settings</h6>
+                                    <!-- Publish Settings -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fa fa-cog me-2"></i>Publish Settings</h6>
                                         </div>
                                         <div class="card-body">
                                             <!-- Status -->
                                             <div class="mb-3">
-                                                <label class="form-label fw-bold">Status</label>
+                                                <label class="form-label">Status</label>
                                                 <select class="form-select" asp-for="Status">
-                                                    <option value="Published">Published</option>
-                                                    <option value="Draft">Draft</option>
-                                                    <option value="Pending">Pending Review</option>
+                                                    <option value="Published">✓ Published</option>
+                                                    <option value="Draft">📝 Draft</option>
+                                                    <option value="Pending">⏳ Pending Review</option>
                                                 </select>
                                             </div>
 
                                             <!-- Author -->
                                             <div class="mb-3">
-                                                <label class="form-label fw-bold">
+                                                <label class="form-label">
                                                     Author <span class="text-danger">*</span>
                                                 </label>
                                                 <select class="form-select" asp-for="AuthorUid" required>
                                                     <option value="">Select Author</option>
-                                                    @* Sẽ load từ ViewBag.Authors *@
                                                     @if (ViewBag.Authors != null)
                                                     {
                                                         foreach (var author in ViewBag.Authors)
@@ -672,69 +380,70 @@
                                                         }
                                                     }
                                                 </select>
-                                                <div class="invalid-feedback">Please select an author.</div>
                                             </div>
 
-                                            <!-- Slug Preview -->
-                                            <div class="mb-3">
-                                                <label class="form-label fw-bold">URL Slug</label>
-                                                <input type="text"
-                                                       class="form-control"
-                                                       id="slugPreview"
-                                                       readonly
-                                                       placeholder="auto-generated-from-title"
-                                                       style="background-color: #f8f9fa;">
-                                                <small class="text-muted">
-                                                    <i class="fa-solid fa-link"></i> Auto-generated from title
-                                                </small>
-                                            </div>
-
-                                            <!-- Published Date -->
                                             @if (isEdit && Model.PublishedAt.HasValue)
                                             {
                                                 <div class="mb-3">
-                                                       <label class="form-label fw-bold">Published Date</label>
+                                                    <label class="form-label">Published Date</label>
                                                     <input type="text"
                                                            class="form-control"
                                                            value="@Model.PublishedAt.Value.ToString("dd MMM yyyy, hh:mm tt")"
-                                                           readonly
-                                                           style="background-color: #f8f9fa;">
+                                                           readonly>
                                                 </div>
                                             }
                                         </div>
                                     </div>
 
-                                    <!-- Preview Card -->
-                                    @* <div class="card border">
-                                        <div class="card-header bg-light">
-                                            <h6 class="mb-0"><i class="fa-solid fa-eye me-2"></i>Content Preview</h6>
+                                    <!-- URL Slug Info -->
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fa fa-link me-2"></i>URL Slug</h6>
                                         </div>
-                                        <div class="card-body" id="contentPreview" style="max-height: 400px; overflow-y: auto;">
-                                            <p class="text-muted small">Preview will appear here...</p>
+                                        <div class="card-body">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   id="slugPreview"
+                                                   readonly
+                                                   placeholder="auto-generated-from-title">
+
+                                            <div class="slug-info mt-3">
+                                                <strong>What is URL Slug?</strong>
+                                                <p class="mb-0 mt-2">
+                                                    URL Slug là phần cuối của địa chỉ web. Ví dụ: nếu slug là "about-us",
+                                                    trang sẽ có địa chỉ: <code>yoursite.com/page/about-us</code>
+                                                </p>
+                                                <p class="mb-0 mt-2">
+                                                    Slug sẽ được tự động tạo từ tiêu đề, không dấu, viết thường,
+                                                    các từ cách nhau bằng dấu gạch ngang (-).
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div> *@
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Action Buttons -->
-                            <div class="row mt-4">
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <button class="btn btn-primary btn-lg" type="submit">
-                                                <i class="fa fa-save me-2"></i>
-                                                @(isEdit ? "Update Page" : "Create Page")
-                                            </button>
-                                                <a href="/admin/list-page"class="btn btn-secondary btn-lg">
+                            <div class="action-buttons">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-primary btn-lg" type="submit">
+                                                    <i class="fa fa-save me-2"></i>
+                                                    @(isEdit ? "Update Page" : "Create Page")
+                                                </button>
+                                                <a href="/admin/list-page" class="btn btn-secondary btn-lg">
                                                     <i class="fa fa-times me-2"></i> Cancel
                                                 </a>
+                                                @if (isEdit)
+                                                {
+                                                    <button type="button" class="btn btn-outline-danger btn-lg" onclick="confirmDelete(@Model.Uid)">
+                                                        <i class="fa fa-trash me-2"></i> Delete
+                                                    </button>
+                                                }
+                                            </div>
                                         </div>
-                                        @if (isEdit)
-                                        {                                                               
-                                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete(@Model.Uid)">
-                                                <i class="fa fa-trash me-2"></i> Delete Page
-                                            </button>
-                                        }
                                     </div>
                                 </div>
                             </div>
@@ -743,11 +452,14 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 @section Scripts {
     <script>
-        // Auto-generate slug from title
+        const contentArea = document.getElementById('pageContent');
+
+        // Auto-generate slug
         function generateSlug(text) {
             return text
                 .toLowerCase()
@@ -760,25 +472,47 @@
                 .trim();
         }
 
-        // Update slug preview when title changes
         document.querySelector('[name="Title"]').addEventListener('input', function(e) {
             const slug = generateSlug(e.target.value);
             document.getElementById('slugPreview').value = slug || 'auto-generated-from-title';
         });
 
-        // Update content preview
-        // document.getElementById('pageContent').addEventListener('input', function(e) {
-        //     const preview = document.getElementById('contentPreview');
-        //     preview.innerHTML = e.target.value || '<p class="text-muted small">Preview will appear here...</p>';
-        // });
+        // Editor helper functions
+        function insertTag(tag, defaultText) {
+            const start = contentArea.selectionStart;
+            const end = contentArea.selectionEnd;
+            const selectedText = contentArea.value.substring(start, end) || defaultText;
+            const newText = `<${tag}>${selectedText}</${tag}>`;
 
-        // Initial preview load
+            contentArea.setRangeText(newText, start, end, 'end');
+            contentArea.focus();
+        }
+
+        function insertList(type) {
+            const start = contentArea.selectionStart;
+            const listHtml = type === 'ul'
+                ? '<ul>\n    <li>Item 1</li>\n    <li>Item 2</li>\n    <li>Item 3</li>\n</ul>'
+                : '<ol>\n    <li>Item 1</li>\n    <li>Item 2</li>\n    <li>Item 3</li>\n</ol>';
+
+            contentArea.setRangeText(listHtml, start, start, 'end');
+            contentArea.focus();
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:', 'https://');
+            if (url) {
+                const text = prompt('Enter link text:', 'Click here');
+                if (text) {
+                    const start = contentArea.selectionStart;
+                    const linkHtml = `<a href="${url}">${text}</a>`;
+                    contentArea.setRangeText(linkHtml, start, start, 'end');
+                    contentArea.focus();
+                }
+            }
+        }
+
+        // Initial slug load
         window.addEventListener('load', function() {
-            // const content = document.getElementById('pageContent').value;
-            // if(content) {
-            //     document.getElementById('contentPreview').innerHTML = content;
-            // }
-
             const title = document.querySelector('[name="Title"]').value;
             if(title) {
                 document.getElementById('slugPreview').value = generateSlug(title);
@@ -802,7 +536,7 @@
 
         // Delete confirmation
         function confirmDelete(uid) {
-            if(confirm('Are you sure you want to delete this page? This action cannot be undone.')) {
+            if(confirm('⚠️ Are you sure you want to delete this page?\n\nThis action cannot be undone!')) {
                 window.location.href = '/admin/list-page/delete/' + uid;
             }
         }

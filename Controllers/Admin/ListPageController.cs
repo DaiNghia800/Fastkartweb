@@ -39,81 +39,6 @@ namespace Fastkart.Controllers.Admin
         }
 
         // ============================================
-        // CREATE - GET: Hiển thị form tạo mới
-        // ============================================
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            // Load danh sách authors (users)
-            LoadAuthors();
-            return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", new Pages());
-        }
-
-        // ============================================
-        // CREATE - POST: Xử lý tạo mới
-        // ============================================
-        [HttpPost("create")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Pages newPage)
-        {
-            try
-            {
-                // Xóa validation cho các trường tự động
-                RemoveAutoFieldsFromValidation();
-
-                // Validate Author
-                if (newPage.AuthorUid <= 0)
-                {
-                    ModelState.AddModelError("AuthorUid", "Please select an author");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    LoadAuthors();
-                    ViewBag.ErrorMessage = "Please check all required fields.";
-                    return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
-                }
-
-                // Gán giá trị tự động
-                newPage.Slug = GenerateSlug(newPage.Title);
-                newPage.CreatedAt = DateTime.Now;
-                newPage.UpdatedAt = DateTime.Now;
-                newPage.CreatedBy = GetCurrentUserName(); // TODO: Lấy từ session/auth
-                newPage.UpdatedBy = GetCurrentUserName();
-                newPage.Deleted = false;
-
-                // Set PublishedAt nếu status = Published
-                if (newPage.Status == "Published")
-                {
-                    newPage.PublishedAt = DateTime.Now;
-                }
-
-                _pageService.CreatePage(newPage);
-
-                Console.WriteLine($"✅ Page created successfully: {newPage.Title}");
-                TempData["SuccessMessage"] = $"Page '{newPage.Title}' created successfully!";
-                return RedirectToAction("Index");
-            }
-            catch (DbUpdateException dbEx)
-            {
-                var innerMessage = dbEx.InnerException?.Message ?? dbEx.Message;
-                Console.WriteLine($"❌ Database error: {innerMessage}");
-
-                LoadAuthors();
-                ViewBag.ErrorMessage = "Database error. Please check if the author exists.";
-                return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error: {ex.Message}");
-
-                LoadAuthors();
-                ViewBag.ErrorMessage = $"An error occurred: {ex.Message}";
-                return View("~/Views/Admin/ListPage/ListPageCreate.cshtml", newPage);
-            }
-        }
-
-        // ============================================
         // EDIT - GET: Hiển thị form chỉnh sửa
         // ============================================
         [HttpGet("edit/{id}")]
@@ -303,11 +228,9 @@ namespace Fastkart.Controllers.Admin
 
         /// <summary>
         /// Lấy username hiện tại
-        /// TODO: Implement authentication và lấy từ User.Identity.Name
         /// </summary>
         private string GetCurrentUserName()
         {
-            // Tạm thời return "admin", sau này implement authentication
             return User?.Identity?.Name ?? "admin";
         }
     }
