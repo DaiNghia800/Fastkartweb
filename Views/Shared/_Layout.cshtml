@@ -142,9 +142,31 @@
                     <!-- Icons & Dropdowns -->
                     <div class="col-md-7 col-sm-7 col-xl-4 d-sm-flex d-none justify-content-end align-items-center gap-3 p-0">
                         <div class="col-md-7 col-sm-7 col-xl-4 d-sm-flex d-none justify-content-end align-items-center gap-3 p-0">
+                            <div class="option-list">
+                                <ul class="list">
+                                    <li class="position-relative">
+                                        <a href="#" target="_blank" rel="noopener noreferrer">
+                                            <span class="badge-number">2</span>
+                                            <i class="fa-solid fa-right-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="position-relative">
+                                        <a href="#" target="_blank" rel="noopener noreferrer">
+                                            <span class="badge-number">1</span>
+                                            <i class="fa-regular fa-heart"></i>
+                                        </a>
+                                    </li>
+                                    <li class="position-relative">
+                                        <a href="#" target="_blank" rel="noopener noreferrer">
+                                            <span class="badge-number">4</span>
+                                            <i class="fa-solid fa-bag-shopping"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             @if (User.Identity != null && User.Identity.IsAuthenticated)
                             {
-                                <li class="profile-box position-relative me-0 pe-0" style="list-style: none;">
+                                <div class="profile-box position-relative me-0 pe-0" style="list-style: none;">
                                     <div class="profile d-flex align-items-center" style="cursor: pointer;">
                                         @if (currentUser != null && !string.IsNullOrEmpty(currentUser.ImgUser))
                                         {
@@ -192,7 +214,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </li>
+                                </div>
                             }
                             else
                             {
@@ -205,29 +227,9 @@
                                     <span>Login</span>
                                 </a>
                             }
+                        
                         </div>
-                        <div class="option-list">
-                            <ul class="list">
-                                <li class="position-relative">
-                                    <a href="#" target="_blank" rel="noopener noreferrer">
-                                        <span class="badge-number">2</span>
-                                        <i class="fa-solid fa-right-left"></i>
-                                    </a>
-                                </li>
-                                <li class="position-relative">
-                                    <a href="#" target="_blank" rel="noopener noreferrer">
-                                        <span class="badge-number">1</span>
-                                        <i class="fa-regular fa-heart"></i>
-                                    </a>
-                                </li>
-                                <li class="position-relative">
-                                    <a href="#" target="_blank" rel="noopener noreferrer">
-                                        <span class="badge-number">4</span>
-                                        <i class="fa-solid fa-bag-shopping"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                       
                     </div>
 
                 </div>
