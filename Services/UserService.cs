@@ -97,7 +97,7 @@ namespace Fastkart.Services
                 existingUser.Email = userModel.Email;
                 existingUser.PhoneNumber = userModel.PhoneNumber;
                 existingUser.Address = userModel.Address;
-                existingUser.Role = userModel.Role;
+                existingUser.RoleUid = userModel.RoleUid;
                 existingUser.ImgUser = userModel.ImgUser; // Cập nhật (dù là ảnh mới hay đường dẫn cũ)
 
                 // 4. Cập nhật thông tin hệ thống
