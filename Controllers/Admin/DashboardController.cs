@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Policy = "NoCustomer")]
     public class DashboardController : Controller
     {
         [Route("/admin/dashboard")]

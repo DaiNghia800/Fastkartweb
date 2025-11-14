@@ -223,9 +223,9 @@ namespace Fastkart.Controllers.Login
                     authProperties);
 
                 // 7. Redirect dựa trên Role
-                string redirectUrl = user.Role.RoleName == WebConstants.ROLE_ADMIN
-                    ? "/admin/dashboard"
-                    : "/";
+                string redirectUrl = user.Role.RoleName == WebConstants.ROLE_CUSTOMER
+                    ? "/" 
+                    : "/admin/dashboard";
 
                 return Redirect(redirectUrl);
             }

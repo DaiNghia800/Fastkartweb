@@ -74,14 +74,15 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_ADMIN));
-
-    options.AddPolicy("CustomerOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_CUSTOMER));
+    options.AddPolicy("NoCustomer", policy =>
+        policy.RequireAssertion(context =>
+            !context.User.IsInRole(WebConstants.ROLE_CUSTOMER)
+        ));
 });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();

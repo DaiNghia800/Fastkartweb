@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Fastkart.Controllers.Admin
 {
-    [Authorize]
+    [Authorize(Policy = "NoCustomer")]
     [Route("/admin/user")]
     public class UserController : Controller
     {
@@ -76,19 +76,74 @@ namespace Fastkart.Controllers.Admin
             return PartialView("~/Views/Admin/User/userdetail.cshtml", user);
         }
 
-        [HttpGet("get-user-edit")]
-        public IActionResult GetUserEdit(int id)
+        [HttpGet("edit/{id}")]
+        public IActionResult Edit(int id)
         {
             var user = _userService.GetUserById(id);
+
             if (user == null)
             {
                 return NotFound("Không tìm thấy người dùng.");
             }
+
+            // Map từ User entity sang UserEditViewModel
+            var model = new UserEditViewModel
+            {
+                Uid = user.Uid,
+                FullName = user.FullName,
+                Email = user.Email,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                ImgUser = user.ImgUser,
+                RoleUid = user.RoleUid
+            };
+
+            // Load danh sách roles
             var allRoles = _userService.GetAllRoles();
             ViewData["RolesList"] = new SelectList(allRoles, "Uid", "RoleName", user.RoleUid);
-            return PartialView("~/Views/Admin/User/useredit.cshtml", user);
+
+            return View("~/Views/Admin/User/Edit.cshtml", model);
         }
 
+        [HttpPost("edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [FromForm] UserCreateViewModel model)
+        {
+            if (id != model.Uid)
+            {
+                return BadRequest("ID không khớp");
+            }
+
+            // Nếu không nhập password mới, bỏ qua validation password
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                ModelState.Remove(nameof(model.Password));
+                ModelState.Remove(nameof(model.ConfirmPassword));
+            }
+
+            // Tải lại RolesList phòng trường hợp phải trả về View
+            var allRoles = _userService.GetAllRoles();
+            ViewData["RolesList"] = new SelectList(allRoles, "Uid", "RoleName", model.RoleUid);
+
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Admin/User/Edit.cshtml", model);
+            }
+
+            // Gọi Service để update
+            var (success, errorMessage) = await _userService.UpdateUserAsync(model);
+
+            if (success)
+            {
+                TempData["SuccessMessage"] = "Cập nhật người dùng thành công!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, errorMessage);
+                return View("~/Views/Admin/User/Edit.cshtml", model);
+            }
+        }
         [HttpPost("update")]
         public async Task<IActionResult> UpdateInfoUser([FromForm] Users userModel, List<IFormFile>? imgFiles)
         {

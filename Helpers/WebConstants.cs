@@ -6,5 +6,6 @@
         public const string SUCCESS = "success";    
         public const string ROLE_ADMIN = "Admin";
         public const string ROLE_CUSTOMER = "Customer";
+        public const string ROLE_CUSTOMERLower = "customer";
     }
 }

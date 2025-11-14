@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Policy = "NoCustomer")]
     public class AttributesController : Controller
     {
         [Route("/admin/attributes")]

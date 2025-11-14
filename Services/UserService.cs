@@ -684,5 +684,53 @@ namespace Fastkart.Services
                 return false;
             }
         }
+        public async Task<(bool Success, string ErrorMessage)> UpdateUserAsync(UserCreateViewModel model)
+        {
+            try
+            {
+                var existingUser = await _context.Users.FindAsync(model.Uid);
+                if (existingUser == null)
+                {
+                    return (false, "Không tìm thấy người dùng");
+                }
+
+                // Kiểm tra email trùng (ngoại trừ user hiện tại)
+                var emailExists = await _context.Users
+                    .AnyAsync(u => u.Email == model.Email && u.Uid != model.Uid && u.Deleted == false);
+
+                if (emailExists)
+                {
+                    return (false, "Email này đã được sử dụng bởi người dùng khác");
+                }
+
+                // Cập nhật thông tin
+                existingUser.FullName = model.FullName;
+                existingUser.Email = model.Email;
+                existingUser.PhoneNumber = model.PhoneNumber;
+                existingUser.Address = model.Address;
+                existingUser.RoleUid = model.RoleUid;
+                existingUser.ImgUser = model.ImgUser;
+                
+                // Cập nhật password nếu có nhập mới
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+                }
+
+                existingUser.UpdatedAt = DateTime.Now;
+                existingUser.UpdatedBy = "admin";
+
+                _context.Users.Update(existingUser);
+                await _context.SaveChangesAsync();
+
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return (false, "Đã xảy ra lỗi hệ thống. Vui lòng thử lại.");
+            }
+        }
+
     }
 }

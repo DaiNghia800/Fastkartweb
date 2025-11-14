@@ -1,10 +1,12 @@
 ﻿using Fastkart.Models.ViewModels;
 using Fastkart.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Policy = "NoCustomer")]
     [Route("/admin/settings/profile")]
     public class SettingController : Controller
     {

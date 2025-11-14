@@ -4,6 +4,7 @@ namespace Fastkart.Models.ViewModels
 {
     public class UserCreateViewModel
     {
+        public int Uid { get; set; }
         [Required(ErrorMessage = "Full name is required.")]
         [StringLength(100)]
         [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Full name must not contain numbers or special characters.")]

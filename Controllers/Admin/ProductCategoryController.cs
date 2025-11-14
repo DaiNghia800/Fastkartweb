@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Policy = "NoCustomer")]
     [Route("/admin/product-category")]
     [Authorize]
     public class ProductCategoryController : Controller
