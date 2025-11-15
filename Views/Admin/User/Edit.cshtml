@@ -1,5 +1,4 @@
-﻿@using Fastkart.Models.Entities
-@model Fastkart.Models.ViewModels.UserCreateViewModel;
+﻿@model Fastkart.Models.ViewModels.UserCreateViewModel;
 @{
     Layout = "_LayoutAdmin";
     ViewData["title"] = "User Edit";
@@ -22,7 +21,6 @@
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-3"></div>
 
                     <input type="hidden" asp-for="Uid" />
-                    <input type="hidden" asp-for="ImgUser" />
 
                     <div class="row mb-4 align-items-center">
                         <label asp-for="FullName" class="col-3 form-label-title">Full Name <span class="text-danger">*</span></label>
@@ -75,7 +73,7 @@
                         <label class="col-3 form-label-title">User Image</label>
                         <div class="col-9">
                             <div id="my-dropzone" class="dropzone"></div>
-                            <input type="hidden" name="ImgUser" id="Thumbnail" data-thumbnail='@(string.IsNullOrEmpty(Model.ImgUser) ? "[]" : Model.ImgUser)'>
+                            <input type="hidden" name="ImgUser" id="Thumbnail" data-thumbnail='@(string.IsNullOrEmpty(Model.ImgUser) ? "[\"https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png\"]" : Model.ImgUser)' />
                         </div>
                     </div>
 
@@ -84,7 +82,7 @@
                         <div class="col-9">
                             <select asp-for="RoleUid" class="js-example-basic-single w-100"
                                     asp-items="@(ViewData["RolesList"] as SelectList)">
-                                <option value="">-- Chọn một quyền --</option>
+                                <option value="">-- Choose one Role --</option>
                             </select>
                             <span asp-validation-for="RoleUid" class="text-danger"></span>
                         </div>
@@ -92,7 +90,7 @@
 
                     <div class="d-flex justify-content-between mb-3">
                         <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-                        <button type="submit" class="btn text-white theme-bg-color" button-save>Cập nhật User</button>
+                        <button type="submit" class="btn text-white theme-bg-color" button-save>Update User</button>
                     </div>
                 </div>
             </div>

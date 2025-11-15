@@ -170,37 +170,20 @@ namespace Fastkart.Services
                         // Cho phép admin thêm password cho user này
                         existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
                         existingUser.FullName = model.FullName;
-                        existingUser.ImgUser = existingUser.ImgUser;
                         existingUser.PhoneNumber = model.PhoneNumber;
                         existingUser.Address = model.Address;
                         existingUser.RoleUid = model.RoleUid;
                         existingUser.UpdatedAt = DateTime.Now;
                         existingUser.UpdatedBy = "admin";
 
-                        //// XỬ LÝ NHIỀU ẢNH
-                        //var imageUrls = new List<string>();
-
-                        //if (!string.IsNullOrEmpty(model.ImgUser))
-                        //{
-                        //    try
-                        //    {
-                        //        imageUrls = JsonSerializer.Deserialize<List<string>>(model.ImgUser) ?? new List<string>();
-                        //    }
-                        //    catch
-                        //    {
-                        //        imageUrls.Add(model.ImgUser);
-                        //    }
-                        //}
-
-                        //if (model.ImgFile != null && model.ImgFile.Length > 0)
-                        //{
-                        //    var url = await _uploadService.UploadImageAsync(model.ImgFile);
-                        //    imageUrls.Add(url);
-                        //}
-
-                        //existingUser.ImgUser = imageUrls.Count > 0 ? JsonSerializer.Serialize(imageUrls) : "[]";
-
-                        //_context.Users.Update(existingUser);
+                        if (string.IsNullOrWhiteSpace(model.ImgUser) || model.ImgUser == "[]")
+                        {
+                            existingUser.ImgUser = WebConstants.DEFAULT_AVATAR;
+                        }
+                        else
+                        {
+                            existingUser.ImgUser = model.ImgUser;
+                        }
                         await _context.SaveChangesAsync();
 
                         return (true, null);
@@ -228,33 +211,14 @@ namespace Fastkart.Services
                     Deleted = false
                 };
 
-                //// XỬ LÝ NHIỀU ẢNH CHO USER MỚI
-                //var newImageUrls = new List<string>();
-
-                //if (!string.IsNullOrEmpty(model.ImgUser))
-                //{
-                //    try
-                //    {
-                //        newImageUrls = JsonSerializer.Deserialize<List<string>>(model.ImgUser) ?? new List<string>();
-                //    }
-                //    catch
-                //    {
-                //        newImageUrls.Add(model.ImgUser);
-                //    }
-                //}
-
-                //if (model.ImgFile != null && model.ImgFile.Length > 0)
-                //{
-                //    var url = await _uploadService.UploadImageAsync(model.ImgFile);
-                //    newImageUrls.Add(url);
-                //}
-
-                //if (newImageUrls.Count == 0)
-                //{
-                //    newImageUrls.Add("https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png");
-                //}
-
-                //newUser.ImgUser = JsonSerializer.Serialize(newImageUrls);
+                if (string.IsNullOrWhiteSpace(model.ImgUser) || model.ImgUser == "[]")
+                {
+                    newUser.ImgUser = WebConstants.DEFAULT_AVATAR;
+                }
+                else
+                {
+                    newUser.ImgUser = model.ImgUser;
+                }
                 await _context.Users.AddAsync(newUser);
           
                 await _context.SaveChangesAsync();
@@ -694,24 +658,21 @@ namespace Fastkart.Services
                     return (false, "Không tìm thấy người dùng");
                 }
 
-                // Kiểm tra email trùng (ngoại trừ user hiện tại)
-                var emailExists = await _context.Users
-                    .AnyAsync(u => u.Email == model.Email && u.Uid != model.Uid && u.Deleted == false);
-
-                if (emailExists)
+                if (string.IsNullOrWhiteSpace(model.ImgUser) || model.ImgUser == "[]")
                 {
-                    return (false, "Email này đã được sử dụng bởi người dùng khác");
+                    existingUser.ImgUser = WebConstants.DEFAULT_AVATAR;
+                }
+                else
+                {
+                    existingUser.ImgUser = model.ImgUser;
                 }
 
-                // Cập nhật thông tin
                 existingUser.FullName = model.FullName;
                 existingUser.Email = model.Email;
                 existingUser.PhoneNumber = model.PhoneNumber;
                 existingUser.Address = model.Address;
                 existingUser.RoleUid = model.RoleUid;
-                existingUser.ImgUser = model.ImgUser;
-                
-                // Cập nhật password nếu có nhập mới
+
                 if (!string.IsNullOrEmpty(model.Password))
                 {
                     existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);

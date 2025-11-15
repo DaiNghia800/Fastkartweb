@@ -87,7 +87,7 @@ namespace Fastkart.Controllers.Admin
             }
 
             // Map từ User entity sang UserEditViewModel
-            var model = new UserEditViewModel
+            var model = new UserCreateViewModel
             {
                 Uid = user.Uid,
                 FullName = user.FullName,
