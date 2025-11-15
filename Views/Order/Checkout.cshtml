@@ -1,0 +1,153 @@
+﻿@using System.Text.Json
+@model Fastkart.Models.Entities.CheckoutPageViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Order";
+     // Đảm bảo bạn có file Layout này
+
+    // --- SỬA 1: Phải truy cập 'Model.CartItems' ---
+    long subtotal = Model.CartItems.Sum(item => item.Total);
+
+    // CÁC PHÍ NÀY PHẢI GIỐNG VỚI LOGIC BẠN SẼ CODE TRONG OrderController
+    long shippingFee = 25000;      // Phí ship (ví dụ)
+    long couponDiscount = 10000; // Giảm giá (ví dụ)
+
+    long total = subtotal + shippingFee - couponDiscount;
+    if (total < 0) total = 0; // Đảm bảo không bị âm
+}
+
+
+<section class="container">
+    <form id="checkoutForm" method="post" action="/order/submit">
+        <main class="fk-chk-container">
+            <div class="fk-chk-form-column">
+
+                <section class="fk-chk-section">
+                    <h2>Delivery Address</h2>
+                    <div class="fk-chk-card-list">
+                        @if (Model.AddressesAsStrings != null && Model.AddressesAsStrings.Any())
+                        {
+                            foreach (var addressString in Model.AddressesAsStrings)
+                            {
+                                // SỬA 2: Dùng một ID duy nhất (ví dụ Index) thay cho @userId
+                                var uniqueRadioId = "addr_" + Model.AddressesAsStrings.IndexOf(addressString);
+
+                                <div class="fk-chk-option-card fk-chk-selected">
+                                    <input type="radio" name="addressId" id="@uniqueRadioId" value="@addressString" checked>
+                                    <label for="@uniqueRadioId">
+                                        <strong>Địa chỉ của bạn</strong>
+                                        <span class="fk-chk-badge fk-chk-badge-home">Default</span>
+                                        <p>Address: @addressString</p>
+                                    </label>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Bạn chưa cập nhật địa chỉ. Vui lòng <a href="/user/profile">cập nhật hồ sơ</a>.</p>
+                        }
+                    </div>
+                </section>
+
+                <section class="fk-chk-section">
+                    <h2>Delivery Option</h2>
+                    <div class="fk-chk-card-list">
+                        <div class="fk-chk-option-card fk-chk-selected">
+                            <input type="radio" name="deliveryOption" id="del1_new" value="Standard" checked>
+                            <label for="del1_new">
+                                <strong>Standard Delivery Option</strong>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="fk-chk-section">
+                    <h2>Payment Option</h2>
+                    <div class="fk-chk-card-list">
+                        <div class="fk-chk-option-card fk-chk-selected">
+                            <input type="radio" name="paymentMethod" id="pay1_new" value="COD" checked>
+                            <label for="pay1_new">
+                                <strong>Cash On Delivery</strong>
+                            </label>
+                        </div>
+                        <div class="fk-chk-option-card">
+                            <input type="radio" name="paymentMethod" id="pay3_new" value="MoMo">
+                            <label for="pay3_new">
+                                <strong>Thanh toán MoMo</strong>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="fk-chk-sidebar-column">
+                <div class="fk-chk-summary-box">
+                    <h3>Order Summary</h3>
+
+                    <ul class="fk-chk-item-list">
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <li>
+                                @{
+                                    var thumbnails = string.IsNullOrWhiteSpace(item.Image)
+                                    ? new List<string>()
+                                    : JsonSerializer.Deserialize<List<string>>(item.Image);
+
+                                    var firstImg = thumbnails.FirstOrDefault();
+                                }
+                                <img src="@firstImg" alt="@item.ProductName">
+                                <div>
+                                    <span>@item.ProductName X @item.Quantity</span>
+                                    <span>@item.Total.ToString("N0") ₫</span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="fk-chk-summary-details">
+                        <div>
+                            <span>Tạm tính</span>
+                            <span>@subtotal.ToString("N0") ₫</span>
+                        </div>
+                        <div>
+                            <span>Phí vận chuyển</span>
+                            <span>@shippingFee.ToString("N0") ₫</span>
+                        </div>
+                        <div class="fk-chk-coupon-row">
+                            <span>Giảm giá</span>
+                            <span>-@couponDiscount.ToString("N0") ₫</span>
+                        </div>
+                        <div class="fk-chk-total-row">
+                            <span>Tổng cộng (VND)</span>
+                            <span>@total.ToString("N0") ₫</span>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="jsOrderTotal" value="@total" />
+
+                <button type="submit" class="fk-chk-place-order-btn">Place Order</button>
+            </div>
+        </main>
+    </form>
+</section>
+
+@section Scripts {
+    <script>
+        document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            if (paymentMethod === 'MoMo') {
+                event.preventDefault();
+
+                const addressId = document.querySelector('input[name="addressId"]:checked').value;
+
+                const redirectUrl = `/payment/momo?addressId=${encodeURIComponent(addressId)}`;
+
+                console.log('Redirecting to MoMo: ' + redirectUrl);
+                window.location.href = redirectUrl;
+            }
+        });
+    </script>
+}

@@ -193,7 +193,8 @@
                     <div class="row mb-4 align-items-center">
                         <label for="StockQuantity" class="col-3 form-label-title">Stock Quantity</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="number" id="StockQuantity" name="StockQuantity" value=@product.StockQuantity placeholder="0" />
+                            <input class="form-control" asp-for="StockQuantity" type="number" id="StockQuantity" name="StockQuantity" value=@product.StockQuantity placeholder="0" />
+                            <span asp-validation-for="StockQuantity" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">

@@ -7,7 +7,7 @@ namespace Fastkart.Models.Entities
         public int Uid { get; set; }
 
         [Required(ErrorMessage = "Danh mục sản phẩm không được để trống")]
-        [RegularExpression(@"^[\p{L}0-9\s\-]+$", ErrorMessage = "Danh mục sản phẩm không được chứa ký tự đặc biệt")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Danh mục sản phẩm không được chứa ký tự đặc biệt")]
         public string CategoryName { get; set; }
         public string Thumbnail { get; set; }
         public string Description { get; set; }

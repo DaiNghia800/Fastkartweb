@@ -1,0 +1,90 @@
+﻿@using System.Text.Json
+@model Fastkart.Models.Entities.Order
+@{
+    ViewData["Title"] = "Kết quả đặt hàng";
+    Layout = "_Layout";
+}
+
+<div class="ty-page-container">
+    <div class="ty-email-wrapper">
+
+        <section class="ty-thankyou-block">
+            <img src="https://themes.pixelstrap.com/fastkart/email-templete/images/order-success-poster.png" alt="Delivery Scooter">
+
+            <h2 style="@(ViewBag.Result != null)">
+                @(ViewBag.Result ?? "Đã xảy ra lỗi")
+            </h2>
+            <p>
+                @ViewBag.Message <br />
+                Mã đơn hàng: <b>@ViewBag.OrderId</b>
+            </p>
+            <a href="/" class="btn btn-animation btn-process" style="display:inline-block;margin-top:20px;padding:10px 20px;background:#0094ff;color:white;border-radius:6px;text-decoration:none;">Quay về trang chủ</a>
+        </section>
+
+        @if (Model != null)
+        {
+            <section class="ty-info-boxes">
+                <div class="ty-info-box">
+                    <h3>Địa chỉ giao hàng</h3>
+                    <p>
+                        @Model.ShippingAddress
+                    </p>
+                </div>
+                <div class="ty-info-box">
+                    <h3>Chi tiết đơn hàng</h3>
+                    <p>
+                        Mã đơn hàng CSDL: <b>#@Model.Uid</b><br />
+                        Trạng thái: <b>@Model.Status</b>
+                    </p>
+                </div>
+            </section>
+
+            <section class="ty-order-details">
+
+                <div class="ty-shipped-items">
+                    <h3>Các sản phẩm đã đặt</h3>
+                    <ul>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <li class="ty-item">
+                                @{
+                                    var thumbnails = string.IsNullOrWhiteSpace(item.Product.Thumbnail)
+                                    ? new List<string>()
+                                    : JsonSerializer.Deserialize<List<string>>(item.Product.Thumbnail);
+
+                                    var firstImg = thumbnails.FirstOrDefault();
+                                }
+                                <img src="@(firstImg ?? "/images/placeholder.jpg")" alt="@(item.Product?.ProductName ?? "Sản phẩm")">
+                                <div class="ty-item-info">
+                                    <strong>@(item.Product?.ProductName ?? "Không tìm thấy tên")</strong>
+                                    <span>SL: @item.Quantity</span>
+                                </div>
+                                <span class="ty-item-price">@item.PriceAtPurchase.ToString("N0") ₫</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="ty-order-summary">
+                    <h3>Tóm tắt đơn hàng</h3>
+                    <div class="ty-summary-details">
+                        <div class="ty-summary-total">
+                            <span>Tổng cộng</span>
+                            <span>@Model.TotalAmount.ToString("N0") ₫</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+        else
+        {
+            <section class="ty-info-boxes">
+                <div class="ty-info-box" style="flex-basis: 100%; text-align: center;">
+                    <h3>Không thể tải chi tiết đơn hàng</h3>
+                    <p>Không tìm thấy chi tiết cho đơn hàng <b>@ViewBag.OrderId</b> trong CSDL.</p>
+                </div>
+            </section>
+        }
+
+    </div>
+</div>

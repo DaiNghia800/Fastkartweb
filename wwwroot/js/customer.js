@@ -233,3 +233,104 @@ function initializeSettingsValidation() {
         }
     });
 }
+
+//drop zone
+//dropzone
+const dropzoneElement = document.querySelector("#my-dropzone");
+if (dropzoneElement) {
+    Dropzone.autoDiscover = false;
+    let uploadedImages = [];
+    const thumbnail = document.getElementById("Thumbnail");
+    let dataThumbnail;
+    if (thumbnail) {
+        dataThumbnail = thumbnail.getAttribute("data-thumbnail");
+    }
+
+    const myDropzone = new Dropzone(dropzoneElement, {
+        url: "/admin/upload/image",
+        method: "post",
+        paramName: 'files',
+        autoProcessQueue: false,
+        uploadMultiple: true,
+        parallelUploads: 10,
+        maxFilesize: 5,
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        headers: {
+            "Cache-Control": null,
+            "X-Requested-With": null
+        },
+        dictDefaultMessage: `
+            <div class= "dz-message-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload-cloud"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+                <p>Thả file vào đây hoặc click để tải lên</p>
+            </div >
+        `,
+
+        init: function () {
+            var dz = this;
+
+            if (dataThumbnail) {
+                try {
+                    uploadedImages = JSON.parse(dataThumbnail);
+                } catch (e) {
+                    uploadedImages = [];
+                }
+            }
+
+            const buttonSave = document.querySelector("[button-save]");
+            if (buttonSave) {
+                buttonSave.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    if (dz.getQueuedFiles().length > 0) {
+                        dz.processQueue();
+                    } else {
+                        document.getElementById("Thumbnail").value = JSON.stringify(uploadedImages);
+                        document.getElementById("mainForm").submit();
+                    }
+                });
+            }
+
+            this.on("sending", function (file, xhr, formData) {
+                formData.append("files", file);
+            });
+
+            if (dataThumbnail !== null) {
+                uploadedImages.forEach(function (url) {
+                    var mockFile = { name: url.split("/").pop(), size: 12345, existingUrl: url };
+                    dz.emit("addedfile", mockFile);
+                    dz.emit("thumbnail", mockFile, url);
+                    dz.emit("complete", mockFile);
+                });
+            }
+
+            this.on("successmultiple", function (file, response) {
+                if (response.urls) {
+                    uploadedImages.push(...response.urls);
+                } else if (response.url) {
+                    uploadedImages.push(response.url);
+                }
+                document.getElementById("Thumbnail").value = JSON.stringify(uploadedImages);
+                document.getElementById("mainForm").submit();
+            });
+
+            this.on("error", function (file, message) {
+                console.error("Upload failed:", message);
+            });
+            this.on("removedfile", function (file) {
+                let url = file.xhr ? JSON.parse(file.xhr.response).url : file.existingUrl || file.dataUrl;
+
+                if (!url) return;
+
+                const index = uploadedImages.indexOf(url);
+                if (index > -1) {
+                    uploadedImages.splice(index, 1);
+                    document.getElementById("Thumbnail").value = JSON.stringify(uploadedImages);
+                }
+            });
+        }
+    });
+}
+//end dropzone
+//end drop zone

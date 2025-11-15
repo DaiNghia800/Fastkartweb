@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Fastkart.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
+Console.WriteLine($"ENVIRONMENT: {builder.Environment.EnvironmentName}");
+builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -69,9 +72,11 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("NoCustomer", policy =>
+
     {
         // 2. Yêu cầu người dùng phải đăng nhập
         policy.RequireAuthenticatedUser();
@@ -79,26 +84,25 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(context =>
             !context.User.IsInRole(WebConstants.ROLE_CUSTOMER));
     });
-
-    options.AddPolicy("CustomerOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_CUSTOMER));
 });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+
+builder.Services.AddScoped<MoMoService>();
+builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+
+// (KHỐI AddSession BỊ TRÙNG LẶP Ở ĐÂY ĐÃ ĐƯỢC XÓA)
+
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -135,30 +139,13 @@ app.UseHttpMethodOverride();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Kích hoạt Session (đã được đăng ký ở trên)
 app.UseSession();
+// Routing
+app.MapControllerRoute(
+    name: "Admin",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
-//app.UseEndpoints(endpoints =>
-//{
-//    // API Routes (phải đặt trước để tránh conflict)
-//    endpoints.MapControllerRoute(
-//        name: "api",
-//        pattern: "api/{controller}/{action}/{id?}");
-
-//    // Route cho khu vực (Area) Admin
-//    endpoints.MapControllerRoute(
-//      name: "Admin",
-//      pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-
-//    // Route cho Account
-//    endpoints.MapControllerRoute(
-//        name: "Account",
-//        pattern: "{controller=Account}/{action=Index}/{id?}");
-
-//    // Route mặc định (Luôn để ở cuối cùng)
-//    endpoints.MapControllerRoute(
-//        name: "default",
-//        pattern: "{controller=Home}/{action=Index}/{id?}");
-//});
 
 app.MapControllers();
 // Route cho khu vực (Area) Admin (Vẫn cần nếu bạn dùng Area)
@@ -167,6 +154,15 @@ app.MapControllerRoute(
       pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 // Route mặc định (Luôn để ở cuối cùng)
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapControllerRoute(
+    name: "Account",
+    pattern: "{controller=Account}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

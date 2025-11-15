@@ -1,6 +1,13 @@
-﻿@{
+﻿@using Fastkart.Models.Entities;
+@using System.Text.Json
+
+@{
     Layout = "_Layout";
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    var newProduct = ViewData["newProduct"] as List<Product>;
+    var featureProduct = ViewData["featureProduct"] as List<Product>;
+    var totalNewProduct = newProduct != null ? newProduct.Count : 0;
+    var totalFeatureProduct = featureProduct != null ? featureProduct.Count : 0;
 }
 
 <section class="home-1">
@@ -45,83 +52,40 @@
         <div class="row">
             <div class="col-12">
                 <div class="category-slider">
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-1 position-relative">
-                                <img src="./assets/images/category-1.png" alt="img" class="position-relative">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-2 position-relative">
-                                <img src="./assets/images/category-2.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-3 position-relative">
-                                <img src="./assets/images/c.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-4 position-relative">
-                                <img src="./assets/images/category-4.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-5 position-relative">
-                                <img src="./assets/images/category-5.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-6 position-relative">
-                                <img src="./assets/images/category-6.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="shop-category-box">
-                            <a href="#"
-                               class="d-flex align-items-center justify-content-center circle-6 position-relative">
-                                <img src="./assets/images/category-6.png" alt="img">
-                            </a>
-                            <div class="category-name">
-                                <h3 class="name text-center">Oils, Refined & Ghee</h3>
-                            </div>
-                        </div>
-                    </div>
+                    @{
+                        if(ViewData["categories"] != null)
+                        {
+                            var i = 1;
+                            foreach(ProductCategory productCategory in ViewBag.categories)
+                            {
+                                <div class="item">
+                                    <div class="shop-category-box">
+                                        <a href="/product-category/@productCategory.Slug"
+                                           class="d-flex align-items-center justify-content-center circle-@i position-relative">
+                                                @{
+                                                    var thumbnails = string.IsNullOrWhiteSpace(productCategory.Thumbnail)
+                                                    ? new List<string>()
+                                                    : JsonSerializer.Deserialize<List<string>>(productCategory.Thumbnail);
+
+                                                    var firstImg = thumbnails.FirstOrDefault();
+                                                 }
+
+                                                @if (!string.IsNullOrEmpty(firstImg))
+                                                {
+                                                // <img src="./assets/images/category-2.png" alt="img">
+                                                <img src=@firstImg alt=@productCategory.CategoryName class="img img-fluid">
+                                                }
+                                                
+                                        </a>
+                                        <div class="category-name">
+                                            <h3 class="name text-center">@productCategory.CategoryName</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                i++;
+                            }
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -197,8 +161,8 @@
                             <div class="deal-detail">
                                 <button class="buy-box">
                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
+                                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    class="css-i6dzq1">
                                         <circle cx="9" cy="21" r="1"></circle>
                                         <circle cx="20" cy="21" r="1"></circle>
                                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
@@ -211,45 +175,45 @@
                                 <ul class="rating">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
@@ -301,8 +265,8 @@
                             <div class="deal-detail">
                                 <button class="buy-box">
                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
+                                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    class="css-i6dzq1">
                                         <circle cx="9" cy="21" r="1"></circle>
                                         <circle cx="20" cy="21" r="1"></circle>
                                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
@@ -315,45 +279,45 @@
                                 <ul class="rating">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
@@ -405,8 +369,8 @@
                             <div class="deal-detail">
                                 <button class="buy-box">
                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
+                                    stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    class="css-i6dzq1">
                                         <circle cx="9" cy="21" r="1"></circle>
                                         <circle cx="20" cy="21" r="1"></circle>
                                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
@@ -419,45 +383,45 @@
                                 <ul class="rating">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star fill">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star fill">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
                                     </li>
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                             stroke-linecap="round" stroke-linejoin="round"
-                                             class="feather feather-star">
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-star">
                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                                             </polygon>
                                         </svg>
@@ -515,770 +479,162 @@
             <div class="col-12">
                 <div class="d-flex align-items-center justify-content-between res-start">
                     <h2 class="title-section">Our Products</h2>
-                    <ul class="list-tab d-flex align-items-center">
-                        <li class="item">
-                            <button class="nav-link btn-tab active" type="button">All</button>
+                    <ul class="list-tab d-flex align-items-center flex-nowrap mb-3 nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="item nav-item" role="presentation">
+                            <button class="nav-link btn-tab nav-link active" id="pills-0-tab" data-bs-toggle="pill" data-bs-target="#pills-0" type="button" role="tab" aria-controls="pills-0" aria-selected="true">All</button>
                         </li>
-                        <li class="item">
-                            <button class="nav-link btn-tab" type="button">Cooking</button>
-                        </li>
-                        <li class="item">
-                            <button class="nav-link btn-tab" type="button">Fruits & Vegetables</button>
-                        </li>
-                        <li class="item">
-                            <button class="nav-link btn-tab" type="button">Beverage</button>
-                        </li>
-                        <li class="item">
-                            <button class="nav-link btn-tab" type="button">Dairy</button>
-                        </li>
+                        @{
+                            var j = 1;
+                            if (ViewData["categories"] != null)
+                            {
+                                foreach(ProductCategory productCategory in ViewBag.categories)
+                                {
+                                    <li class="item nav-item" role="presentation">
+                                        <button class="nav-link btn-tab" id="pills-@j-tab" button-tab data-patch="/@productCategory.Slug" data-bs-toggle="pill" data-bs-target="#pills-@j" type="button" role="tab" aria-controls="pills-@j" aria-selected="true">@productCategory.CategoryName</button>
+                                    </li>
+                                    j++;
+                                }
+                            }
+                            
+                        }
                     </ul>
                 </div>
-                <div class="list-product-pro">
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-0" role="tabpanel" aria-labelledby="pills-0-tab">
+                        <div class="list-product-pro">
+                            @{
+                                if (ViewData["products"] != null)
+                                {
+                                    foreach (Product product in ViewBag.products)
+                                    {
+                                        <div class="item">
+                                            <div class="product-image position-relative">
+                                                <button class="btn-wishlist">
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </button>
+                                                @{
+                                                    var thumbnails = string.IsNullOrWhiteSpace(product.Thumbnail)
+                                                    ? new List<string>()
+                                                    : JsonSerializer.Deserialize<List<string>>(product.Thumbnail);
 
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
+                                                    var firstImg = thumbnails.FirstOrDefault();
+                                                }
+                                                <a href="/product/detail/@product.Slug" class="text-center d-block">
+                                                    <img src=@firstImg alt="img" class=@product.ProductName>
+                                                </a>
+                                                <ul class="option">
+                                                    <li>
+                                                        <i class="fa-regular fa-eye"></i>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa-solid fa-right-left"></i>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="product-detail">
+                                                <ul class="rating">
+                                                    <li class="lh-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round"
+                                                             class="feather feather-star fill">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                            </polygon>
+                                                        </svg>
+                                                    </li>
+                                                    <li class="lh-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round"
+                                                             class="feather feather-star fill">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                            </polygon>
+                                                        </svg>
+                                                    </li>
+                                                    <li class="lh-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round"
+                                                             class="feather feather-star fill">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                            </polygon>
+                                                        </svg>
+                                                    </li>
+                                                    <li class="lh-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                            </polygon>
+                                                        </svg>
+                                                    </li>
+                                                    <li class="lh-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                            </polygon>
+                                                        </svg>
+                                                    </li>
+                                                </ul>
+                                                <a href="/product/detail/@product.Slug" class="text-decoration-none">
+                                                    <h5 class="name">@product.ProductName</h5>
+                                                </a>
+                                                <h5 class="price theme-color text-theme">
+                                                    @{
+                                                        var priceNew = product.Price - (product.Price * product.Discount / 100);
+
+                                                    }
+                                                    @string.Format("{0:#,##0.##}", priceNew) đ
+                                                    @if (product.Discount > 0)
+                                                    {
+                                                        <del>@string.Format("{0:#,##0.##}", product.Price) đ</del>
+                                                    }
+                                                </h5>
+                                                <div class="price-qty">
+                                                    <div class="counter-number">
+                                                        <div class="counter">
+                                                            <div class="qty-left-minus">
+                                                                <i class="fa-solid fa-minus"></i>
+                                                            </div>
+                                                            <input class="form-control input-number qty-input" type="text"
+                                                                   name="quantity" value="0">
+                                                            <div class="qty-right-plus">
+                                                                <i class="fa-solid fa-plus"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="buy-pro">
+                                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
+                                                             stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                                             class="css-i6dzq1">
+                                                            <circle cx="9" cy="21" r="1"></circle>
+                                                            <circle cx="20" cy="21" r="1"></circle>
+                                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                                            </path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
+                                    }
+                                }
+                            }
+                                                    
                         </div>
                     </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
+                    @{
+                        if (ViewData["categories"] != null)
+                        {
+                            for (var i = 1; i <= ViewBag.categories.Count; i++)
+                            {
+                                <div class="tab-pane fade" id="pills-@i" role="tabpanel" aria-labelledby="pills-@i-tab">
+                                    <div class="list-product-pro">
                                     </div>
                                 </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="product-image position-relative">
-                            <button class="btn-wishlist">
-                                <i class="fa-regular fa-heart"></i>
-                            </button>
-                            <a href="#" class="text-center d-block">
-                                <img src="./assets/images/image-product.png" alt="img" class="image-product">
-                            </a>
-                            <ul class="option">
-                                <li>
-                                    <i class="fa-regular fa-eye"></i>
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-right-left"></i>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="product-detail">
-                            <ul class="rating">
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-star fill">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                                <li class="lh-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                        </polygon>
-                                    </svg>
-                                </li>
-                            </ul>
-                            <a href="#" class="text-decoration-none">
-                                <h5 class="name">Bell pepper</h5>
-                            </a>
-                            <h5 class="price theme-color text-theme">$70.21<del>$65.25</del></h5>
-                            <div class="price-qty">
-                                <div class="counter-number">
-                                    <div class="counter">
-                                        <div class="qty-left-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </div>
-                                        <input class="form-control input-number qty-input" type="text"
-                                               name="quantity" value="0">
-                                        <div class="qty-right-plus">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="buy-pro">
-                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
-                                         stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                         class="css-i6dzq1">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                            }
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -1334,442 +690,106 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="wrap-pr-first">
-                            <div class="item">
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
+                            @{
+                                for(int i = 0; i < totalNewProduct; i += 3)
+                                {
+                                    <div class="item">
+                                        @for(int k = i ; k < i + 3 && k < totalNewProduct; k++)
+                                        {
+                                            <div class="product-mini">
+                                                <a href="/product/detail/@newProduct[k].Slug" class="wrap-img">
+                                                    @{
+                                                        var thumbnails = string.IsNullOrWhiteSpace(newProduct[k].Thumbnail)
+                                                        ? new List<string>()
+                                                        : JsonSerializer.Deserialize<List<string>>(newProduct[k].Thumbnail);
+
+                                                        var firstImg = thumbnails.FirstOrDefault();
+                                                    }
+                                                    <img src=@firstImg alt="@newProduct[k].ProductName">
+                                                </a>
+                                                <div class="product-detail product-image position-relative">
+                                                    <ul class="rating">
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                    </ul>
+                                                    <a href="/product/detail/@newProduct[k].Slug" class="text-decoration-none" tabindex="0">
+                                                        <h4 class="name">@newProduct[k].ProductName</h4>
+                                                    </a>
+                                                    <h5 class="price text-theme">
+                                                        @{
+                                                            var priceNew = @newProduct[k].Price - (@newProduct[k].Price * @newProduct[k].Discount / 100);
+
+                                                        }
+                                                        @string.Format("{0:#,##0.##}", priceNew) đ
+                                                        @if (@newProduct[k].Discount > 0)
+                                                        {
+                                                            <del>@string.Format("{0:#,##0.##}", @newProduct[k].Price) đ</del>
+                                                        }
+                                                    </h5>
+                                                    <ul class="option">
+                                                        <li>
+                                                            <i class="fa-solid fa-cart-shopping"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-regular fa-eye"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-regular fa-heart"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-solid fa-right-left"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                                }
+                            }
+                            
                         </div>
                     </div>
                 </div>
@@ -1785,442 +805,105 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="wrap-pr-second">
-                            <div class="item">
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
+                            @{
+                                for (int i = 0; i < totalFeatureProduct; i += 3)
+                                {
+                                    <div class="item">
+                                        @for (int k = i; k < i + 3 && k < totalFeatureProduct; k++)
+                                        {
+                                            <div class="product-mini">
+                                                <a href="/product/detail/@featureProduct[k].Slug" class="wrap-img">
+                                                    @{
+                                                        var thumbnails = string.IsNullOrWhiteSpace(featureProduct[k].Thumbnail)
+                                                        ? new List<string>()
+                                                        : JsonSerializer.Deserialize<List<string>>(featureProduct[k].Thumbnail);
+
+                                                        var firstImg = thumbnails.FirstOrDefault();
+                                                    }
+                                                    <img src=@firstImg alt="@featureProduct[k].ProductName">
+                                                </a>
+                                                <div class="product-detail product-image position-relative">
+                                                    <ul class="rating">
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                        <li>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                 class="feather feather-star fill">
+                                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                                                </polygon>
+                                                            </svg>
+                                                        </li>
+                                                    </ul>
+                                                    <a href="/product/detail/@featureProduct[k].Slug" class="text-decoration-none" tabindex="0">
+                                                        <h4 class="name">@featureProduct[k].ProductName</h4>
+                                                    </a>
+                                                    <h5 class="price text-theme">
+                                                        @{
+                                                            var priceNew = @featureProduct[k].Price - (@featureProduct[k].Price * @featureProduct[k].Discount / 100);
+
+                                                        }
+                                                        @string.Format("{0:#,##0.##}", priceNew) đ
+                                                        @if (@featureProduct[k].Discount > 0)
+                                                        {
+                                                            <del>@string.Format("{0:#,##0.##}", @featureProduct[k].Price) đ</del>
+                                                        }
+                                                    </h5>
+                                                    <ul class="option">
+                                                        <li>
+                                                            <i class="fa-solid fa-cart-shopping"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-regular fa-eye"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-regular fa-heart"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa-solid fa-right-left"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-mini">
-                                    <a href="#" class="wrap-img">
-                                        <img src="./assets/images/img-product-1.png" alt="img-product">
-                                    </a>
-                                    <div class="product-detail product-image position-relative">
-                                        <ul class="rating">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                     class="feather feather-star fill">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                                    </polygon>
-                                                </svg>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="text-decoration-none" tabindex="0">
-                                            <h4 class="name">Potato</h4>
-                                        </a>
-                                        <h5 class="price text-theme">$75.20<del>$65.21</del></h5>
-                                        <ul class="option">
-                                            <li>
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-eye"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-regular fa-heart"></i>
-                                            </li>
-                                            <li>
-                                                <i class="fa-solid fa-right-left"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                                }
+                            }
                         </div>
                     </div>
                 </div>

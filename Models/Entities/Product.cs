@@ -7,7 +7,7 @@ namespace Fastkart.Models.Entities
         public int Uid {  get; set; }
 
         [Required(ErrorMessage = "Tên sản phẩm không được để trống")]
-        [RegularExpression(@"^[\p{L}0-9\s\-]+$", ErrorMessage = "Tên sản phẩm không được chứa ký tự đặc biệt")]
+        //[RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Tên sản phẩm không được chứa ký tự đặc biệt")]
         public string ProductName { get; set; }
 
         public int SubCategoryUid { get; set; }
@@ -16,7 +16,9 @@ namespace Fastkart.Models.Entities
 
         public int UnitUid {  get; set; }
         public Unit Unit { get; set; }
-        public int StockQuantity {  get; set; }
+        [Required(ErrorMessage = "Số lượng tồn kho không được để trống")]
+        [Range(0, double.MaxValue, ErrorMessage = "Số lượng tồn kho không được bé hơn 0")]
+        public int? StockQuantity {  get; set; }
         public StockStatus StockStatus { get; set; }
         public int StockStatusUid { get; set; }
 
@@ -24,7 +26,7 @@ namespace Fastkart.Models.Entities
         public string Sku {  get; set; }
 
         [Required(ErrorMessage = "Giá sản phẩm không được để trống")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0")]
+        [Range(0, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0 hoặc bằng 0")]
         public decimal? Price { get; set; }
 
         [Required(ErrorMessage = "Giảm giá không được để trống")]
@@ -35,6 +37,7 @@ namespace Fastkart.Models.Entities
 
         [Range(0, int.MaxValue, ErrorMessage = "Vị trí sản phẩm phải lớn hơn 0")]
         public int? Position { get; set; }
+
         public int BrandUid { get; set; }
         public Brand Brand { get; set; }
 
