@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251110052427_updateNameTable")]
-    partial class updateNameTable
+    [Migration("20251113063911_updateLogo_ProductCategory")]
+    partial class updateLogo_ProductCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,9 +57,8 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(false)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -346,8 +345,8 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Thumbnail")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(false)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()

@@ -4,26 +4,42 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Fastkart.Controllers.Admin
+namespace Fastkart.Controllers.Client
 {
-    [Authorize(Policy = "NoCustomer")]
-    [Route("/admin/settings/profile")]
-    public class SettingController : Controller
+    [Authorize]
+    [Route("/customer")]
+    public class CustomerController : Controller
     {
         private readonly IUserService _userService;
-        public SettingController(IUserService userService)
+
+        public CustomerController(IUserService userService)
         {
             _userService = userService;
         }
-        [HttpGet("")]
-        public IActionResult Index()
+        [HttpGet("get-my-profile")]
+        public IActionResult GetMyProfile()
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var user = _userService.GetUserById(currentUserId);
 
             if (user == null)
             {
-                return RedirectToAction("Index", "Account");
+                return NotFound("User not found.");
+            }
+
+            return PartialView("~/Views/Customer/MyProfile.cshtml", user);
+        }
+
+        // GET: Settings Modal - Trả về ProfileUpdateViewModel
+        [HttpGet("get-settings")]
+        public IActionResult GetSettings()
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var user = _userService.GetUserById(currentUserId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
             }
 
             var model = new ProfileUpdateViewModel
@@ -35,26 +51,33 @@ namespace Fastkart.Controllers.Admin
                 Address = user.Address
             };
 
-            return View("~/Views/Admin/Setting/Index.cshtml", model);
+            return PartialView("~/Views/Customer/ProfileSetting.cshtml", model);
         }
-        [HttpPost("")]
+
+        // POST: Update Profile
+        [HttpPost("update-profile")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProfile([FromForm] ProfileUpdateViewModel model)
         {
-            // Kiểm tra nếu có nhập password
+            // Validate password if provided
             if (!string.IsNullOrEmpty(model.Password))
             {
-                // Bắt buộc phải có confirm password
                 if (string.IsNullOrEmpty(model.ConfirmPassword))
                 {
-                    return Json(new { success = false, message = "Vui lòng xác nhận mật khẩu." });
+                    return Json(new { success = false, message = "Please confirm your password." });
                 }
 
-                // Kiểm tra khớp
                 if (model.Password != model.ConfirmPassword)
                 {
-                    return Json(new { success = false, message = "Mật khẩu xác nhận không khớp." });
+                    return Json(new { success = false, message = "Passwords do not match." });
                 }
+            }
+
+            // Remove password validation từ ModelState nếu không nhập
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                ModelState.Remove(nameof(model.Password));
+                ModelState.Remove(nameof(model.ConfirmPassword));
             }
 
             if (!ModelState.IsValid)
@@ -71,11 +94,11 @@ namespace Fastkart.Controllers.Admin
 
             if (result)
             {
-                return Json(new { success = true, message = "Cập nhật thông tin thành công!" });
+                return Json(new { success = true, message = "Profile updated successfully!" });
             }
             else
             {
-                return Json(new { success = false, message = "Cập nhật thất bại. Vui lòng thử lại." });
+                return Json(new { success = false, message = "Update failed. Please try again." });
             }
         }
     }

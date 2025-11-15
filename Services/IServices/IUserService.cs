@@ -9,7 +9,7 @@ namespace Fastkart.Services.IServices
         List<Roles> GetAllRoles();
         Task<PaginatedList<Users>> GetAllUsersAsync(int pageIndex, int pageSize);
         Users GetUserById(int userId);
-        Task<bool> UpdateUser(Users userToUpdate, IFormFile imgFile);
+        Task<bool> UpdateUser(Users userToUpdate, List<IFormFile>? imgFiles);
         Task<bool> DeleteUser(int userId);
         Task<(bool Success, string ErrorMessage)> CreateUser(UserCreateViewModel model);
         Users Login(string username, string password);
@@ -19,6 +19,8 @@ namespace Fastkart.Services.IServices
         Task<(bool Success, string Message)> VerifyOtpAsync(string email, string otpCode);
         Task<(bool Success, string Message)> ResetPasswordAsync(string email, string otpCode, string newPassword);
         List<string> getPermissionRole(int roleId);
+        Task<bool> UpdateProfile(ProfileUpdateViewModel model);
+        Task<(bool Success, string ErrorMessage)> UpdateUserAsync(UserCreateViewModel model);
     }
 }
 

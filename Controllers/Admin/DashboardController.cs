@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fastkart.Controllers.Admin
 {
-    [Authorize]
     [Route("/admin/dashboard")]
+    [Authorize(Policy = "NoCustomer")]
     public class DashboardController : Controller
     {
         [HttpGet("")]

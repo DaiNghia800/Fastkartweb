@@ -8,7 +8,8 @@ using System.Text.Json;
 
 namespace Fastkart.Controllers.Admin
 {
-    [Authorize]
+
+    [Authorize(Policy = "NoCustomer")]
     [Route("/admin/role")]
     public class RoleController : Controller
     {

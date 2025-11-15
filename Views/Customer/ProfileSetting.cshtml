@@ -1,0 +1,72 @@
+﻿@model Fastkart.Models.ViewModels.ProfileUpdateViewModel
+
+<form id="customerSettingsForm" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Uid)
+
+    <div class="row">
+        <!-- Full Name -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" asp-for="FullName" placeholder="Enter your full name">
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" asp-for="Email" placeholder="Enter your email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" asp-for="PhoneNumber" placeholder="Enter your phone number">
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <!-- Role (Read-only) -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Role</label>
+            <input type="text" class="form-control" value="Customer" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+            <small class="text-muted">(Role cannot be changed)</small>
+        </div>
+
+        <!-- Address -->
+        <div class="col-12 mb-3">
+            <label class="form-label">Address</label>
+            <textarea class="form-control" asp-for="Address" rows="2" placeholder="Enter your address"></textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <!-- Profile Photo -->
+        <div class="col-12 mb-3">
+            <label class="form-label">Profile Photo</label>
+            <input type="file" name="Photo" class="form-control" accept="image/*">
+        </div>
+
+        <hr class="my-3">
+
+        <!-- Password Section -->
+        <div class="col-12 mb-2">
+            <h6 class="fw-bold">Change Password (Optional)</h6>
+            <p class="text-muted small">Leave blank if you don't want to change your password</p>
+        </div>
+
+        <!-- New Password -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control" asp-for="Password" id="customerPassword" placeholder="Enter new password (optional)">
+            <span asp-validation-for="Password" class="text-danger"></span>
+            
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" asp-for="ConfirmPassword" id="customerConfirmPassword" placeholder="Confirm new password">
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+</form>

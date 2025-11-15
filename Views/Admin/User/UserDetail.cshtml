@@ -1,11 +1,23 @@
-﻿@model Fastkart.Models.Entities.Users
-
+﻿@using Fastkart.Models.Entities
+@using System.Text.Json
 <div class="row">
     <div class="col-md-4 text-center border-end">
-        <img src="@Model.ImgUser" alt="@Model.FullName" class="img-fluid rounded-circle mb-3"
-             style="width: 150px; height: 150px; object-fit: cover;" />
+        @{
+            Users users = Model;
+            var thumbnails = string.IsNullOrWhiteSpace(users.ImgUser)
+            ? new List<string>()
+            : JsonSerializer.Deserialize<List<string>>(users.ImgUser);
+
+            var firstImg = thumbnails.FirstOrDefault();
+        }
+
+        @if (!string.IsNullOrEmpty(firstImg))
+        {
+            <img src=@firstImg alt=@users.FullName class ="img-fluid rounded-circle mb-3"
+                 style="width: 150px; height: 150px; object-fit: cover;  "/>
+        }
         <h5 class="mb-1">@Model.FullName</h5>
-        <p class="text-muted mb-0">@Model.Role</p>
+        <p class="text-muted mb-0">@Model.Role.RoleName</p>
     </div>
 
     <div class="col-md-8">
