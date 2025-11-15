@@ -1,7 +1,9 @@
-﻿@model Fastkart.Models.Entities.CheckoutPageViewModel
+﻿@using System.Text.Json
+@model Fastkart.Models.Entities.CheckoutPageViewModel
 @{
-    ViewData["Title"] = "Trang dat hang";
-    Layout = "_Layout"; // Đảm bảo bạn có file Layout này
+    Layout = "_Layout";
+    ViewData["Title"] = "Order";
+     // Đảm bảo bạn có file Layout này
 
     // --- SỬA 1: Phải truy cập 'Model.CartItems' ---
     long subtotal = Model.CartItems.Sum(item => item.Total);
@@ -13,27 +15,7 @@
     long total = subtotal + shippingFee - couponDiscount;
     if (total < 0) total = 0; // Đảm bảo không bị âm
 }
-<section class="breadcrumb-section pt-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="breadcrumb-contain">
-                    <h2>Checkout</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0 d-flex align-items-center">
-                            <li class="breadcrumb-item">
-                                <a href="index.html">
-                                    <i class="fa-solid fa-house"></i>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item active">Checkout</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <section class="container">
     <form id="checkoutForm" method="post" action="/order/submit">
@@ -106,7 +88,14 @@
                         @foreach (var item in Model.CartItems)
                         {
                             <li>
-                                <img src="@item.Image" alt="@item.ProductName">
+                                @{
+                                    var thumbnails = string.IsNullOrWhiteSpace(item.Image)
+                                    ? new List<string>()
+                                    : JsonSerializer.Deserialize<List<string>>(item.Image);
+
+                                    var firstImg = thumbnails.FirstOrDefault();
+                                }
+                                <img src="@firstImg" alt="@item.ProductName">
                                 <div>
                                     <span>@item.ProductName X @item.Quantity</span>
                                     <span>@item.Total.ToString("N0") ₫</span>

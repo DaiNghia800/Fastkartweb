@@ -1,4 +1,5 @@
-﻿@model List<Fastkart.Models.Entities.CartItemViewModel>
+﻿@using System.Text.Json
+@model List<Fastkart.Models.Entities.CartItemViewModel>
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Cart";
@@ -25,7 +26,14 @@
                                             <td class="product-detail">
                                                 <div class="product d-flex align-items-center">
                                                     <a href="#">
-                                                        <img src="@item.Image" alt="@item.ProductName" class="img-fluid">
+                                                        @{
+                                                            var thumbnails = string.IsNullOrWhiteSpace(item.Image)
+                                                            ? new List<string>()
+                                                            : JsonSerializer.Deserialize<List<string>>(item.Image);
+
+                                                            var firstImg = thumbnails.FirstOrDefault();
+                                                        }
+                                                        <img src="@firstImg" alt="@item.ProductName" class="img-fluid">
                                                     </a>
                                                     <div class="detail">
                                                         <ul>

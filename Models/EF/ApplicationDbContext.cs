@@ -535,6 +535,7 @@ namespace Fastkart.Models.EF
 
             modelBuilder.Entity<Order>(entity =>
             {
+                //entity.ToTable("Orders");
                 entity.HasKey(e => e.Uid);
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
                 // Thêm các liên kết khác cho Order (ví dụ: với Users)
@@ -542,6 +543,7 @@ namespace Fastkart.Models.EF
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
+                //entity.ToTable("OrderItems");
                 entity.HasKey(e => e.Uid);
                 entity.Property(e => e.PriceAtPurchase).HasColumnType("decimal(18, 2)");
 

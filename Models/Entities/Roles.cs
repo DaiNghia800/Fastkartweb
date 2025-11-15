@@ -8,7 +8,7 @@ namespace Fastkart.Models.Entities
         public int Uid { get; set; }
 
         [Required(ErrorMessage = "Tên vai trò không được để trống")]
-        [RegularExpression(@"^[\p{L}0-9\s\-]+$", ErrorMessage = "Tên vai trò không được chứa ký tự đặc biệt")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Tên vai trò không được chứa ký tự đặc biệt")]
         public string RoleName { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
