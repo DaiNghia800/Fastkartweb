@@ -22,6 +22,65 @@ namespace Fastkart.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogCategories", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Uid");
+
+                    b.ToTable("BlogCategories");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<int>("AuthorUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryUid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("AuthorUid");
+
+                    b.HasIndex("CategoryUid");
+
+                    b.ToTable("BlogPosts");
+                });
+
             modelBuilder.Entity("Fastkart.Models.Entities.Brand", b =>
                 {
                     b.Property<int>("Uid")
@@ -651,6 +710,25 @@ namespace Fastkart.Migrations
                     b.HasIndex("RoleUid");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("AuthorUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.BlogCategories", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>

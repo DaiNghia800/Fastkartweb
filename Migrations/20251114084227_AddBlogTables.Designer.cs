@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251028100640_addTableOptionNameAndOptionValue")]
-    partial class addTableOptionNameAndOptionValue
+    [Migration("20251114084227_AddBlogTables")]
+    partial class AddBlogTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,65 @@ namespace Fastkart.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogCategories", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Uid");
+
+                    b.ToTable("BlogCategories");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<int>("AuthorUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryUid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("AuthorUid");
+
+                    b.HasIndex("CategoryUid");
+
+                    b.ToTable("BlogPosts");
+                });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Brand", b =>
                 {
@@ -57,9 +116,8 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(false)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -86,46 +144,94 @@ namespace Fastkart.Migrations
                     b.ToTable("Brand");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionName", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
                 {
                     b.Property<int>("Uid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Active");
+
+                    b.HasKey("Uid");
+
+                    b.ToTable("Functions");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<bool>("Allowed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("FunctionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("FunctionId");
+
+                    b.HasIndex("PermissionTypeId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Uid");
+                    b.HasKey("Id");
 
-                    b.ToTable("OptionName");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>
-                {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
-
-                    b.Property<int>("OptionNameId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("OptionNameId", "Value")
-                        .IsUnique();
-
-                    b.ToTable("OptionValue");
+                    b.ToTable("PermissionTypes");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -157,6 +263,12 @@ namespace Fastkart.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Discount")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<bool>("Exchangeable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -167,7 +279,14 @@ namespace Fastkart.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<decimal>("Price")
+                    b.Property<int?>("Position")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal?>("Price")
+                        .IsRequired()
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductName")
@@ -181,7 +300,6 @@ namespace Fastkart.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Sku")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -207,14 +325,13 @@ namespace Fastkart.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Thumbnail")
-                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UnitUid")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UpdatedBy")
@@ -223,6 +340,7 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<double?>("Weight")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.HasKey("Uid");
@@ -269,9 +387,11 @@ namespace Fastkart.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Icon")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<int?>("Position")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -284,8 +404,8 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Thumbnail")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(false)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -364,7 +484,7 @@ namespace Fastkart.Migrations
                     b.ToTable("ProductSubCategory");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.ProductVariant", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
                 {
                     b.Property<int>("Uid")
                         .ValueGeneratedOnAdd()
@@ -387,18 +507,7 @@ namespace Fastkart.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductUid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<string>("Sku")
+                    b.Property<string>("RoleName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -413,40 +522,9 @@ namespace Fastkart.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("VariantName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.HasKey("Uid");
 
-                    b.HasIndex("ProductUid");
-
-                    b.ToTable("ProductVariant");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.ProductVariantOptionValue", b =>
-                {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
-
-                    b.Property<int>("OptionValueId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductVariantId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("OptionValueId");
-
-                    b.HasIndex("ProductVariantId", "OptionValueId")
-                        .IsUnique();
-
-                    b.ToTable("ProductVariantOptionValue");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.StockStatus", b =>
@@ -555,15 +633,132 @@ namespace Fastkart.Migrations
                     b.ToTable("Unit");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
                 {
-                    b.HasOne("Fastkart.Models.Entities.OptionName", "OptionName")
-                        .WithMany("OptionValues")
-                        .HasForeignKey("OptionNameId")
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImgUser")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("OtpCode")
+                        .HasMaxLength(6)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<DateTime?>("OtpExpiry")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("RoleUid")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("RoleUid");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("AuthorUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.BlogCategories", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Function", "Function")
+                        .WithMany("Permissions")
+                        .HasForeignKey("FunctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OptionName");
+                    b.HasOne("Fastkart.Models.Entities.PermissionType", "PermissionType")
+                        .WithMany("Permissions")
+                        .HasForeignKey("PermissionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.Roles", "Role")
+                        .WithMany("Permissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Function");
+
+                    b.Navigation("PermissionType");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
@@ -612,49 +807,25 @@ namespace Fastkart.Migrations
                     b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.ProductVariant", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
                 {
-                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
-                        .WithMany("Variants")
-                        .HasForeignKey("ProductUid")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Fastkart.Models.Entities.Roles", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleUid")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.ProductVariantOptionValue", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
                 {
-                    b.HasOne("Fastkart.Models.Entities.OptionValue", "OptionValue")
-                        .WithMany("ProductVariantOptionValues")
-                        .HasForeignKey("OptionValueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Fastkart.Models.Entities.ProductVariant", "ProductVariant")
-                        .WithMany("ProductVariantOptionValues")
-                        .HasForeignKey("ProductVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OptionValue");
-
-                    b.Navigation("ProductVariant");
+                    b.Navigation("Permissions");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionName", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
                 {
-                    b.Navigation("OptionValues");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.OptionValue", b =>
-                {
-                    b.Navigation("ProductVariantOptionValues");
-                });
-
-            modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
-                {
-                    b.Navigation("Variants");
+                    b.Navigation("Permissions");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
@@ -662,9 +833,11 @@ namespace Fastkart.Migrations
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("Fastkart.Models.Entities.ProductVariant", b =>
+            modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
                 {
-                    b.Navigation("ProductVariantOptionValues");
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

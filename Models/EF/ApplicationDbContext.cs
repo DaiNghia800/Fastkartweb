@@ -21,6 +21,8 @@ namespace Fastkart.Models.EF
         public DbSet<PermissionType> PermissionTypes { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<BlogPosts> BlogPosts { get; set; }
+        public DbSet<BlogCategories> BlogCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -403,7 +405,45 @@ namespace Fastkart.Models.EF
                     .HasDefaultValue(false);
 
             });
-          
+            modelBuilder.Entity<BlogCategories>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<BlogPosts>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(500)
+                    .IsRequired();
+
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar(max)")
+                    .IsRequired();
+
+                entity.HasOne(e => e.Users)
+                    .WithMany()
+                    .HasForeignKey(e => e.AuthorUid)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Category)
+                    .WithMany()
+                    .HasForeignKey(e => e.CategoryUid)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(e => e.ImageUrl)
+                    .HasMaxLength(500)
+                    .IsRequired(false);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+            });
+
         }
     }
 }
