@@ -227,7 +227,7 @@
                                     </a>
                                     <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product") ? "show" : "")" id="collapseProduct">
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_view"))
+                                            @if (User.HasClaim("permission", "product_view"))
                                             {
                                                 <a href="/admin/product" class="text-capitalize">
                                                     Product
@@ -236,7 +236,7 @@
                                             
                                         </li>
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_create"))
+                                            @if (User.HasClaim("permission", "product_create"))
                                             {
                                                 <a href="/admin/product/create" class="text-capitalize">
                                                     Add new products

@@ -1,20 +1,32 @@
-using System.Diagnostics;
 using Fastkart.Models;
+using Fastkart.Models.Entities;
+using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Fastkart.Controllers.Client
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHomeService _homeService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHomeService homeService)
         {
-            _logger = logger;
+            _homeService = homeService;
         }
 
         public IActionResult Index()
         {
+            var listCategory = _homeService.GetAllCategory();
+            var listProduct = _homeService.GetAllProduct();
+            var listNewProduct = _homeService.GetNewProduct();
+            var listFeature = _homeService.GetFeatureProduct();
+            ViewData["products"] = listProduct;
+            ViewData["categories"] = listCategory;
+            ViewData["newProduct"] = listNewProduct;
+            ViewData["featureProduct"] = listFeature;
             return View();
         }
 
@@ -28,5 +40,15 @@ namespace Fastkart.Controllers.Client
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet("{slug}")]
+        public ActionResult<List<object>> GetCategory(string slug)
+        {
+            var listProduct = _homeService.GetProduct(slug);
+            return listProduct;
+
+        }
+
+        
     }
 }

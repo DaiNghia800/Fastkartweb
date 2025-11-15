@@ -126,6 +126,18 @@ namespace Fastkart.Services
             }
         }
 
+        public Product GetProduct(string slug)
+        {
+            try
+            {
+                return _context.Product.SingleOrDefault(p => p.Slug == slug && !p.Deleted);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public void EditProduct(int id, Product data)
         {
             try
@@ -275,6 +287,17 @@ namespace Fastkart.Services
                 product.UpdatedAt = DateTime.Now;
             }
             _context.SaveChanges();
+        }
+
+        public List<Product> GetProductBySubCategory(int id, int subId)
+        {
+            try
+            {
+                return _context.Product.Where(p => p.SubCategoryUid == subId && p.Uid != id && p.Status == "Active" && !p.Deleted).AsNoTracking().ToList();
+            }catch(Exception ex)
+            {
+                return new List<Product>();
+            }
         }
     }
 }

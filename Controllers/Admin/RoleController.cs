@@ -1,5 +1,6 @@
 ﻿using Fastkart.Models.Entities;
 using Fastkart.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop.Implementation;
 using Slugify;
@@ -7,6 +8,7 @@ using System.Text.Json;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize]
     [Route("/admin/role")]
     public class RoleController : Controller
     {
