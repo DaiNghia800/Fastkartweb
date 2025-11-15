@@ -26,19 +26,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     })
     .AddCookie("External", options =>
     {
-       options.Cookie.IsEssential = true;
-       options.Cookie.SameSite = SameSiteMode.None;
-       options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.IsEssential = true;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     })
     .AddGoogle(googleOptions =>
     {
         googleOptions.SignInScheme = "External";
-        // Lấy ID và Secret từ file appsettings.json
         googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
         googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
         googleOptions.CallbackPath = "/signin-google";
-        // Yêu cầu Google trả về Email và Profile
         googleOptions.Scope.Clear();
         googleOptions.Scope.Add("openid");
         googleOptions.Scope.Add("profile");
@@ -48,12 +46,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddFacebook(facebookOptions =>
     {
         facebookOptions.SignInScheme = "External";
-        // Lấy ID và Secret từ file appsettings.json
         facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
         facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
 
         facebookOptions.CallbackPath = "/signin-facebook";
-        // Yêu cầu Google trả về Email và Profile
         facebookOptions.Scope.Clear();
         facebookOptions.Scope.Add("email");
         facebookOptions.Scope.Add("public_profile");
@@ -70,14 +66,19 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
-    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_ADMIN));
+    options.AddPolicy("NoCustomer", policy =>
+    {
+        // 2. Yêu cầu người dùng phải đăng nhập
+        policy.RequireAuthenticatedUser();
+        // 3. Yêu cầu người dùng KHÔNG CÓ vai trò "Customer"
+        policy.RequireAssertion(context =>
+            !context.User.IsInRole(WebConstants.ROLE_CUSTOMER));
+    });
 
     options.AddPolicy("CustomerOnly", policy =>
         policy.RequireRole(WebConstants.ROLE_CUSTOMER));
@@ -90,6 +91,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IBlogService, BlogService>();
 
 builder.Services.AddSession(options =>
 {
@@ -98,14 +100,28 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseCors("AllowAll");
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -119,22 +135,38 @@ app.UseAuthorization();
 
 app.UseSession();
 
-app.UseEndpoints(endpoints =>
-{
-    // Route cho khu vực (Area) Admin
-    endpoints.MapControllerRoute(
+//app.UseEndpoints(endpoints =>
+//{
+//    // API Routes (phải đặt trước để tránh conflict)
+//    endpoints.MapControllerRoute(
+//        name: "api",
+//        pattern: "api/{controller}/{action}/{id?}");
+
+//    // Route cho khu vực (Area) Admin
+//    endpoints.MapControllerRoute(
+//      name: "Admin",
+//      pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+//    // Route cho Account
+//    endpoints.MapControllerRoute(
+//        name: "Account",
+//        pattern: "{controller=Account}/{action=Index}/{id?}");
+
+//    // Route mặc định (Luôn để ở cuối cùng)
+//    endpoints.MapControllerRoute(
+//        name: "default",
+//        pattern: "{controller=Home}/{action=Index}/{id?}");
+//});
+
+app.MapControllers();
+// Route cho khu vực (Area) Admin (Vẫn cần nếu bạn dùng Area)
+app.MapControllerRoute(
       name: "Admin",
-      pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
-    );
+      pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
-    // Route cho Account (Quan trọng cho Login/Signup)
-    endpoints.MapControllerRoute(
-        name: "Account",
-        pattern: "{controller=Account}/{action=Index}/{id?}");
+// Route mặc định (Luôn để ở cuối cùng)
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-    // Route mặc định (Luôn để ở cuối cùng)
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
 app.Run();
