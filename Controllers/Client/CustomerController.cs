@@ -2,6 +2,7 @@
 using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace Fastkart.Controllers.Client
@@ -30,75 +31,70 @@ namespace Fastkart.Controllers.Client
             return PartialView("~/Views/Customer/MyProfile.cshtml", user);
         }
 
-        // GET: Settings Modal - Trả về ProfileUpdateViewModel
-        [HttpGet("get-settings")]
-        public IActionResult GetSettings()
+        [HttpGet("profile/{id}")]
+        public IActionResult ProfileSetting(int id)
         {
-            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var user = _userService.GetUserById(currentUserId);
+            var user = _userService.GetUserById(id);
 
             if (user == null)
             {
-                return NotFound("User not found.");
+                return NotFound("Không tìm thấy người dùng.");
             }
 
-            var model = new ProfileUpdateViewModel
+            var model = new UserCreateViewModel
             {
                 Uid = user.Uid,
                 FullName = user.FullName,
                 Email = user.Email,
+                Address = user.Address,
                 PhoneNumber = user.PhoneNumber,
-                Address = user.Address
+                ImgUser = user.ImgUser,
+                RoleUid = user.RoleUid
             };
 
-            return PartialView("~/Views/Customer/ProfileSetting.cshtml", model);
+            var allRoles = _userService.GetAllRoles();
+            ViewData["RolesList"] = new SelectList(allRoles, "Uid", "RoleName", user.RoleUid);
+
+            return View("~/Views/Customer/ProfileSetting.cshtml", model);
         }
 
-        // POST: Update Profile
-        [HttpPost("update-profile")]
+        [HttpPost("profile/edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProfile([FromForm] ProfileUpdateViewModel model)
+        public async Task<IActionResult> UpdateProfile(int id, [FromForm] UserCreateViewModel model)
         {
-            // Validate password if provided
-            if (!string.IsNullOrEmpty(model.Password))
+            if (id != model.Uid)
             {
-                if (string.IsNullOrEmpty(model.ConfirmPassword))
-                {
-                    return Json(new { success = false, message = "Please confirm your password." });
-                }
-
-                if (model.Password != model.ConfirmPassword)
-                {
-                    return Json(new { success = false, message = "Passwords do not match." });
-                }
+                return BadRequest("ID không khớp");
             }
 
-            // Remove password validation từ ModelState nếu không nhập
+            // Nếu không nhập password mới, bỏ qua validation password
             if (string.IsNullOrEmpty(model.Password))
             {
                 ModelState.Remove(nameof(model.Password));
                 ModelState.Remove(nameof(model.ConfirmPassword));
             }
 
+            // Tải lại RolesList phòng trường hợp phải trả về View
+            var allRoles = _userService.GetAllRoles();
+            ViewData["RolesList"] = new SelectList(allRoles, "Uid", "RoleName", model.RoleUid);
+
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return Json(new { success = false, message = string.Join(", ", errors) });
+                return View("~/Views/Customer/ProfileSetting.cshtml", model);
             }
 
-            var result = await _userService.UpdateProfile(model);
+            // Gọi Service để update
+            var (success, errorMessage) = await _userService.UpdateUserAsync(model);
 
-            if (result)
+            if (success)
             {
-                return Json(new { success = true, message = "Profile updated successfully!" });
+                TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
+                return RedirectToAction("ProfileSetting", new { id = model.Uid });
             }
             else
             {
-                return Json(new { success = false, message = "Update failed. Please try again." });
+                ModelState.AddModelError(string.Empty, errorMessage);
+                return View("~/Views/Customer/ProfileSetting.cshtml", model);
             }
         }
     }

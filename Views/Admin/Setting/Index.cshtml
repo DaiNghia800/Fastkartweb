@@ -1,151 +1,99 @@
-﻿@model Fastkart.Models.ViewModels.ProfileUpdateViewModel
+﻿@model Fastkart.Models.ViewModels.UserCreateViewModel;
 @{
     Layout = "_LayoutAdmin";
-    ViewData["title"] = "Profile Setting";
+    ViewData["title"] = "Profile Settings";
 }
 
-<form id="profileUpdateForm" asp-controller="Setting" asp-action="UpdateProfile" method="post" enctype="multipart/form-data" class="theme-form">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Uid" />
+<section class="product-create">
+    <form asp-controller="Setting" asp-action="UpdateProfile" asp-route-id="@Model.Uid" method="post" enctype="multipart/form-data" id="mainForm" class="theme-form theme-form-2">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="card">
+                    <div class="card-header2">
+                        <h5>Profile Settings</h5>
+                    </div>
 
-    <div class="card">
-        <div class="header-title">
-            <h5>Profile Setting</h5>
-        </div>
-        <div class="card-body">
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success mx-3">@TempData["SuccessMessage"]</div>
+                    }
 
-            <div class="row">
-                <div class="row mb-3">
-                    <label asp-for="FullName" class="col-sm-3 col-form-label text-sm-end">Full Name</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" asp-for="FullName" placeholder="Enter Your Full Name">
-                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-3"></div>
+
+                    <input type="hidden" asp-for="Uid" />
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="FullName" class="col-3 form-label-title">Full Name <span class="text-danger">*</span></label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" asp-for="FullName" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="Email" class="col-3 form-label-title">Email <span class="text-danger">*</span></label>
+                        <div class="col-9">
+                            <input class="form-control" type="email" asp-for="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="Address" class="col-3 form-label-title">Address</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" asp-for="Address" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="PhoneNumber" class="col-3 form-label-title">Phone Number</label>
+                        <div class="col-9">
+                            <input class="form-control" type="tel" asp-for="PhoneNumber" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="Password" class="col-3 form-label-title">Password <small>(Leave blank if not changed)</small></label>
+                        <div class="col-9">
+                            <input class="form-control" type="password" asp-for="Password" placeholder="Nhập mật khẩu mới nếu muốn thay đổi" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="ConfirmPassword" class="col-3 form-label-title">Xác nhận mật khẩu</label>
+                        <div class="col-9">
+                            <input class="form-control" type="password" asp-for="ConfirmPassword" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label class="col-3 form-label-title">User Image</label>
+                        <div class="col-9">
+                            <div id="my-dropzone" class="dropzone"sytle="z-index:0"></div>
+                            <input type="hidden" name="ImgUser" id="Thumbnail" data-thumbnail='@(string.IsNullOrEmpty(Model.ImgUser) ? "[\"https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png\"]" : Model.ImgUser)' />
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 align-items-center">
+                        <label asp-for="RoleUid" class="col-3 form-label-title">Role</label>
+                        <div class="col-9">
+                            <select asp-for="RoleUid" class="js-example-basic-single w-100"
+                                    asp-items="@(ViewData["RolesList"] as SelectList)" disabled>
+                                <option value="">-- Choose one Role --</option>
+                            </select>
+                            <input type="hidden" asp-for="RoleUid" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="submit" class="btn text-white theme-bg-color" button-save>Update Profile</button>
                     </div>
                 </div>
-
-                <div class="row mb-3">
-                    <label asp-for="PhoneNumber" class="col-sm-3 col-form-label text-sm-end">Your Phone Number</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Enter Your Number">
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label asp-for="Email" class="col-sm-3 col-form-label text-sm-end">Enter Email Address</label>
-                    <div class="col-sm-9">
-                        <input type="email" class="form-control" asp-for="Email" placeholder="Enter Your Email Address">
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label asp-for="Address" class="col-sm-3 col-form-label text-sm-end">Address</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" asp-for="Address" placeholder="Enter Your Address">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label asp-for="Photo" class="col-sm-3 col-form-label text-sm-end">Photo</label>
-                    <div class="col-sm-9">
-                        <input class="form-control" type="file" asp-for="Photo">
-                    </div>
-                </div>
-
-                <hr class="my-4">
-                <h6 class="text-muted mb-3">Change Password (Optional)</h6>
-
-                <div class="row mb-3">
-                    <label asp-for="Password" class="col-sm-3 col-form-label text-sm-end">Password</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" asp-for="Password" id="password" placeholder="Enter New Password">
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                        <small class="text-muted">Leave blank if you do not want to change your password</small>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label asp-for="ConfirmPassword" class="col-sm-3 col-form-label text-sm-end">Confirm Password</label>
-                    <div class="col-sm-9">
-                        <input type="password" class="form-control" asp-for="ConfirmPassword" id="confirmPassword" placeholder="Confirm New Password">
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-sm-9 offset-sm-3">
-                    <button type="submit" class="btn btn-success">Update Profile</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-<div class="header-title mt-4">
-    <h5>Address</h5>
-</div>
-
-<div class="row g-4">
-    <div class="col-lg-4 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">Mark Jugal</h6>
-                    <span class="badge bg-success">Home</span>
-                </div>
-                <hr>
-                <p class="mb-2">549 Sulphur Springs Road</p>
-                <p class="mb-2">Downers Grove, IL</p>
-                <p class="mb-2">60515</p>
-                <p class="mb-0">Mobile No. +1-123-456-7890</p>
-            </div>
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="#" class="btn btn-sm btn-secondary">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger">Remove</a>
             </div>
         </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">Method Zaki</h6>
-                    <span class="badge bg-primary">Office</span>
-                </div>
-                <hr>
-                <p class="mb-2">549 Sulphur Springs Road</p>
-                <p class="mb-2">Downers Grove, IL</p>
-                <p class="mb-2">60515</p>
-                <p class="mb-0">Mobile No. +1-123-456-7890</p>
-            </div>
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="#" class="btn btn-sm btn-secondary">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger">Remove</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">Mark Jugal</h6>
-                    <span class="badge bg-success">Home</span>
-                </div>
-                <hr>
-                <p class="mb-2">549 Sulphur Springs Road</p>
-                <p class="mb-2">Downers Grove, IL</p>
-                <p class="mb-2">60515</p>
-                <p class="mb-0">Mobile No. +1-123-456-7890</p>
-            </div>
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="#" class="btn btn-sm btn-secondary">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger">Remove</a>
-            </div>
-        </div>
-    </div>
-</div>
+    </form>
+</section>

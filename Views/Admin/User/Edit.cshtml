@@ -72,7 +72,7 @@
                     <div class="row mb-4 align-items-center">
                         <label class="col-3 form-label-title">User Image</label>
                         <div class="col-9">
-                            <div id="my-dropzone" class="dropzone"></div>
+                            <div id="my-dropzone" class="dropzone" style="z-index: 0"></div>
                             <input type="hidden" name="ImgUser" id="Thumbnail" data-thumbnail='@(string.IsNullOrEmpty(Model.ImgUser) ? "[\"https://res.cloudinary.com/dfeaar87r/image/upload/v1763101391/default-avatar_uek2f1.png\"]" : Model.ImgUser)' />
                         </div>
                     </div>
