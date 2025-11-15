@@ -406,7 +406,8 @@ namespace Fastkart.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("StockQuantity")
+                    b.Property<int?>("StockQuantity")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);
@@ -879,8 +880,7 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ImgUser")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtpCode")
                         .HasMaxLength(6)

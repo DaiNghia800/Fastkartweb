@@ -1,6 +1,8 @@
 ﻿@using System.Security.Claims
 @using Fastkart.Helpers
+@using Fastkart.Models.Entities
 @using Fastkart.Services.IServices
+@using System.Text.Json
 @inject IUserService UserService
 
 @{
@@ -97,13 +99,24 @@
                     {
                         <li class="profile-box position-relative me-0 pe-0">
                             <div class="profile d-flex align-items-center">
-                                @if (!string.IsNullOrEmpty(currentUser.ImgUser))
+                                @{
+                                    Users users = currentUser;
+                                    var thumbnails = string.IsNullOrWhiteSpace(users.ImgUser)
+                                    ? new List<string>()
+                                    : JsonSerializer.Deserialize<List<string>>(users.ImgUser);
+
+                                    var firstImg = thumbnails.FirstOrDefault();
+                                }
+
+                                @if (!string.IsNullOrEmpty(firstImg))
                                 {
-                                    <img src="@currentUser.ImgUser" alt="@currentUser.FullName" class="user-img img-fluid" />
+                                    <img src=@firstImg alt=@users.FullName class="img-fluid rounded-circle mb-0"
+                                         style="width: 40px; height: 40px; object-fit: cover;  " />
                                 }
                                 else
                                 {
-                                    <img src="/images/users/default-avatar.png" alt="@currentUser.FullName" class="user-img img-fluid" />
+                                    <img src="/images/users/default-avatar.png" alt="@currentUser.FullName" class="user-img img-fluid"
+                                         style="width: 40px; height: 40px; object-fit: cover;  " />
                                 }
                                 <div class="user-name">
                                     <span style="display:block; max-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@currentUser.FullName</span>
@@ -145,7 +158,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/admin/settings/profile" style="cursor:pointer;">
+                                    <a href="/admin/settings/profile/@users.Uid" style="cursor:pointer;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings">
                                             <circle cx="12" cy="12" r="3"></circle>
                                             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -227,7 +240,7 @@
                                     </a>
                                     <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/product") ? "show" : "")" id="collapseProduct">
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_view"))
+                                            @if (User.HasClaim("permission", "product_view"))
                                             {
                                                 <a href="/admin/product" class="text-capitalize">
                                                     Product
@@ -236,7 +249,7 @@
                                             
                                         </li>
                                         <li>
-                                            @if (!User.HasClaim("permission", "product_create"))
+                                            @if (User.HasClaim("permission", "product_create"))
                                             {
                                                 <a href="/admin/product/create" class="text-capitalize">
                                                     Add new products
@@ -455,7 +468,7 @@
                                 </a>
                                 <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "show" : "")" id="collapseSettings">
                                     <li>
-                                        <a href="/admin/settings/profile" class="text-capitalize">
+                                        <a href="/admin/settings/profile/@currentUser.Uid" class="text-capitalize">
                                             Profile Setting
                                         </a>
                                     </li>

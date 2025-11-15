@@ -1,4 +1,6 @@
-﻿﻿@using System.Security.Claims
+﻿@using System.Security.Claims
+@using Fastkart.Models.Entities
+@using System.Text.Json
 @inject Fastkart.Services.IServices.IUserService UserService
 
 @{
@@ -24,6 +26,7 @@
     <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/lib/slick/slick.css" />
     <link rel="stylesheet" href="/lib/slick/slick-theme.css" />
+    @RenderSection("Styles", required: false)
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     @* <link rel="stylesheet" href="~/Fastkart.styles.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/assets/css/style.css" />
@@ -103,7 +106,7 @@
                     <!-- Logo -->
                     <div class="col-md-2  col-sm-2 col-8 text-sm-left text-center">
                         <a href="#" target="_blank" rel="noopener noreferrer">
-                            <img class="img-logo" src="./assets/images/logo-fastkart.png" alt="logo">
+                            <img class="img-logo" src="~/assets/images/logo-fastkart.png" alt="logo">
                         </a>
                     </div>
 
@@ -164,17 +167,29 @@
                         {
                             <li class="profile-box position-relative me-0 pe-0" style="list-style: none; flex:1">
                                 <div class="profile d-flex align-items-center" style="cursor: pointer;">
-                                    @if (currentUser != null && !string.IsNullOrEmpty(currentUser.ImgUser))
+                                    @{
+                                        Users users = currentUser;
+                                        var thumbnails = string.IsNullOrWhiteSpace(users.ImgUser)
+                                        ? new List<string>()
+                                        : JsonSerializer.Deserialize<List<string>>(users.ImgUser);
+
+                                        var firstImg = thumbnails.FirstOrDefault();
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(firstImg))
                                     {
-                                        <img src="@currentUser.ImgUser" alt="@currentUser.FullName" class="user-img img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                        <img src=@firstImg alt=@users.FullName class="img-fluid rounded-circle mb-0"
+                                             style="width: 40px; height: 40px; object-fit: cover;  " />
                                     }
                                     else
                                     {
-                                        <img src="/images/users/default-avatar.png" alt="User" class="user-img img-fluid rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                        <img src="/images/users/default-avatar.png" alt="@currentUser.FullName" class="user-img img-fluid"
+                                             style="width: 40px; height: 40px; object-fit: cover;  " />
                                     }
                                     <div class="user-name ms-2">
                                         <span class="fw-semibold" style="display:block; max-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                                              @(currentUser?.FullName ?? "User")</span>
+                                            @(currentUser?.FullName ?? "User")
+                                        </span>
                                         <p class="mb-0 small text-muted">
                                             @(currentUser.Role.RoleName)
                                             <i class="fa-solid fa-angle-down"></i>
@@ -192,7 +207,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)" onclick="viewSettings(@currentUser.Uid)" style="cursor:pointer" class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark hover-bg-light">
+                                        <a href="/customer/profile/@users.Uid" style="cursor:pointer" class="d-flex align-items-center px-3 py-2 text-decoration-none text-dark hover-bg-light">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
                                                 <circle cx="12" cy="12" r="3"></circle>
                                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -215,7 +230,7 @@
                         }
                         else
                         {
-                            <a href="/login" class="btn btn-success d-flex align-items-center gap-2">
+                            <a href="/login" class="btn btn-process btn-animation mt-0 d-flex align-items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                                     <polyline points="10 17 15 12 10 7"></polyline>
@@ -486,27 +501,6 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Account Settings</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="settingsContent">
-                    <!-- Loading spinner -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnSaveSettings">
-                        <i class="fas fa-save me-2"></i>Save Changes
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <footer class="section-t-space footer-section-2">
         <div class="container">
             <div class="main-footer">
@@ -772,9 +766,6 @@
     <script src="/lib/tinymce/tinymce.min.js"></script>
     <script src="/lib/slick/slick.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.all.min.js"></script>
-
-    <script src="~/js/chart-custom.js"></script>
-    <script src="~/js/sidebar-effect.js"></script>
     <script src="~/js/login.js" asp-append-version="true"></script>
     <script src="~/js/customer.js" asp-append-version="true"></script>
     <script src="~/assets/js/script.js"></script>

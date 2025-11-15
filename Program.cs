@@ -80,12 +80,12 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_ADMIN));
-
-    options.AddPolicy("CustomerOnly", policy =>
-        policy.RequireRole(WebConstants.ROLE_CUSTOMER));
+    options.AddPolicy("NoCustomer", policy =>
+        policy.RequireAssertion(context =>
+            !context.User.IsInRole(WebConstants.ROLE_CUSTOMER)
+        ));
 });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<MoMoService>();
@@ -95,6 +95,7 @@ builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IUploadService, UploadService>();
 

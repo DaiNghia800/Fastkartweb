@@ -1,11 +1,13 @@
 ﻿using Fastkart.Models.Entities;
 using Fastkart.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
 using System.Text.Json;
 
 namespace Fastkart.Controllers.Admin
 {
+    [Authorize(Policy = "NoCustomer")]
     [Route("/admin/sub-category")]
     public class SubCategoryController : Controller
     {

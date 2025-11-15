@@ -8,85 +8,85 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Fastkart.Migrations
 {
     /// <inheritdoc />
-    public partial class mergemainn : Migration
+    public partial class mergeproduct : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.CreateTable(
-            //    name: "Brand",
-            //    columns: table => new
-            //    {
-            //        Uid = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        BrandName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-            //        Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-            //        Logo = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
-            //        Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-            //        CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-            //        UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-            //        CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-            //        UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Brand", x => x.Uid);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Brand",
+                columns: table => new
+                {
+                    Uid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Logo = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brand", x => x.Uid);
+                });
 
-            //migrationBuilder.CreateTable(
-            //    name: "Functions",
-            //    columns: table => new
-            //    {
-            //        Uid = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-            //        Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Active")
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Functions", x => x.Uid);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Functions",
+                columns: table => new
+                {
+                    Uid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, defaultValue: "Active")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Functions", x => x.Uid);
+                });
 
-            //migrationBuilder.CreateTable(
-            //    name: "PermissionTypes",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-            //        Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_PermissionTypes", x => x.Id);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "PermissionTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PermissionTypes", x => x.Id);
+                });
 
-            //migrationBuilder.CreateTable(
-            //    name: "ProductCategory",
-            //    columns: table => new
-            //    {
-            //        Uid = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        CategoryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-            //        Thumbnail = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
-            //        Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            //        Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-            //        Position = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-            //        Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-            //        CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-            //        UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
-            //        CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-            //        UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-            //        Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_ProductCategory", x => x.Uid);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "ProductCategory",
+                columns: table => new
+                {
+                    Uid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Thumbnail = table.Column<string>(type: "nvarchar(max)", unicode: false, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Position = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Slug = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategory", x => x.Uid);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -216,7 +216,7 @@ namespace Fastkart.Migrations
                     Uid = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ImgUser = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    ImgUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     PhoneNumber = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(255)", nullable: true),

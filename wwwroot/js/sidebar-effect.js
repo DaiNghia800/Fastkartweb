@@ -106,7 +106,11 @@
         nodes.push(new Node(x, y, radius, fakeBlur, 1));
     }
 
-    document.getElementById('sidebarEffect').appendChild(canvas)
+    const sidebarEffect = document.getElementById('sidebarEffect');
+    if (sidebarEffect) {
+        sidebarEffect.appendChild(canvas);
+    }
+    
     window.addEventListener("resize", redraw, false);
     redraw();
     render();

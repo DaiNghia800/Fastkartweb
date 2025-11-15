@@ -454,7 +454,7 @@ namespace Fastkart.Models.EF
                     .IsUnicode(true)
                     .IsRequired();
                 entity.Property(e => e.ImgUser)
-                    .HasMaxLength(255)
+                     .HasColumnType("nvarchar(max)")
                     .IsRequired(false);
 
                 entity.Property(e => e.Email)

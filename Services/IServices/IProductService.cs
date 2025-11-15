@@ -16,11 +16,13 @@ namespace Fastkart.Services.IServices
         List<StockStatus> GetAllStockStatus();
         void CreateProduct(Product product);
         Product GetProduct(int id);
+        Product GetProduct(string slug);
         void EditProduct(int id, Product data);
         void DeleteProduct(int id);
         void ChangeStatus(int id, string status);
         int CountProduct(string status);
         string ChangeMulti(JsonElement data);
         void ChangePosition(JsonElement data);
+        List<Product> GetProductBySubCategory(int id, int subId);
     }
 }

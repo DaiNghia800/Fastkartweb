@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251114031320_merge-mainn")]
-    partial class mergemainn
+    [Migration("20251115060750_merge-product")]
+    partial class mergeproduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -409,7 +409,8 @@ namespace Fastkart.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("StockQuantity")
+                    b.Property<int?>("StockQuantity")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);
@@ -882,8 +883,7 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ImgUser")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtpCode")
                         .HasMaxLength(6)
