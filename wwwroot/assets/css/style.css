@@ -7016,16 +7016,17 @@ footer .main-footer .footer-contact {
   position: relative;
 }
 
-.contact-detail .contact-detail-box i {
-  border: 0.0625rem solid #0da487;
-  background-color: #0da487;
-  border-radius: 0.3125rem;
-  padding: 0.625rem;
-  color: #fff;
-  position: absolute;
-  display: inherit;
-  left: -1.3125rem;
-}
+    .contact-detail .contact-detail-box i {
+        border: 0.0625rem solid #0da487;
+        background-color: #0da487;
+        border-radius: 0.3125rem;
+        padding: 0.625rem;
+        color: #fff;
+        position: absolute;
+        display: inherit;
+        left: -1.3125rem;
+        width: 8%;
+    }
 
 .contact-detail-box .contact-content {
   width: 100%;
