@@ -77,8 +77,8 @@ namespace Fastkart.Controllers
                 .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.Uid == newOrder.Uid);
 
-            ViewBag.Result = "Đặt hàng (COD) thành công!";
-            ViewBag.Message = $"Đơn hàng của bạn sẽ sớm được giao.";
+            ViewBag.Result = "(COD) Order placed successfully!";
+            ViewBag.Message = $"Your order will be delivered soon!";
             ViewBag.OrderId = newOrder.Uid.ToString();
             ViewBag.Amount = newOrder.TotalAmount;
 

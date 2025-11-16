@@ -508,5 +508,122 @@ if (buttonTab.length > 0) {
 }
 //end category tab
 
+// add cart
+document.addEventListener('DOMContentLoaded', function () {
+    const productContainer = document.querySelector('.product-cart');
+
+    if (!productContainer) {
+        return;
+    }
+    function updateMinusButtonState(inputElement) {
+        const counterDiv = inputElement.closest('.counter');
+        if (!counterDiv) return;
+
+        const minusButton = counterDiv.querySelector('.qty-left-minus');
+        if (!minusButton) return;
+
+        const currentValue = parseInt(inputElement.value);
+
+        if (currentValue === 0) {
+            minusButton.classList.add('disabled');
+        } else {
+            minusButton.classList.remove('disabled');
+        }
+    }
+    const allInputs = productContainer.querySelectorAll('.qty-input');
+    allInputs.forEach(input => {
+        updateMinusButtonState(input);
+    });
+
+    productContainer.addEventListener('click', function (event) {
+        const target = event.target;
+        let inputElement; 
+        const plusButton = target.closest('.qty-right-plus');
+        if (plusButton) {
+            const counterDiv = plusButton.closest('.counter');
+            if (!counterDiv) return;
+
+            inputElement = counterDiv.querySelector('.qty-input');
+            if (inputElement) {
+                let currentVal = parseInt(inputElement.value);
+                inputElement.value = currentVal + 1;
+                updateMinusButtonState(inputElement);
+            }
+            return; 
+        }
+
+        const minusButton = target.closest('.qty-left-minus');
+        if (minusButton) {
+            const counterDiv = minusButton.closest('.counter');
+            if (!counterDiv) return;
+
+            inputElement = counterDiv.querySelector('.qty-input');
+            if (inputElement) {
+                let currentVal = parseInt(inputElement.value);
+                if (currentVal > 0) {
+                    inputElement.value = currentVal - 1;
+                    updateMinusButtonState(inputElement);
+                }
+            }
+            return;
+        }
+        const cartButton = target.closest('.add-to-cart');
+        if (cartButton) {
+
+            const item = cartButton.closest('.item');
+            if (!item) return;
+
+            const productId = item.dataset.productId;
+
+            const quantityInput = item.querySelector('.qty-input');
+            if (!quantityInput) return;
+
+            const quantity = quantityInput.value;
+
+            if (quantity <= 0) {
+                alert("Vui lòng chọn số lượng lớn hơn 0");
+                return;
+            }
+
+            console.log(`Đang thêm: ProductId=${productId}, Quantity=${quantity}`);
+
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'productId': productId,
+                    'quantity': quantity
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert("Đã thêm sản phẩm vào giỏ hàng!");
+
+                        const cartCountElement = document.querySelector('.cart-badge');
+                        if (cartCountElement) {
+                            cartCountElement.textContent = data.totalItems;
+                        }
+                    } else {
+                        alert(data.message || "Đã xảy ra lỗi khi thêm vào giỏ.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert("Đã xảy ra lỗi (network) khi thêm vào giỏ hàng.");
+                });
+        }
+    });
+});
+
+//end add cart 
+
 
 

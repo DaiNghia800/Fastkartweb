@@ -8095,14 +8095,15 @@ footer .main-footer .footer-contact {
     align-items: center;
     width: 100%;
 }
-.fk-chk-section .fk-chk-option-card label::after {
-    content: "\f078";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 0.9em;
-    color: var(--text-color);
-    transition: transform 0.3s ease;
-}
+    .fk-chk-section .fk-chk-option-card label::after {
+        /*    content: "\f078";*/
+        content: "";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 0.9em;
+        color: var(--text-color);
+        transition: transform 0.3s ease;
+    }
 .fk-chk-section .fk-chk-option-card.fk-chk-selected label::after {
     transform: rotate(180deg);
     color: var(--brand-color);

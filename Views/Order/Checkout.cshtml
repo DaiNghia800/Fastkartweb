@@ -2,18 +2,14 @@
 @model Fastkart.Models.Entities.CheckoutPageViewModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "Order";
-     // Đảm bảo bạn có file Layout này
-
-    // --- SỬA 1: Phải truy cập 'Model.CartItems' ---
+    ViewData["Title"] = "Checkout";
     long subtotal = Model.CartItems.Sum(item => item.Total);
 
-    // CÁC PHÍ NÀY PHẢI GIỐNG VỚI LOGIC BẠN SẼ CODE TRONG OrderController
-    long shippingFee = 25000;      // Phí ship (ví dụ)
-    long couponDiscount = 10000; // Giảm giá (ví dụ)
+    long shippingFee = 25000;      
+    long couponDiscount = 10000; 
 
     long total = subtotal + shippingFee - couponDiscount;
-    if (total < 0) total = 0; // Đảm bảo không bị âm
+    if (total < 0) total = 0; 
 }
 
 
@@ -29,15 +25,14 @@
                         {
                             foreach (var addressString in Model.AddressesAsStrings)
                             {
-                                // SỬA 2: Dùng một ID duy nhất (ví dụ Index) thay cho @userId
                                 var uniqueRadioId = "addr_" + Model.AddressesAsStrings.IndexOf(addressString);
 
                                 <div class="fk-chk-option-card fk-chk-selected">
                                     <input type="radio" name="addressId" id="@uniqueRadioId" value="@addressString" checked>
                                     <label for="@uniqueRadioId">
-                                        <strong>Địa chỉ của bạn</strong>
+                                        <strong>Address</strong>
                                         <span class="fk-chk-badge fk-chk-badge-home">Default</span>
-                                        <p>Address: @addressString</p>
+                                        <p>@addressString</p>
                                     </label>
                                 </div>
                             }
@@ -73,7 +68,7 @@
                         <div class="fk-chk-option-card">
                             <input type="radio" name="paymentMethod" id="pay3_new" value="MoMo">
                             <label for="pay3_new">
-                                <strong>Thanh toán MoMo</strong>
+                                <strong>MoMo Payment</strong>
                             </label>
                         </div>
                     </div>
@@ -97,7 +92,7 @@
                                 }
                                 <img src="@firstImg" alt="@item.ProductName">
                                 <div>
-                                    <span>@item.ProductName X @item.Quantity</span>
+                                    <span>@item.ProductName <br /> <b>SL: </b>@(item.Quantity)</span>
                                     <span>@item.Total.ToString("N0") ₫</span>
                                 </div>
                             </li>
@@ -106,19 +101,19 @@
 
                     <div class="fk-chk-summary-details">
                         <div>
-                            <span>Tạm tính</span>
+                            <span>Subtotal</span>
                             <span>@subtotal.ToString("N0") ₫</span>
                         </div>
                         <div>
-                            <span>Phí vận chuyển</span>
+                            <span>Shipping</span>
                             <span>@shippingFee.ToString("N0") ₫</span>
                         </div>
                         <div class="fk-chk-coupon-row">
-                            <span>Giảm giá</span>
+                            <span>Discount</span>
                             <span>-@couponDiscount.ToString("N0") ₫</span>
                         </div>
                         <div class="fk-chk-total-row">
-                            <span>Tổng cộng (VND)</span>
+                            <span>Total (VND)</span>
                             <span>@total.ToString("N0") ₫</span>
                         </div>
                     </div>
