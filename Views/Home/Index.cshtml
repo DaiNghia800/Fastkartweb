@@ -509,8 +509,20 @@
                                     {
                                         <div class="item"  data-product-id="@product.Uid">
                                             <div class="product-image position-relative">
-                                                <button class="btn-wishlist">
-                                                    <i class="fa-regular fa-heart"></i>
+                                                @{
+                                                    var likedIds = ViewBag.LikedProductIds as List<int> ?? new List<int>();
+
+                                                    bool isLiked = likedIds.Contains(product.Uid);
+                                                }
+                                                <button class="btn-wishlist" data-product-id="@product.Uid">
+                                                    @if (isLiked)
+                                                    {
+                                                        <i class="fa-solid fa-heart text-danger"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fa-regular fa-heart"></i>
+                                                    }
                                                 </button>
                                                 @{
                                                     var thumbnails = string.IsNullOrWhiteSpace(product.Thumbnail)

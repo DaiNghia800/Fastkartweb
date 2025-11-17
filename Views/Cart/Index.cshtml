@@ -22,14 +22,14 @@
                                 {
                                     @foreach (var item in Model)
                                     {
-                                        <tr>
+                                        <tr class="product-row" data-product-id="@item.ProductId">
                                             <td class="product-detail">
                                                 <div class="product d-flex align-items-center">
                                                     <a href="#">
                                                         @{
                                                             var thumbnails = string.IsNullOrWhiteSpace(item.Image)
                                                             ? new List<string>()
-                                                            : JsonSerializer.Deserialize<List<string>>(item.Image);
+                                                            : System.Text.Json.JsonSerializer.Deserialize<List<string>>(item.Image);
 
                                                             var firstImg = thumbnails.FirstOrDefault();
                                                         }
@@ -41,8 +41,7 @@
                                                                 <a href="#">@item.ProductName</a>
                                                             </li>
                                                             <li class="text-content">
-                                                                <span>Sold By:</span>
-                                                                Fresho
+                                                                <span>Sold By:</span> Fresho
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -56,11 +55,13 @@
                                                 <h4 class="table-title">Qty</h4>
                                                 <div class="cart-qty">
                                                     <div class="input-group">
-                                                        <button type="button" class="btn qty-left-minus" data-type="minus" data-field="">
+                                                        <button type="button" class="btn qty-left-minus btn-update-qty" data-action="minus">
                                                             <i class="fa fa-minus ms-0"></i>
                                                         </button>
+
                                                         <input class="form-control input-number qty-input" type="text" name="quantity" value="@item.Quantity" readonly>
-                                                        <button type="button" class="btn qty-right-plus" data-type="plus" data-field="">
+
+                                                        <button type="button" class="btn qty-right-plus btn-update-qty" data-action="plus">
                                                             <i class="fa fa-plus ms-0"></i>
                                                         </button>
                                                     </div>
@@ -72,7 +73,9 @@
                                             </td>
                                             <td class="action">
                                                 <h4 class="table-title">Action</h4>
-                                                <a href="#" class="save">Save for later</a>
+
+                                                <a href="#" class="save" onclick="alert('Chức năng Lưu mua sau đang phát triển!')">Save for later</a>
+
                                                 <a href="/cart/remove?productId=@item.ProductId" class="remove">Remove</a>
                                             </td>
                                         </tr>
@@ -139,3 +142,58 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const updateButtons = document.querySelectorAll('.btn-update-qty');
+
+            updateButtons.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const row = this.closest('.product-row');
+                    const productId = row.dataset.productId;
+                    const input = row.querySelector('.qty-input');
+                    let currentQty = parseInt(input.value);
+                    const action = this.dataset.action; 
+
+                    let quantityToSend = 0;
+
+                    if (action === 'plus') {
+                        quantityToSend = 1;
+                    } else if (action === 'minus') {
+                        if (currentQty > 1) {
+                            quantityToSend = -1;
+                        } else {
+                            if(confirm("Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+                                window.location.href = `/cart/remove?productId=${productId}`;
+                            }
+                            return;
+                        }
+                    }
+
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            'productId': productId,
+                            'quantity': quantityToSend
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert("Có lỗi xảy ra khi cập nhật giỏ hàng.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+}

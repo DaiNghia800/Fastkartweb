@@ -1,5 +1,6 @@
 using Fastkart.Models;
 using Fastkart.Models.Entities;
+using Fastkart.Services;
 using Fastkart.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -11,14 +12,27 @@ namespace Fastkart.Controllers.Client
     public class HomeController : Controller
     {
         private readonly IHomeService _homeService;
+        private readonly WishlistService _wishlistService;
 
-        public HomeController(IHomeService homeService)
+        public HomeController(IHomeService homeService, WishlistService wishlistService)
         {
             _homeService = homeService;
+            _wishlistService = wishlistService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            var wishlistIds = new List<int>();
+            if (User.Identity.IsAuthenticated)
+            {
+                var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdStr, out int userId))
+                {
+                    wishlistIds = await _wishlistService.GetUserWishlistProductIds(userId);
+                }
+            }
+            ViewBag.LikedProductIds = wishlistIds;
             var listCategory = _homeService.GetAllCategory();
             var listProduct = _homeService.GetAllProduct();
             var listNewProduct = _homeService.GetNewProduct();

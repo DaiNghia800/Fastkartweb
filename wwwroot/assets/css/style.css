@@ -6716,9 +6716,10 @@ footer .main-footer .footer-contact {
 }
 
 .page-item {
-  color: #777;
-  display: flex;
-  align-items: center;
+    color: #777;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .blog-section .left-box .accordion-body .trending-products .box-body a{
@@ -6850,6 +6851,9 @@ footer .main-footer .footer-contact {
 
 .blog-section .right-box .box-page{
   margin-top: calc(1.375rem + 13 * (100vw - 20rem) / 1600);
+}
+.page-item.disabled {
+    pointer-events: none;
 }
 
 .blog-section .right-box .page-item{

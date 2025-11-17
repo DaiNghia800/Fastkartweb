@@ -1,0 +1,84 @@
+﻿@using System.Text.Json
+@model Fastkart.Models.Entities.Order
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Chi tiết đơn hàng #" + Model.Uid;
+}
+
+
+<section class="user-dashboard-section section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12">
+
+                <div style="margin-bottom: 20px;">
+                    <a href="/order/my-orders" class="btn btn-sm d-inline-flex btn-process btn-animation">
+                        <i class="fa-solid fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+
+                <div class="ty-email-wrapper" style="margin: 0 auto; max-width: 800px;">
+
+                    <div class="ty-header">
+                        Order Details <span style="color: #0baf9a;">#@Model.Uid</span>
+                    </div>
+
+                    <section class="ty-info-boxes">
+                        <div class="ty-info-box">
+                            <h3>Shipping Address</h3>
+                            <p>@Model.ShippingAddress</p>
+                        </div>
+                        <div class="ty-info-box">
+                            <h3>Order Info</h3>
+                            <p>
+                                <strong>Date:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")<br />
+                                <strong>Status:</strong>
+                                <span style="color: #0baf9a; font-weight: bold;">@Model.Status</span><br />
+                                <strong>Payment:</strong> @Model.PaymentMethod
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="ty-order-details">
+                        <div class="ty-shipped-items" style="flex: 100%;">
+                            <h3>Items Ordered</h3>
+                            <ul>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <li class="ty-item">
+                                        @{
+                                            var thumbnails = string.IsNullOrWhiteSpace(item.Product.Thumbnail)
+                                            ? new List<string>()
+                                            : JsonSerializer.Deserialize<List<string>>(item.Product.Thumbnail);
+
+                                            var firstImg = thumbnails.FirstOrDefault();
+                                        }
+                                        <img src="@(firstImg ?? "https://via.placeholder.com/60")"
+                                             alt="@item.Product?.ProductName"
+                                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+
+                                        <div class="ty-item-info">
+                                            <strong>@(item.Product?.ProductName ?? "Product Name Unavailable")</strong>
+                                            <span>Qty: @item.Quantity</span>
+                                        </div>
+                                        <span class="ty-item-price">@item.PriceAtPurchase.ToString("N0") ₫</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="ty-order-summary" style="flex: 100%; border-top: 1px solid #eee; margin-top: 20px; padding-top: 20px;">
+                            <div class="ty-summary-details">
+                                <div class="ty-summary-total" style="font-size: 1.5em; text-align: right;">
+                                    <span>Total:</span>
+                                    <span style="color: #0baf9a;">@Model.TotalAmount.ToString("N0") ₫</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

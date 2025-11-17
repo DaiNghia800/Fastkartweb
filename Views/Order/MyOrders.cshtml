@@ -1,0 +1,211 @@
+﻿@model List<Fastkart.Models.ViewModels.OrderHistoryViewModel>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Order History";
+}
+
+<style>
+    .dashboard-order .title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #222;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .order-table-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        margin-top: 30px;
+    }
+
+    .table-order {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table-order th {
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            color: #222;
+            border-bottom: 2px solid #222; /* Đường kẻ đậm dưới header */
+            font-size: 16px;
+        }
+
+        .table-order td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+            color: #777;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        .table-order tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* Style cho cột Order ID */
+    .order-id {
+        font-weight: 700;
+        color: #222 !important;
+    }
+
+    /* Style cho badges trạng thái */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: 500;
+        display: inline-block;
+        min-width: 80px;
+        text-align: center;
+    }
+
+        .status-badge.shipped, .status-badge.success {
+            background-color: rgba(13, 164, 135, 0.1);
+            color: #0da487;
+        }
+
+        .status-badge.pending {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+
+        .status-badge.danger {
+            background-color: #fff0f0;
+            color: red;
+        }
+
+    .order-price {
+        font-weight: 600;
+        color: #222 !important;
+        font-size: 16px;
+    }
+
+    /* Phân trang đơn giản (CSS Only) */
+    .pagination-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .page-btn {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #777;
+        transition: all 0.3s;
+    }
+
+        .page-btn.active {
+            background-color: #0da487;
+            color: #fff;
+        }
+
+        .page-btn:hover:not(.active) {
+            background-color: #f8f8f8;
+        }
+</style>
+
+<section class="user-dashboard-section section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12 col-lg-12">
+                <div class="dashboard-order">
+                    <h3 class="title">
+                        All Order
+                    </h3>
+                    <span class="title-leaf">
+                        <i class="fa-solid fa-seedling"></i>
+                    </span>
+                    <div class="order-table-container">
+                        <div class="table-responsive">
+                            <table class="table-order">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Product Name</th>
+                                        <th>Status</th>
+                                        <th>Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="order-id">@item.OrderCode</td>
+                                                <td>
+                                                    @item.ProductName
+                                                </td>
+                                                <td>
+                                                    <span class="status-badge @item.StatusClass">
+                                                        @item.StatusLabel
+                                                    </span>
+                                                </td>
+                                                <td class="order-price">
+                                                    @item.TotalPrice.ToString("N0") ₫
+                                                </td>
+                                                <td>
+                                                    <a href="/order/details/@item.Uid" style="color: #0da487; font-weight: 600; text-decoration: none;">
+                                                        View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5" style="text-align:center; padding: 40px;">
+                                                <img src="https://themes.pixelstrap.com/fastkart/assets/images/empty-cart.png" style="width:100px; opacity:0.5">
+                                                <p style="margin-top:10px">Bạn chưa có đơn hàng nào.</p>
+                                                <a href="/" class="btn btn-sm" style="background:#0da487; color:#fff; margin-top:10px">Mua sắm ngay</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <nav class="box-page">
+                            <ul class="d-flex justify-content-center gap-2">
+                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                    <span href="" button-pagination=@(ViewBag.CurrentPage - 1)>
+                                        <i class="fa-solid fa-angles-left p-0"></i>
+                                    </span>
+                                </li>
+                                @{
+                                    for (int i = 1; i <= ViewBag.TotalPage; i++)
+                                    {
+                                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                                            <span href="#" button-pagination=@i>
+                                                @i
+                                            </span>
+                                        </li>
+                                    }
+                                }
+                                <li class="page-item @(ViewBag.TotalPage == ViewBag.CurrentPage ? "disabled" : "")">
+                                    <span href="" button-pagination=@(ViewBag.CurrentPage + 1)>
+                                        <i class="fa-solid fa-angles-right p-0"></i>
+                                    </span>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -34,6 +34,8 @@ namespace Fastkart.Models.EF
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<Payment> Payment { get; set; }
 
+        public DbSet<Wishlist> Wishlist { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -567,6 +569,19 @@ namespace Fastkart.Models.EF
                 // Thêm các liên kết khác cho Payment (ví dụ: với Order)
             });
 
+            modelBuilder.Entity<Wishlist>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+                entity.HasOne(w => w.User)
+                    .WithMany()
+                    .HasForeignKey(w => w.UserUid)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(w => w.Product)
+                    .WithMany()
+                    .HasForeignKey(w => w.ProductUid)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

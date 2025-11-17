@@ -1,0 +1,81 @@
+﻿@using System.Text.Json
+@model List<Fastkart.Models.Entities.Product>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Wishlist";
+}
+
+<section class="wishlist-section section-b-space product-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3>My Wishlist</h3>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="col-12">
+                    <div class="row g-sm-4 g-3">
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-xxl-3 col-lg-4 col-md-6 col-12 product-box-contain item" data-product-id="@product.Uid">
+                                <div class="product-box-3 h-100 bg-white">
+                                    <div class="product-header">
+                                        <div class="product-image">
+                                            <a href="/product/detail/@product.Slug">
+                                                @{
+                                                    var thumbnails = string.IsNullOrWhiteSpace(product.Thumbnail)
+                                                    ? new List<string>()
+                                                    : JsonSerializer.Deserialize<List<string>>(product.Thumbnail);
+
+                                                    var firstImg = thumbnails.FirstOrDefault();
+                                                }
+                                                <img src="@firstImg" class="img-fluid" alt="@product.ProductName" style="height: 200px; object-fit: contain;">
+                                            </a>
+                                            <ul class="product-option">
+                                                <li>
+                                                    <a href="javascript:void(0)" class="js-toggle-wishlist" data-product-id="@product.Uid">
+                                                        <i class="fa-solid fa-trash text-danger"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="product-footer">
+                                        <div class="product-detail">
+                                            <a href="/product/detail/@product.Slug">
+                                                <h5 class="name">@product.ProductName</h5>
+                                            </a>
+                                            <h5 class="price">
+                                                @((product.Price ?? 0).ToString("N0")) ₫
+                                            </h5>
+
+                                            <div class="add-to-cart-box bg-white mt-2">
+                                                <input type="hidden" class="qty-input" value="1">
+
+                                                <button class="btn btn-add-cart addcart-button buy-pro js-add-to-cart w-100" style="background: #0da487; color: #fff;">
+                                                    Add To Cart
+                                                    <span class="add-icon bg-light-gray">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <img src="https://themes.pixelstrap.com/fastkart/assets/images/empty-cart.png" style="width:150px; opacity:0.5">
+                    <p class="mt-3">Wishlist is empty.</p>
+                    <a href="/" class="btn btn-sm" style="background:#0da487; color:#fff">Shop Now</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
