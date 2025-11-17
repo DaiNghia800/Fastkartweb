@@ -10,13 +10,14 @@
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
         public string ShippingAddress { get; set; }
-        public string Status { get; set; } // (Pending, Processing, Shipped...)
+        public string Status { get; set; } 
 
         public string PaymentMethod { get; set; }
 
+        public bool Deleted { get; set; } = false;
+
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-        // Một đơn hàng có thể có nhiều thanh toán (hoặc 1)
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }
