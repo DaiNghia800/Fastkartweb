@@ -55,6 +55,12 @@ namespace Fastkart.Controllers.Client
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
+        public IActionResult NotFound404()
+        {
+            return View("~/Views/Shared/404.cshtml");
+        }
+
         [HttpGet("{slug}")]
         public ActionResult<List<object>> GetCategory(string slug)
         {
@@ -63,6 +69,5 @@ namespace Fastkart.Controllers.Client
 
         }
 
-        
     }
 }

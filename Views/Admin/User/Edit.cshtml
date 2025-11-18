@@ -54,15 +54,15 @@
                     </div>
 
                     <div class="row mb-4 align-items-center">
-                        <label asp-for="Password" class="col-3 form-label-title">Password <small>(Để trống nếu không đổi)</small></label>
+                        <label asp-for="Password" class="col-3 form-label-title">Password <small>(Leave blank if not changed)</small></label>
                         <div class="col-9">
-                            <input class="form-control" type="password" asp-for="Password" placeholder="Nhập mật khẩu mới nếu muốn thay đổi" />
+                            <input class="form-control" type="password" asp-for="Password" placeholder="Enter new password if you want to change" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="row mb-4 align-items-center">
-                        <label asp-for="ConfirmPassword" class="col-3 form-label-title">Xác nhận mật khẩu</label>
+                        <label asp-for="ConfirmPassword" class="col-3 form-label-title">Confirm Password</label>
                         <div class="col-9">
                             <input class="form-control" type="password" asp-for="ConfirmPassword" />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>

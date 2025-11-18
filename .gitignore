@@ -1,4 +1,4 @@
-﻿# ASP.NET Core build folders
+﻿﻿# ASP.NET Core build folders
 bin/
 obj/
 .vs/

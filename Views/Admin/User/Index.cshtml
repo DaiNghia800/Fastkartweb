@@ -171,3 +171,65 @@
         </div>
     </div>
 </div> *@
+@section Scripts{
+    <script>
+                //delete Users
+        // (Bên dưới code submit form edit)
+
+               // Handle Delete button click event
+        $(document).on('click', '.icon-delete', function (e) {
+            e.preventDefault(); // Prevent default behavior of <a> tag
+
+            const button = $(this);
+            const userId = button.data('user-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to undo this action!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        url: '/admin/user/delete',
+                        type: 'POST',
+                        data: { id: userId }, // Data to send
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    response.message,
+                                    'success'
+                                );
+                                // Remove the parent <tr> of the clicked button
+                                button.closest('tr').fadeOut(500, function () {
+                                    $(this).remove();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                'Error!',
+                                'Unable to connect to the server.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+
+        //end delete Users
+    </script>
+}

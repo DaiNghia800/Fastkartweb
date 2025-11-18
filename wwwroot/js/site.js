@@ -636,10 +636,14 @@ $(document).ready(function () {
 });
 //end show user edit
 
-//delete Users
-// (Bên dưới code submit form edit)
+////delete Users
+//// (Bên dưới code submit form edit)
 
+<<<<<<< HEAD
 // Xử lý sự kiện nhấn nút Xóa
+=======
+//// Xử lý sự kiện nhấn nút Xóa
+>>>>>>> origin/fix_users
 //$(document).on('click', '.icon-delete', function (e) {
 //    e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
 
@@ -694,7 +698,6 @@ $(document).ready(function () {
 //});
 //end delete Users
 
-//My profile (admin)
 function viewMyProfile(userId){
     $.ajax({
         url: '/admin/user/get-user-detail',

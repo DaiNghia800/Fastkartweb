@@ -3,7 +3,7 @@ using Fastkart.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 // Đảm bảo namespace này khớp với project của bạn
-namespace Fastkart.Models.EF 
+namespace Fastkart.Models.EF
 {
     public class ApplicationDbContext : DbContext
     {
@@ -26,6 +26,8 @@ namespace Fastkart.Models.EF
         public DbSet<PermissionType> PermissionTypes { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<BlogPosts> BlogPosts { get; set; }
+        public DbSet<BlogCategories> BlogCategories { get; set; }
 
         // --- CÁC BẢNG E-COMMERCE (THÊM VÀO) ---
         public DbSet<Cart> Cart { get; set; }
@@ -40,8 +42,6 @@ namespace Fastkart.Models.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // --- CẤU HÌNH & SEED DỮ LIỆU ---
 
             modelBuilder.Entity<ProductCategory>(entity =>
             {
@@ -81,7 +81,7 @@ namespace Fastkart.Models.EF
                     .IsRequired(false);
                 entity.Property(e => e.Deleted)
                     .HasDefaultValue(false);
-                
+
                 // SEED
                 entity.HasData(
                     new ProductCategory { Uid = 1, CategoryName = "Rau củ", Slug = "rau-cu", Status = "Active" }
@@ -121,7 +121,7 @@ namespace Fastkart.Models.EF
                     .IsUnicode(true);
                 entity.Property(e => e.Deleted)
                     .HasDefaultValue(false);
-                
+
                 // SEED
                 entity.HasData(
                     new ProductSubCategory { Uid = 1, CategoryUid = 1, SubCategoryName = "Rau củ tươi", Slug = "rau-cu-tuoi", Description = "Rau củ tươi", Status = "Active" }
@@ -161,7 +161,7 @@ namespace Fastkart.Models.EF
                     .IsUnicode(true);
                 entity.Property(e => e.Deleted)
                     .HasDefaultValue(false);
-                
+
                 // SEED
                 entity.HasData(
                     new Brand { Uid = 1, BrandName = "Fresho", Slug = "fresho", Logo = "fresho.png", Status = "Active" }
@@ -337,10 +337,10 @@ namespace Fastkart.Models.EF
                         Thumbnail = "https://themes.pixelstrap.com/fastkart/assets/images/veg-3/cate1/6.png",
                         Slug = "bong-cai-xanh",
                         Status = "Active",
-                        SubCategoryUid = 1, 
-                        UnitUid = 1,        
-                        StockStatusUid = 1, 
-                        BrandUid = 1,       
+                        SubCategoryUid = 1,
+                        UnitUid = 1,
+                        StockStatusUid = 1,
+                        BrandUid = 1,
                         StockQuantity = 100,
                         Discount = 0,
                         Weight = 1.0,
@@ -356,10 +356,10 @@ namespace Fastkart.Models.EF
                         Thumbnail = "https://themes.pixelstrap.com/fastkart/assets/images/veg-3/pro1/3.png",
                         Slug = "ca-rot-huu-co",
                         Status = "Active",
-                        SubCategoryUid = 1, 
-                        UnitUid = 1,        
-                        StockStatusUid = 1, 
-                        BrandUid = 1,       
+                        SubCategoryUid = 1,
+                        UnitUid = 1,
+                        StockStatusUid = 1,
+                        BrandUid = 1,
                         StockQuantity = 100,
                         Discount = 0,
                         Weight = 1.0,
@@ -507,16 +507,61 @@ namespace Fastkart.Models.EF
                     .HasDefaultValue(false);
             });
 
-            modelBuilder.Entity<Cart>(entity =>
+            modelBuilder.Entity<BlogCategories>(entity =>
             {
                 entity.HasKey(e => e.Uid);
-                // Thêm các cấu hình khác cho Cart nếu cần
-                // Ví dụ: liên kết với Users
-                entity.HasOne(c => c.User)
-                    .WithMany() // Giả sử User có thể có nhiều Cart (mặc dù thường là 1-1)
-                    .HasForeignKey(c => c.UserUid)
+                entity.Property(e => e.Name)
+                    .HasMaxLength(200)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity<BlogPosts>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(500)
+                    .IsRequired();
+
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar(max)")
+                    .IsRequired();
+
+                entity.HasOne(e => e.Users)
+                    .WithMany()
+                    .HasForeignKey(e => e.AuthorUid)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Category)
+                    .WithMany()
+                    .HasForeignKey(e => e.CategoryUid)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+            modelBuilder.Entity<Wishlist>(entity =>
+            {
+                entity.HasKey(e => e.Uid);
+                entity.HasOne(w => w.User)
+                    .WithMany()
+                    .HasForeignKey(w => w.UserUid)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(w => w.Product)
+                    .WithMany()
+                    .HasForeignKey(w => w.ProductUid)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+        
+                
+            modelBuilder.Entity<Cart>(entity =>
+                {
+                    entity.HasKey(e => e.Uid);
+                    // Thêm các cấu hình khác cho Cart nếu cần
+                    // Ví dụ: liên kết với Users
+                    entity.HasOne(c => c.User)
+                        .WithMany() // Giả sử User có thể có nhiều Cart (mặc dù thường là 1-1)
+                        .HasForeignKey(c => c.UserUid)
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
 
             modelBuilder.Entity<CartItem>(entity =>
             {
@@ -569,19 +614,6 @@ namespace Fastkart.Models.EF
                 // Thêm các liên kết khác cho Payment (ví dụ: với Order)
             });
 
-            modelBuilder.Entity<Wishlist>(entity =>
-            {
-                entity.HasKey(e => e.Uid);
-                entity.HasOne(w => w.User)
-                    .WithMany()
-                    .HasForeignKey(w => w.UserUid)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(w => w.Product)
-                    .WithMany()
-                    .HasForeignKey(w => w.ProductUid)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
         }
     }
 }
