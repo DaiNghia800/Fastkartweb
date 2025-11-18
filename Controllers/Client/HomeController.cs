@@ -37,10 +37,12 @@ namespace Fastkart.Controllers.Client
             var listProduct = _homeService.GetAllProduct();
             var listNewProduct = _homeService.GetNewProduct();
             var listFeature = _homeService.GetFeatureProduct();
+            var listTopProduct = _homeService.GetTopProduct();
             ViewData["products"] = listProduct;
             ViewData["categories"] = listCategory;
             ViewData["newProduct"] = listNewProduct;
             ViewData["featureProduct"] = listFeature;
+            ViewData["topProduct"] = listTopProduct;
             return View();
         }
 

@@ -17,7 +17,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="productName" class="col-3 form-label-title">@product.ProductName</label>
                         <div class="col-9 parent">
-                            <input class="form-control" asp-for="ProductName" type="text" id="productName" value=@product.ProductName placeholder="Nhập tên sản phẩm (VD: Rau muống Đà Lạt)" />
+                            <input class="form-control" asp-for="ProductName" type="text" id="productName" placeholder="Nhập tên sản phẩm (VD: Rau muống Đà Lạt)" />
                             <span asp-validation-for="ProductName" class="text-danger"></span>
                         </div>
                     </div>
@@ -150,7 +150,8 @@
                     <div class="row mb-4 align-items-center">
                         <label for="productWeight" class="col-3 form-label-title">Weight (kg)</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="text" name="Weight" value=@product.Weight id="productWeight" placeholder="Weight" />
+                            <input class="form-control" step="0.1" type="text" asp-for="Weight" id="productWeight" placeholder="Weight" />
+                            <span asp-validation-for="Weight" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -161,7 +162,7 @@
                     <div class="row mb-4 align-items-center">
                         <label for="productPrice" class="col-3 form-label-title">Price</label>
                         <div class="col-9 parent">
-                            <input class="form-control" step="0.01" type="number" asp-for="Price" id="productPrice" value="@(product.Price % 1 == 0 ? ((int)product.Price).ToString() : product.Price.Value.ToString("0.##"))" placeholder="0" />
+                            <input class="form-control" min="0" step="0.01" type="number" asp-for="Price" id="productPrice" value="@(product.Price % 1 == 0 ? ((int)product.Price).ToString() : product.Price.Value.ToString("0.##"))" placeholder="0" />
                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                     </div>
@@ -170,7 +171,7 @@
                         <div class="col-9 parent">
                             <div class="row">
                                 <div class="col-11 pe-0">
-                                    <input class="form-control rounded-0 rounded-start" asp-for="Discount" type="number" value=@product.Discount id="productDiscount" placeholder="0" />
+                                    <input class="form-control rounded-0 rounded-start" asp-for="Discount" type="number" id="productDiscount" placeholder="0" />
                                 </div>
                                 <div class="col-1 ps-0">
                                     <span class="theme-bg-color fw-bold text-white d-flex justify-content-center align-items-center w-100 h-100 rounded-end">%</span>
@@ -187,20 +188,21 @@
                     <div class="row mb-4 align-items-center" container-sku>
                         <label for="sku" class="col-3 form-label-title">SKU</label>
                         <div class="col-9 parent">
-                            <input class="form-control" type="text" name="Sku" value=@product.Sku id="sku" />
+                            <input class="form-control" type="text" asp-for="Sku" id="sku" />
+                            <span asp-validation-for="Sku" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
                         <label for="StockQuantity" class="col-3 form-label-title">Stock Quantity</label>
                         <div class="col-9 parent">
-                            <input class="form-control" asp-for="StockQuantity" type="number" id="StockQuantity" name="StockQuantity" value=@product.StockQuantity placeholder="0" />
+                            <input class="form-control" asp-for="StockQuantity" type="number" id="StockQuantity" name="StockQuantity" placeholder="0" />
                             <span asp-validation-for="StockQuantity" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mb-4 align-items-center">
                         <label for="optionName" class="col-3 form-label-title">Stock Status</label>
                         <div class="col-9">
-                            <select class="js-example-basic-single w-100" name="StockStatusUid">
+                            <select class="js-example-basic-single w-100" name="StockStatusUid" stock-status>
                                 @{
                                     if (ViewData["stockStatus"] != null)
                                     {

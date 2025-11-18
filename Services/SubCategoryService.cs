@@ -15,13 +15,16 @@ namespace Fastkart.Services
         {
             _context = context;
         }
-        public List<ProductSubCategory> GetAllSubCategory(int skip, int limitItem, string status)
+        public List<ProductSubCategory> GetAllSubCategory(int skip, int limitItem, string status, string keyword)
         {
             try
             {
                 var query = _context.ProductSubCategory
                             .Include(p => p.ProductCategory)
                             .Where(p => !p.Deleted);
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.SubCategoryName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -57,6 +60,7 @@ namespace Fastkart.Services
         {
             try
             {
+                subCategory.SubCategoryName = subCategory.SubCategoryName.Trim();
                 _context.ProductSubCategory.Add(subCategory);
 
                 _context.SaveChanges();
@@ -67,11 +71,14 @@ namespace Fastkart.Services
             }
         }
 
-        public int CountSubCategory(string status)
+        public int CountSubCategory(string status, string keyword)
         {
             try
             {
                 var query = _context.ProductSubCategory.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.SubCategoryName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -107,7 +114,7 @@ namespace Fastkart.Services
 
                 if (existSubCategory != null)
                 {
-                    existSubCategory.SubCategoryName = subCategory.SubCategoryName;
+                    existSubCategory.SubCategoryName = subCategory.SubCategoryName.Trim();
                     existSubCategory.CategoryUid = subCategory.CategoryUid;
                     existSubCategory.Description = subCategory.Description;
                     existSubCategory.Status = subCategory.Status;
@@ -205,6 +212,24 @@ namespace Fastkart.Services
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        public bool checkSubCategoryName(int subId, int categoryId, string name)
+        {
+            try
+            {
+                var normalizedName = name.Trim().ToLower();
+                if (subId > 0)
+                {
+                    return _context.ProductSubCategory.Any(p => p.CategoryUid == categoryId && p.Uid != subId && p.SubCategoryName.ToLower() == normalizedName && !p.Deleted);
+                } else
+                {
+                    return _context.ProductSubCategory.Any(p => p.CategoryUid == categoryId && p.SubCategoryName.ToLower() == normalizedName && !p.Deleted);
+                }
+            } catch(Exception ex)
+            {
+                return false;
             }
         }
     }

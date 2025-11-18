@@ -91,5 +91,17 @@ namespace Fastkart.Services
                 return new List<Product>();
             }
         }
+
+        public List<Product> GetTopProduct()
+        {
+            try
+            {
+                return _context.Product.Where(p => p.Status == "Active" && !p.Deleted).Take(10).AsNoTracking().ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<Product>();
+            }
+        }
     }
 }

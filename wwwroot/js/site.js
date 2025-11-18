@@ -39,6 +39,32 @@ $(document).ready(function () {
     $('.slide-dashboard-category').slick({
         slidesToShow: 10,
         slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1500,
+                settings: {
+                    slidesToShow: 9
+                }
+            },
+            {
+                breakpoint: 1400,
+                settings: {
+                    slidesToShow: 8
+                }
+            },
+            {
+                breakpoint: 1280,
+                settings: {
+                    slidesToShow: 7
+                }
+            },
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 6
+                }
+            }
+        ]
     });
 });
 //end slick
@@ -79,8 +105,9 @@ if (dropzoneElement) {
         paramName: 'files',
         autoProcessQueue: false,
         uploadMultiple: true, 
-        parallelUploads: 10,
+        parallelUploads: 6,
         maxFilesize: 5,
+        maxFiles: 6,
         acceptedFiles: "image/*",
         addRemoveLinks: true,
         headers: {
@@ -195,12 +222,99 @@ categorySelect.on("change", function () {
 })
 // end get subcategory by category
 
-//delete
-const listButtonDelete = document.querySelectorAll("[button-delete]");
-if (listButtonDelete.length) {
-    listButtonDelete.forEach(buttonDelete => {
-        buttonDelete.addEventListener("click", (event) => {
-            event.preventDefault();
+
+//search
+const inputSearch = document.querySelector("[input-search]");
+if (inputSearch) {
+    let url = new URL(location.href);
+    inputSearch.addEventListener("keyup", () => {
+        const keyword = inputSearch.value.trim();
+
+        url.searchParams.set("keyword", keyword);
+        url.searchParams.set("page", 1);
+
+        if (!keyword) {
+            url.searchParams.delete("keyword");
+        }
+
+        history.replaceState(null, "", url.toString());
+
+        fetch(url)
+            .then(res => res.text())
+            .then(html => {
+                const newList = $(html).find("#product-list").html();
+
+                document.getElementById("product-list").innerHTML = newList;
+            })
+    })
+
+    //display default
+    const keywordCurrent = url.searchParams.get("keyword");
+    if (keywordCurrent) {
+        inputSearch.value = keywordCurrent;
+    }
+    //end display default
+}
+//end search
+
+
+//product list
+const productList = document.getElementById("product-list")
+if (productList) {
+    productList.addEventListener("click", function (e) {
+        const buttonPagination = e.target.closest("[button-pagination]");
+        const buttonChangeStatus = e.target.closest("[button-change-status]");
+        const buttonDelete = e.target.closest("[button-delete]");
+
+        //change status
+        if (buttonChangeStatus) {
+            const itemId = buttonChangeStatus.getAttribute("item-id");
+            const statusChange = buttonChangeStatus.getAttribute("button-change-status");
+            const patch = buttonChangeStatus.getAttribute("data-patch");
+
+            const data = {
+                id: itemId,
+                status: statusChange
+            }
+
+            fetch(patch, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == "success") {
+                        location.reload();
+                    }
+                })
+        }
+
+        //end change status
+
+        //pagination
+        if (buttonPagination) {
+            e.preventDefault();
+            let url = new URL(location.href);
+            const page = buttonPagination.getAttribute("button-pagination");
+            if (page) {
+                url.searchParams.set("page", page);
+            } else {
+                url.searchParams.delete("page");
+            }
+
+            location.href = url.href;
+        }
+
+        //end pagination
+
+
+
+        //delete
+        if (buttonDelete) {
+            e.preventDefault();
 
             Swal.fire({
                 title: "Bạn có chắc chắn muốn xóa bảng ghi này?",
@@ -243,47 +357,14 @@ if (listButtonDelete.length) {
                         })
                 }
             });
-
-        })
-    })
+        }
+        //end delete
+    });
 }
-//end delete
+//end product list
 
-//change status
-const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
-
-if (listButtonChangeStatus.length > 0) {
-    listButtonChangeStatus.forEach(button => {
-        button.addEventListener("click", () => {
-            const itemId = button.getAttribute("item-id");
-            const statusChange = button.getAttribute("button-change-status");
-            const patch = button.getAttribute("data-patch");
-
-            const data = {
-                id: itemId,
-                status: statusChange
-            }
-
-            fetch(patch, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-                body: JSON.stringify(data)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.code == "success") {
-                        location.reload();
-                    }
-                })
-        })
-    })
-}
-//end change status
-
-//pagination
-const listButtonPagination = document.querySelectorAll("[button-pagination]");
+//paginationv2
+const listButtonPagination = document.querySelectorAll(".box-page.pro [button-pagination]");
 if (listButtonPagination.length > 0) {
     let url = new URL(location.href);
     listButtonPagination.forEach(button => {
@@ -301,15 +382,15 @@ if (listButtonPagination.length > 0) {
         })
     })
 }
-//end pagination
+// end paginationv2
 
 //filter
 const boxFilter = $("[box-filter]");
 if (boxFilter.length > 0) {
-    let url = new URL(location.href);
     boxFilter.on("change", function () {
+        let url = new URL(location.href);
         const value = boxFilter.val();
-
+        console.log(url);
         if (value) {
             url.searchParams.set("status", value);
         } else {
@@ -320,7 +401,7 @@ if (boxFilter.length > 0) {
     });
 
     //display default
-    const statusCurrent = url.searchParams.get("status");
+    const statusCurrent = new URL(location.href).searchParams.get("status");
     if (statusCurrent) {
         boxFilter.val(statusCurrent);
     }
@@ -331,10 +412,10 @@ if (boxFilter.length > 0) {
 //sort
 const sortSelect = $("[sort-select]");
 if (sortSelect.length > 0) {
-    let url = new URL(location.href);
     sortSelect.on("change", function () {
+        let url = new URL(location.href);
         const value = sortSelect.val();
-
+        
         if (value) {
             const [sortKey, sortValue] = value.split("-");
             url.searchParams.set("sortKey", sortKey);
@@ -344,12 +425,12 @@ if (sortSelect.length > 0) {
             url.searchParams.delete("sortValue");
         }
 
-        location.href = url.href;
+        location.href = url.toString();
     });
 
     //display default
-    const sortKeyCurrent = url.searchParams.get("sortKey");
-    const sortValueCurrent = url.searchParams.get("sortValue");
+    const sortKeyCurrent = new URL(location.href).searchParams.get("sortKey");
+    const sortValueCurrent = new URL(location.href).searchParams.get("sortValue");
     if (sortKeyCurrent && sortValueCurrent) {
         sortSelect.val(`${sortKeyCurrent}-${sortValueCurrent}`);
     }
@@ -390,7 +471,7 @@ if (formChangeMulti) {
             const ids = [];
 
             const listInputChange = document.querySelectorAll("[input-change]:checked");
-
+            console.log(listInputChange)
             listInputChange.forEach(input => {
                 const id = input.getAttribute("input-change");
                 ids.push(id);
@@ -430,13 +511,15 @@ if (formChangeMulti) {
 //end changemulti
 
 //change position
-const listInputPosition = document.querySelectorAll("[input-position]");
-if (listInputPosition.length > 0) {
-    listInputPosition.forEach(input => {
-        input.addEventListener("change", () => {
-            const value = parseInt(input.value)
-            const id = parseInt(input.getAttribute("item-id"));
-            const patch = input.getAttribute("data-patch");
+const productListChangePosititon = document.getElementById("product-list");
+if (productListChangePosititon) {
+    productListChangePosititon.addEventListener("change", (e) => {
+        const inputPosition = e.target.closest("[input-position]");
+
+        if (inputPosition) {
+            const value = parseInt(inputPosition.value)
+            const id = parseInt(inputPosition.getAttribute("item-id"));
+            const patch = inputPosition.getAttribute("data-patch");
 
             fetch(patch, {
                 headers: {
@@ -454,7 +537,7 @@ if (listInputPosition.length > 0) {
                         location.reload();
                     }
                 })
-        })
+        }
     })
 }
 //end change position
@@ -636,68 +719,8 @@ $(document).ready(function () {
 });
 //end show user edit
 
-////delete Users
-//// (Bên dưới code submit form edit)
 
-<<<<<<< HEAD
-// Xử lý sự kiện nhấn nút Xóa
-=======
-//// Xử lý sự kiện nhấn nút Xóa
->>>>>>> origin/fix_users
-//$(document).on('click', '.icon-delete', function (e) {
-//    e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
-
-//    const button = $(this);
-//    const userId = button.data('user-id');
-
-//    Swal.fire({
-//        title: 'Bạn có chắc không?',
-//        text: "Bạn sẽ không thể hoàn tác hành động này!",
-//        icon: 'warning',
-//        showCancelButton: true,
-//        confirmButtonColor: '#d33',
-//        cancelButtonColor: '#3085d6',
-//        confirmButtonText: 'Vâng, hãy xóa nó!',
-//        cancelButtonText: 'Hủy'
-//    }).then((result) => {
-//        if (result.isConfirmed) {
-
-//            $.ajax({
-//                url: '/admin/user/delete',
-//                type: 'POST',
-//                data: { id: userId }, // Dữ liệu gửi đi
-//                success: function (response) {
-//                    if (response.success) {
-//                        Swal.fire(
-//                            'Đã xóa!',
-//                            response.message,
-//                            'success'
-//                        );
-//                        // Xóa hàng <tr> cha của nút vừa bấm
-//                        button.closest('tr').fadeOut(500, function () {
-//                            $(this).remove();
-//                        });
-//                    } else {
-//                        Swal.fire(
-//                            'Lỗi!',
-//                            response.message,
-//                            'error'
-//                        );
-//                    }
-//                },
-//                error: function () {
-//                    Swal.fire(
-//                        'Lỗi!',
-//                        'Không thể kết nối đến máy chủ.',
-//                        'error'
-//                    );
-//                }
-//            });
-//        }
-//    });
-//});
-//end delete Users
-
+//My profile (admin)
 function viewMyProfile(userId){
     $.ajax({
         url: '/admin/user/get-user-detail',
@@ -928,3 +951,34 @@ $(document).ready(function () {
     }
 });
 //end Profile Settings
+
+//Safety Stock
+const inputStockQuantity = document.getElementById("StockQuantity");
+if (inputStockQuantity) {
+    function safetyStock() {
+        const value = parseInt(inputStockQuantity.value) || 0;
+        const selectStockStatus = $("[stock-status]");;
+
+        let option;
+        if (value === 0) {
+            option = [...selectStockStatus.find("option")].find(opt => opt.text.trim() === "Hết hàng");
+        } else if (value <= 10) {
+            option = [...selectStockStatus.find("option")].find(opt => opt.text.trim() === "Sắp hết hàng");
+        } else {
+            option = [...selectStockStatus.find("option")].find(opt => opt.text.trim() === "Còn hàng");
+        }
+
+        if (option) {
+            option.selected = true;
+            selectStockStatus.find(`option[value="${ option.value }"]`).prop("disabled", false);
+            selectStockStatus.find("option").not(`[value="${option.value}"]`).prop("disabled", true);
+            selectStockStatus.val(option.value).trigger('change');
+        }
+        
+        //selectStockStatus.dispatchEvent(new Event("change"));
+    }
+    safetyStock()
+
+    $("#StockQuantity").on("change", safetyStock);
+}
+//end Safety Stock

@@ -17,12 +17,15 @@ namespace Fastkart.Services
         {
             _context = context;
         }
-        public List<ProductCategory> GetAllProductCategory(int skip, int limitItem, string status, string sortKey, bool descending)
+        public List<ProductCategory> GetAllProductCategory(int skip, int limitItem, string status, string keyword, string sortKey, bool descending)
         {
             try
             {
                 var query = _context.ProductCategory
                             .Where(p => !p.Deleted);
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.CategoryName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -47,6 +50,7 @@ namespace Fastkart.Services
         public void CreateCategory(ProductCategory category) {
             try
             {
+                category.CategoryName = category.CategoryName.Trim();
                 _context.ProductCategory.Add(category);
 
                 _context.SaveChanges();
@@ -56,11 +60,14 @@ namespace Fastkart.Services
             }
         }
 
-        public int CountProduct(string status)
+        public int CountProduct(string status, string keyword)
         {
             try
             {
                 var query = _context.ProductCategory.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.CategoryName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -96,7 +103,7 @@ namespace Fastkart.Services
 
                 if (existCategory != null)
                 {
-                    existCategory.CategoryName = productCategory.CategoryName;
+                    existCategory.CategoryName = productCategory.CategoryName.Trim();
                     existCategory.Description = productCategory.Description;
                     existCategory.Thumbnail = productCategory.Thumbnail;
                     existCategory.Status = productCategory.Status;
@@ -210,6 +217,38 @@ namespace Fastkart.Services
                 category.UpdatedAt = DateTime.Now;
             }
             _context.SaveChanges();
+        }
+
+        public bool checkCategoryName(int id, string name)
+        {
+            try
+            {
+                var normalizedName = name.Trim().ToLower();
+                if (id > 0)
+                {
+                    return _context.ProductCategory.Any(p => p.Uid != id && p.CategoryName.ToLower() == normalizedName && !p.Deleted);
+                }
+                else
+                {
+                    return _context.ProductCategory.Any(p => p.CategoryName.ToLower() == normalizedName && !p.Deleted);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public ProductCategory GetProductCategory(string slug)
+        {
+            try
+            {
+                return _context.ProductCategory.SingleOrDefault(p => p.Slug == slug && p.Status == "Active" && !p.Deleted);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

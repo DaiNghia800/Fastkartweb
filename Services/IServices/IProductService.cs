@@ -7,7 +7,7 @@ namespace Fastkart.Services.IServices
 {
     public interface IProductService
     {
-        List<Product> GetAllProducts(int skip, int limitItem, string status, string sortKey, bool descending);
+        List<Product> GetAllProducts(int skip, int limitItem, string status, string keyword, string sortKey, bool descending);
         List<ProductCategory> GetAllProductCategory();
         List<ProductSubCategory> GetAllProductSubCategory();
         List<Brand> GetAllBrand();
@@ -20,9 +20,11 @@ namespace Fastkart.Services.IServices
         void EditProduct(int id, Product data);
         void DeleteProduct(int id);
         void ChangeStatus(int id, string status);
-        int CountProduct(string status);
+        int CountProduct(string status, string keyword);
         string ChangeMulti(JsonElement data);
         void ChangePosition(JsonElement data);
         List<Product> GetProductBySubCategory(int id, int subId);
+        bool CheckSku(int id, string sku);
+        bool checkProductName(int productId, int subId, string name);
     }
 }

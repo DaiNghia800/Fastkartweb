@@ -1,0 +1,801 @@
+﻿@using Fastkart.Models.Entities;
+@using System.Text.Json
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Product Category detail";
+    var category = ViewBag.category as ProductCategory;
+}
+
+<section class="product-category">
+    <div class="container">
+        <!-- Code here Le Anh Pha -->
+        <div class="row">
+            <div class="col-custom-3 contain">
+                <div class="box-left">
+
+                    <input type="checkbox" id="btn-checkbox" hidden>
+                    <label class="overlay" for="btn-checkbox"></label>
+                    <div class="shop-sidebar-left">
+                        <ul>
+                            <li class="active">
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Vegetables & Fruit</span>
+                                        <img src="/assets/images/vegetable.svg" alt=""
+                                             class="img-fluid category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Beverages</span>
+                                        <img src="/assets/images/cup.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Meats & Seafood</span>
+                                        <img src="/assets/images/meats.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Breakfast & Daily</span>
+                                        <img src="/assets/images/breakfast.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Frozen Foods</span>
+                                        <img src="/assets/images/frozen.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Biscuits & Snacks</span>
+                                        <img src="/assets/images/biscuit.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Grocery & Staples</span>
+                                        <img src="/assets/images/grocery.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Wines & Alcohol Drinks</span>
+                                        <img src="/assets/images/drink.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Milk & Dairies</span>
+                                        <img src="/assets/images/milk.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button>
+                                    <div class="btn-content">
+                                        <span class="category-text">Pet Foods</span>
+                                        <img src="/assets/images/pet.svg" alt="" class="category-icon">
+                                    </div>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-custom contain">
+                <div class="show-button">
+                    <label for="btn-checkbox">
+                        <div class="filter-button">
+                            <a>
+                                <i class="fa-solid fa-filter"></i>
+                                <p> Filter Menu</p>
+                            </a>
+                        </div>
+                    </label>
+                    <div class="top-filter-menu">
+                        <div class="top-filter-menu-left">
+                            <h5>Sort By :</h5>
+                            <div class="drop-down">
+                                <button>
+                                    <span>Most Popular</span>
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                                <ul>
+                                    <li>
+                                        Popularity
+                                    </li>
+                                    <li>
+                                        Low-High Price
+                                    </li>
+                                    <li>
+                                        High-Low Price
+                                    </li>
+                                    <li>
+                                        Average Rating
+                                    </li>
+                                    <li>
+                                        A-Z Order
+                                    </li>
+                                    <li>
+                                        Z-A Order
+                                    </li>
+                                    <li>
+                                        % Off-Hight To Low
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="grid-option">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-bars" style="transform: rotate(90deg);"></i>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-list-ul"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="filter-menu">
+                        <ul>
+                            <li>
+                                Veritable
+                                <i class="fa-solid fa-xmark"></i>
+                            </li>
+                            <li>
+                                Fruit
+                                <i class="fa-solid fa-xmark"></i>
+                            </li>
+                            <li>
+                                Fresh
+                                <i class="fa-solid fa-xmark"></i>
+                            </li>
+                            <li>
+                                Milk
+                                <i class="fa-solid fa-xmark"></i>
+                            </li>
+                            <li>
+                                Meat
+                                <i class="fa-solid fa-xmark"></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="product-list">
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Bread_flour.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fresh Bread and Pastry Flour 200 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Peanut_premium.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Peanut Butter Bite Premium Butter Cookies 600 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>350 G</h6>
+                                    <h5 class="price">
+                                        <span>$04.33</span>
+                                        <del>$10.36</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Snack_amor.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Snack</span>
+                                    <a href="">
+                                        <h5>SnackAmor Combo Pack of Jowar Stick and Jowar Chips</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>570 G</h6>
+                                    <h5 class="price">
+                                        <span>$12.52</span>
+                                        <del>$13.62</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Potato_chips.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Snack</span>
+                                    <a href="">
+                                        <h5>Yumitos Chilli Sprinkled Potato Chips 100 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>100 G</h6>
+                                    <h5 class="price">
+                                        <span>$10.25</span>
+                                        <del>$12.36</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Choco_chips.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fantasy Crunchy Choco Chip Cookies</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>550 G</h6>
+                                    <h5 class="price">
+                                        <span>$14.25</span>
+                                        <del>$16.57</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Banh_mi.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fresh Bread and Pastry Flour 200 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>1 Kg</h6>
+                                    <h5 class="price">
+                                        <span>$12.68</span>
+                                        <del>$14.69</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Bread_flour.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fresh Bread and Pastry Flour 200 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Peanut_premium.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Peanut Butter Bite Premium Butter Cookies 600 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Snack_amor.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Snack</span>
+                                    <a href="">
+                                        <h5>SnackAmor Combo Pack of Jowar Stick and Jowar Chips</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Potato_chips.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Snack</span>
+                                    <a href="">
+                                        <h5>Yumitos Chilli Sprinkled Potato Chips 100 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Choco_chips.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fantasy Crunchy Choco Chip Cookies</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Banh_mi.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fresh Bread and Pastry Flour 200 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Bread_flour.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Fresh Bread and Pastry Flour 200 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-box">
+                        <div class="product-box-wrap">
+                            <div class="product-header">
+                                <div class="product-image">
+                                    <img src="/assets/images/Peanut_premium.png" alt="">
+                                    <ul class="product-option">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                        <i class="fa-regular fa-heart"></i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-detail-1">
+                                    <span>Veritable</span>
+                                    <a href="">
+                                        <h5>Peanut Butter Bite Premium Butter Cookies 600 g</h5>
+                                    </a>
+                                    <div class="product-rate">
+                                        <ul>
+                                            <li>★</li>
+                                            <li>★</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                            <li>☆</li>
+                                        </ul>
+                                        <span class="rating-value">(4.0)</span>
+                                    </div>
+                                    <h6>250 ml</h6>
+                                    <h5 class="price">
+                                        <span>$08.02</span>
+                                        <del>$15.05</del>
+                                    </h5>
+                                    <div class="add-btn">
+                                        <button>
+                                            <span class="add-text">Add</span>
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <nav class="custom-pagination">
+                    <ul>
+                        <li class="page-item"><i class="fa-solid fa-angles-left"></i></li>
+                        <li class="page-item active"><span>1</span></li>
+                        <li class="page-item"><span>2</span></li>
+                        <li class="page-item"><span>3</span></li>
+                        <li class="page-item"><i class="fa-solid fa-angles-right"></i></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>

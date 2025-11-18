@@ -22,6 +22,10 @@ namespace Fastkart.Controllers.Admin
         [HttpGet("")]
         public IActionResult Index()
         {
+            //search
+            string keyword = Request.Query["keyword"];
+            //end search
+
             //filter
             string status = Request.Query["status"];
             if (string.IsNullOrEmpty(status))
@@ -54,10 +58,10 @@ namespace Fastkart.Controllers.Admin
             }
 
             int skip = (page - 1) * limitItem;
-            int totalProduct = _productCategoryService.CountProduct(status);
+            int totalProduct = _productCategoryService.CountProduct(status, keyword);
             int totalPage = (int)Math.Ceiling((double)totalProduct / limitItem);
             //pagination
-            var listProductCategory = _productCategoryService.GetAllProductCategory(skip, limitItem, status, sortKey, descending);
+            var listProductCategory = _productCategoryService.GetAllProductCategory(skip, limitItem, status, keyword, sortKey, descending);
             ViewData["productCategories"] = listProductCategory;
             ViewData["TotalPage"] = totalPage;
             ViewData["CurrentPage"] = page;
@@ -72,8 +76,12 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] ProductCategory productCategory)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _productCategoryService.checkCategoryName(-1, productCategory.CategoryName))
             {
+                if (_productCategoryService.checkCategoryName(-1, productCategory.CategoryName))
+                {
+                    ModelState.AddModelError("CategoryName", "Tên này đã tồn tại, vui lòng nhập tên khác");
+                }
                 return View("~/Views/Admin/ProductCategory/Create.cshtml", productCategory);
             }
 
@@ -83,7 +91,7 @@ namespace Fastkart.Controllers.Admin
             }
             else
             {
-                int count = _productCategoryService.CountProduct(null);
+                int count = _productCategoryService.CountProduct(null, null);
                 productCategory.Position = count + 1;
             }
 
@@ -101,20 +109,31 @@ namespace Fastkart.Controllers.Admin
         {
             var productCategory = _productCategoryService.GetProductCategory(id);
             ViewData["productCategory"] = productCategory;
-            return View("~/Views/Admin/ProductCategory/Edit.cshtml");
+            return View("~/Views/Admin/ProductCategory/Edit.cshtml", productCategory);
         }
 
         [HttpPost("edit/{id}")]
         public IActionResult EditPost([FromForm] ProductCategory productCategory ,int id)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _productCategoryService.checkCategoryName(id, productCategory.CategoryName))
             {
+                if(_productCategoryService.checkCategoryName(id, productCategory.CategoryName))
+                {
+                    ModelState.AddModelError("CategoryName", "Tên này đã tồn tại, vui lòng nhập tên khác");
+                }
+                var category = _productCategoryService.GetProductCategory(id);
+                ViewData["productCategory"] = category;
                 return View("~/Views/Admin/ProductCategory/Edit.cshtml", productCategory);
             }
 
             if (productCategory.Position != null)
             {
                 productCategory.Position = (int)productCategory.Position;
+            }
+            else
+            {
+                int count = _productCategoryService.CountProduct(null, null);
+                productCategory.Position = count + 1;
             }
 
             var slugHelper = new SlugHelper();

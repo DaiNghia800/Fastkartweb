@@ -17,7 +17,7 @@ namespace Fastkart.Services
             _context = context;
         }
 
-        public List<Product> GetAllProducts(int skip, int limitItem, string status, string sortKey, bool descending)
+        public List<Product> GetAllProducts(int skip, int limitItem, string status, string keyword, string sortKey, bool descending)
         {
             try
             {
@@ -25,6 +25,9 @@ namespace Fastkart.Services
                             .Include(p => p.SubCategory)
                             .ThenInclude(p => p.ProductCategory)
                             .Where(p => !p.Deleted);
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.ProductName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -54,6 +57,7 @@ namespace Fastkart.Services
                 return new List<ProductCategory>();
             }
         }
+
         public List<ProductSubCategory> GetAllProductSubCategory()
         {
             try
@@ -110,6 +114,8 @@ namespace Fastkart.Services
 
         public void CreateProduct(Product product)
         {
+            product.ProductName = product.ProductName.Trim();
+            product.Sku = product.Sku.Trim();
             _context.Product.Add(product);
 
             _context.SaveChanges();
@@ -146,13 +152,13 @@ namespace Fastkart.Services
 
                 if (product != null)
                 {
-                    product.ProductName = data.ProductName;
+                    product.ProductName = data.ProductName.Trim();
                     product.SubCategoryUid = data.SubCategoryUid;
                     product.Description = data.Description;
                     product.UnitUid = data.UnitUid;
                     product.StockQuantity = data.StockQuantity;
                     product.StockStatusUid = data.StockStatusUid;
-                    product.Sku = data.Sku;
+                    product.Sku = data.Sku.Trim();
                     product.Price = data.Price;
                     product.Discount = data.Discount;
                     product.Thumbnail = data.Thumbnail;
@@ -210,11 +216,14 @@ namespace Fastkart.Services
             }
         }
 
-        public int CountProduct(string status)
+        public int CountProduct(string status, string keyword)
         {
             try
             {
                 var query = _context.Product.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    query = query.Where(p => p.ProductName.Contains(keyword));
 
                 if (!string.IsNullOrEmpty(status))
                 {
@@ -297,6 +306,43 @@ namespace Fastkart.Services
             }catch(Exception ex)
             {
                 return new List<Product>();
+            }
+        }
+
+        public bool CheckSku(int id, string sku)
+        {
+            try
+            {
+                if(id < 0)
+                {
+                    return _context.Product.Any(p => p.Sku == sku && !p.Deleted);
+                } else
+                {
+                    return _context.Product.Any(p => p.Uid != id && p.Sku == sku && !p.Deleted);
+                }
+            } catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool checkProductName(int productId, int subId,  string name)
+        {
+            try
+            {
+                var normalizedName = name.Trim().ToLower();
+                if (productId > 0)
+                {
+                    return _context.Product.Any(p => p.Uid != productId && p.SubCategoryUid == subId && p.ProductName.ToLower() == normalizedName && !p.Deleted);
+                }
+                else
+                {
+                    return _context.Product.Any(p => p.SubCategoryUid == subId && p.ProductName.ToLower() == normalizedName && !p.Deleted);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

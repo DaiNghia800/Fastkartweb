@@ -36,8 +36,12 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] Roles roles)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _roleService.checkRoleName(-1, roles.RoleName))
             {
+                if (_roleService.checkRoleName(-1, roles.RoleName))
+                {
+                    ModelState.AddModelError("RoleName", "Vai trò này đã tồn tại, vui nhập lòng nhập vai trò mới");
+                }
                 return View("~/Views/Admin/Role/Create.cshtml", roles);
             }
 
@@ -53,14 +57,20 @@ namespace Fastkart.Controllers.Admin
         {
             var role = _roleService.GetRole(id);
             ViewData["role"] = role;
-            return View("~/Views/Admin/Role/Edit.cshtml");
+            return View("~/Views/Admin/Role/Edit.cshtml", role);
         }
 
         [HttpPost("edit/{id}")]
         public IActionResult CreatePost([FromForm] Roles roles, int id)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _roleService.checkRoleName(id, roles.RoleName))
             {
+                if(_roleService.checkRoleName(id, roles.RoleName))
+                {
+                    ModelState.AddModelError("RoleName", "Vai trò này đã tồn tại, vui nhập lòng nhập vai trò mới");
+                }
+                var role = _roleService.GetRole(id);
+                ViewData["role"] = role;
                 return View("~/Views/Admin/Role/Edit.cshtml", roles);
             }
 
@@ -79,7 +89,7 @@ namespace Fastkart.Controllers.Admin
         [HttpGet("permission")]
         public IActionResult Permission()
         {
-            var listRole = _roleService.GetAllRole();
+            var listRole = _roleService.GetRolePermission();
             var permissions = _roleService.GetPermissions();
             ViewData["roles"] = listRole;
             ViewData["permissions"] = permissions;
