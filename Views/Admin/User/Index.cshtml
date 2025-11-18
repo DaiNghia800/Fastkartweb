@@ -176,43 +176,43 @@
                 //delete Users
         // (Bên dưới code submit form edit)
 
-        // Xử lý sự kiện nhấn nút Xóa
+               // Handle Delete button click event
         $(document).on('click', '.icon-delete', function (e) {
-            e.preventDefault(); // Ngăn hành vi mặc định của thẻ <a>
+            e.preventDefault(); // Prevent default behavior of <a> tag
 
             const button = $(this);
             const userId = button.data('user-id');
 
             Swal.fire({
-                title: 'Bạn có chắc không?',
-                text: "Bạn sẽ không thể hoàn tác hành động này!",
+                title: 'Are you sure?',
+                text: "You won't be able to undo this action!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Vâng, hãy xóa nó!',
-                cancelButtonText: 'Hủy'
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
 
                     $.ajax({
                         url: '/admin/user/delete',
                         type: 'POST',
-                        data: { id: userId }, // Dữ liệu gửi đi
+                        data: { id: userId }, // Data to send
                         success: function (response) {
                             if (response.success) {
                                 Swal.fire(
-                                    'Đã xóa!',
+                                    'Deleted!',
                                     response.message,
                                     'success'
                                 );
-                                // Xóa hàng <tr> cha của nút vừa bấm
+                                // Remove the parent <tr> of the clicked button
                                 button.closest('tr').fadeOut(500, function () {
                                     $(this).remove();
                                 });
                             } else {
                                 Swal.fire(
-                                    'Lỗi!',
+                                    'Error!',
                                     response.message,
                                     'error'
                                 );
@@ -220,8 +220,8 @@
                         },
                         error: function () {
                             Swal.fire(
-                                'Lỗi!',
-                                'Không thể kết nối đến máy chủ.',
+                                'Error!',
+                                'Unable to connect to the server.',
                                 'error'
                             );
                         }
@@ -229,6 +229,7 @@
                 }
             });
         });
+
         //end delete Users
     </script>
 }
