@@ -510,9 +510,10 @@ if (buttonTab.length > 0) {
 
 // add cart
 document.addEventListener('DOMContentLoaded', function () {
-    const productContainer = document.querySelector('.product-cart');
+    const productContainers = document.querySelectorAll('.product-cart');
+    console.log(productContainers);
 
-    if (!productContainer) {
+    if (productContainers.length === 0) {
         return;
     }
     function updateMinusButtonState(inputElement) {
@@ -530,118 +531,121 @@ document.addEventListener('DOMContentLoaded', function () {
             minusButton.classList.remove('disabled');
         }
     }
-    const allInputs = productContainer.querySelectorAll('.qty-input');
-    allInputs.forEach(input => {
-        updateMinusButtonState(input);
-    });
+    productContainers.forEach(container => {
+        const allInputs = container.querySelectorAll('.qty-input');
+        allInputs.forEach(input => {
+            updateMinusButtonState(input);
+        });
 
-    productContainer.addEventListener('click', function (event) {
-        const target = event.target;
-        let inputElement; 
-        const plusButton = target.closest('.qty-right-plus');
-        if (plusButton) {
-            const counterDiv = plusButton.closest('.counter');
-            if (!counterDiv) return;
+        container.addEventListener('click', function (event) {
+            const target = event.target;
+            let inputElement;
+            const plusButton = target.closest('.qty-right-plus');
+            if (plusButton) {
+                const counterDiv = plusButton.closest('.counter');
+                if (!counterDiv) return;
 
-            inputElement = counterDiv.querySelector('.qty-input');
-            if (inputElement) {
-                let currentVal = parseInt(inputElement.value);
-                inputElement.value = currentVal + 1;
-                updateMinusButtonState(inputElement);
-            }
-            return; 
-        }
-
-        const minusButton = target.closest('.qty-left-minus');
-        if (minusButton) {
-            const counterDiv = minusButton.closest('.counter');
-            if (!counterDiv) return;
-
-            inputElement = counterDiv.querySelector('.qty-input');
-            if (inputElement) {
-                let currentVal = parseInt(inputElement.value);
-                if (currentVal > 0) {
-                    inputElement.value = currentVal - 1;
+                inputElement = counterDiv.querySelector('.qty-input');
+                if (inputElement) {
+                    let currentVal = parseInt(inputElement.value);
+                    inputElement.value = currentVal + 1;
                     updateMinusButtonState(inputElement);
                 }
-            }
-            return;
-        }
-        const cartButton = target.closest('.add-to-cart');
-        if (cartButton) {
-
-            const item = cartButton.closest('.item');
-            if (!item) return;
-
-            const productId = item.dataset.productId;
-
-            const quantityInput = item.querySelector('.qty-input');
-            if (!quantityInput) return;
-
-            const quantity = quantityInput.value;
-
-            if (quantity <= 0) {
-                alert("Vui lòng chọn số lượng lớn hơn 0");
                 return;
             }
 
-            //console.log(`Đang thêm: ProductId=${productId}, Quantity=${quantity}`);
+            const minusButton = target.closest('.qty-left-minus');
+            if (minusButton) {
+                const counterDiv = minusButton.closest('.counter');
+                if (!counterDiv) return;
 
-            fetch('/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    'productId': productId,
-                    'quantity': quantity
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                inputElement = counterDiv.querySelector('.qty-input');
+                if (inputElement) {
+                    let currentVal = parseInt(inputElement.value);
+                    if (currentVal > 0) {
+                        inputElement.value = currentVal - 1;
+                        updateMinusButtonState(inputElement);
                     }
-                    return response.json();
+                }
+                return;
+            }
+            const cartButton = target.closest('.add-to-cart');
+            if (cartButton) {
+
+                const item = cartButton.closest('.item');
+                if (!item) return;
+
+                const productId = item.dataset.productId;
+
+                const quantityInput = item.querySelector('.qty-input');
+                if (!quantityInput) return;
+
+                const quantity = quantityInput.value;
+
+                if (quantity <= 0) {
+                    alert("Vui lòng chọn số lượng lớn hơn 0");
+                    return;
+                }
+
+                console.log(`Đang thêm: ProductId=${productId}, Quantity=${quantity}`);
+
+                fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'productId': productId,
+                        'quantity': quantity
+                    })
                 })
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Added to Cart!",
-                            text: "Product has been added to your cart.",
-                            timer: 1500,              
-                            showConfirmButton: false,  
-                            toast: true,              
-                            position: 'top-end',      
-                            background: '#fff',        
-                            iconColor: '#0baf9a'       
-                        });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Added to Cart!",
+                                text: "Product has been added to your cart.",
+                                timer: 1500,
+                                showConfirmButton: false,
+                                toast: true,
+                                position: 'top-end',
+                                background: '#fff',
+                                iconColor: '#0baf9a'
+                            });
 
-                        const allBadges = document.querySelectorAll('.cart-badge');
-                        allBadges.forEach(badge => {
-                            badge.classList.remove('d-none');
-                            badge.style.display = 'flex';
-                            badge.textContent = data.totalItems;
-                        });
+                            const allBadges = document.querySelectorAll('.cart-badge');
+                            allBadges.forEach(badge => {
+                                badge.classList.remove('d-none');
+                                badge.style.display = 'flex';
+                                badge.textContent = data.totalItems;
+                            });
 
-                    } else {
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi",
+                                text: data.message || "An error occurred while adding to cart."
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
                         Swal.fire({
                             icon: "error",
-                            title: "Lỗi",
-                            text: data.message || "An error occurred while adding to cart."
+                            title: "Lỗi mạng",
+                            text: "Không thể kết nối tới máy chủ."
                         });
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Lỗi mạng",
-                        text: "Không thể kết nối tới máy chủ."
                     });
-                });
-        }
+            }
+        });
     });
+    
 });
 
 //end add cart 

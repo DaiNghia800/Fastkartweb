@@ -830,7 +830,7 @@
                     })
                     .then(res => {
                         if (res.status === 401) {
-                            Swal.fire("Vui lòng đăng nhập", "Bạn cần đăng nhập để thêm vào yêu thích", "warning");
+                            Swal.fire("Login Required", "Please log in to add items to your wishlist.", "warning");
                             return null;
                         }
                         return res.json();
@@ -854,7 +854,7 @@
                             if (data.isLiked) {
                                  Swal.fire({
                                     icon: "success",
-                                    title: "Đã thích!",
+                                    title: "Added to Wishlist!",
                                     toast: true,
                                     position: 'top-end',
                                     showConfirmButton: false,
@@ -868,7 +868,7 @@
                             } else {
                                  Swal.fire({
                                     icon: "info",
-                                    title: "Đã bỏ thích",
+                                    title: "Removed from Wishlist!",
                                     toast: true,
                                     position: 'top-end',
                                     showConfirmButton: false,

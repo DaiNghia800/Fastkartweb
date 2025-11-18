@@ -8,6 +8,7 @@
     var featureProduct = ViewData["featureProduct"] as List<Product>;
     var totalNewProduct = newProduct != null ? newProduct.Count : 0;
     var totalFeatureProduct = featureProduct != null ? featureProduct.Count : 0;
+    var likedIds = ViewBag.LikedProductIds as List<int> ?? new List<int>();
 }
 
 <section class="home-1">
@@ -510,7 +511,6 @@
                                         <div class="item"  data-product-id="@product.Uid">
                                             <div class="product-image position-relative">
                                                 @{
-                                                    var likedIds = ViewBag.LikedProductIds as List<int> ?? new List<int>();
 
                                                     bool isLiked = likedIds.Contains(product.Uid);
                                                 }
@@ -688,7 +688,7 @@
         </div>
     </div>
 </section>
-<section class="home-7">
+<section class="home-7 product-cart">
     <div class="container">
         <div class="row">
             <div class="col-xl-6 col-md-6">
@@ -708,7 +708,7 @@
                                     <div class="item">
                                         @for(int k = i ; k < i + 3 && k < totalNewProduct; k++)
                                         {
-                                            <div class="product-mini">
+                                            <div class="product-mini item" data-product-id="@newProduct[k].Uid">
                                                 <a href="/product/detail/@newProduct[k].Slug" class="wrap-img">
                                                     @{
                                                         var thumbnails = string.IsNullOrWhiteSpace(newProduct[k].Thumbnail)
@@ -783,13 +783,29 @@
                                                     </h5>
                                                     <ul class="option">
                                                         <li>
-                                                            <i class="fa-solid fa-cart-shopping"></i>
+                                                            <input class="qty-input" type="hidden" value="1">
+                                                            <button class="bg-transparent border-0 add-to-cart buy-pro">
+                                                                <i class="fa-solid fa-cart-shopping text-dark"></i>
+                                                            </button>
                                                         </li>
                                                         <li>
                                                             <i class="fa-regular fa-eye"></i>
                                                         </li>
                                                         <li>
-                                                            <i class="fa-regular fa-heart"></i>
+                                                            @{
+
+                                                                bool isLiked = likedIds.Contains(@newProduct[k].Uid);
+                                                            }
+                                                            <a href="javascript:void(0)" class="js-toggle-wishlist text-dark" data-product-id="@newProduct[k].Uid">
+                                                                @if (isLiked)
+                                                                {
+                                                                    <i class="fa-solid fa-heart text-danger"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="fa-regular fa-heart"></i>
+                                                                }
+                                                            </a>
                                                         </li>
                                                         <li>
                                                             <i class="fa-solid fa-right-left"></i>
@@ -823,7 +839,7 @@
                                     <div class="item">
                                         @for (int k = i; k < i + 3 && k < totalFeatureProduct; k++)
                                         {
-                                            <div class="product-mini">
+                                            <div class="product-mini item" data-product-id="@featureProduct[k].Uid">
                                                 <a href="/product/detail/@featureProduct[k].Slug" class="wrap-img">
                                                     @{
                                                         var thumbnails = string.IsNullOrWhiteSpace(featureProduct[k].Thumbnail)
@@ -898,13 +914,29 @@
                                                     </h5>
                                                     <ul class="option">
                                                         <li>
-                                                            <i class="fa-solid fa-cart-shopping"></i>
+                                                            <input class="qty-input" type="hidden" value="1">
+                                                            <button class="bg-transparent border-0 add-to-cart buy-pro">
+                                                                <i class="fa-solid fa-cart-shopping text-dark"></i>
+                                                            </button>
                                                         </li>
                                                         <li>
                                                             <i class="fa-regular fa-eye"></i>
                                                         </li>
                                                         <li>
-                                                            <i class="fa-regular fa-heart"></i>
+                                                            @{
+
+                                                                bool isLiked = likedIds.Contains(@featureProduct[k].Uid);
+                                                            }
+                                                            <a href="javascript:void(0)" class="js-toggle-wishlist text-dark" data-product-id="@newProduct[k].Uid">
+                                                                @if (isLiked)
+                                                                {
+                                                                    <i class="fa-solid fa-heart text-danger"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="fa-regular fa-heart"></i>
+                                                                }
+                                                            </a>
                                                         </li>
                                                         <li>
                                                             <i class="fa-solid fa-right-left"></i>
