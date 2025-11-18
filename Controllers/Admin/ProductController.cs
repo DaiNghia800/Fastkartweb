@@ -1,9 +1,10 @@
 ﻿using Fastkart.Models.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Fastkart.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Fastkart.Controllers.Admin
 {
@@ -21,6 +22,10 @@ namespace Fastkart.Controllers.Admin
         [HttpGet("")]
         public IActionResult Index()
         {
+            //search
+            string keyword = Request.Query["keyword"];
+            //end search
+
             //filter
             string status = Request.Query["status"];
             if (string.IsNullOrEmpty(status))
@@ -53,11 +58,11 @@ namespace Fastkart.Controllers.Admin
             }
 
             int skip = (page - 1) * limitItem;
-            int totalProduct = _productService.CountProduct(status);
+            int totalProduct = _productService.CountProduct(status, keyword);
             int totalPage = (int)Math.Ceiling((double)totalProduct / limitItem);
             //pagination
 
-            var listProduct = _productService.GetAllProducts(skip, limitItem, status, sortKey, descending);
+            var listProduct = _productService.GetAllProducts(skip, limitItem, status, keyword, sortKey, descending);
             ViewData["Products"] = listProduct;
             ViewData["TotalPage"] = totalPage;
             ViewData["CurrentPage"] = page;
@@ -88,8 +93,16 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] Product product)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _productService.CheckSku(-1, product.Sku))
             {
+                if (_productService.CheckSku(-1, product.Sku))
+                {
+                    ModelState.AddModelError("Sku", "Mã SKU đã tồn tại, vui lòng nhập mã khác.");
+                }
+                else if (_productService.checkProductName(-1, product.SubCategoryUid, product.ProductName))
+                {
+                    ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại, vui lòng nhập tên khác.");
+                }
                 var listProductCategory = _productService.GetAllProductCategory();
                 var listBrand = _productService.GetAllBrand();
                 var listUnit = _productService.GetAllUnit();
@@ -106,7 +119,7 @@ namespace Fastkart.Controllers.Admin
                 product.Position = (int)product.Position;
             } else
             {
-                int count = _productService.CountProduct(null);
+                int count = _productService.CountProduct(null, null);
                 product.Position = count + 1;
             }
 
@@ -132,14 +145,21 @@ namespace Fastkart.Controllers.Admin
             ViewData["units"] = listUnit;
             ViewData["stockStatus"] = listStockStatus;
             ViewData["product"] = product;
-            return View("~/Views/Admin/Product/Edit.cshtml");
+            return View("~/Views/Admin/Product/Edit.cshtml", product);
         }
 
         [HttpPost("edit/{id}")]
         public IActionResult EditPost([FromForm] Product data, int id)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _productService.checkProductName(id, data.SubCategoryUid, data.ProductName) || _productService.CheckSku(id, data.Sku))
             {
+                if (_productService.CheckSku(id, data.Sku))
+                {
+                    ModelState.AddModelError("Sku", "Mã SKU đã tồn tại, vui lòng nhập mã khác.");
+                } else if(_productService.checkProductName(id, data.SubCategoryUid, data.ProductName))
+                {
+                    ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại, vui lòng nhập tên khác.");
+                }
                 var listProductCategory = _productService.GetAllProductCategory();
                 var listBrand = _productService.GetAllBrand();
                 var listUnit = _productService.GetAllUnit();
@@ -152,10 +172,17 @@ namespace Fastkart.Controllers.Admin
                 ViewData["product"] = product;
                 return View("~/Views/Admin/Product/Edit.cshtml", data);
             }
+
             if (data.Position != null)
             {
                 data.Position = (int)data.Position;
             }
+            else
+            {
+                int count = _productService.CountProduct(null, null);
+                data.Position = count + 1;
+            }
+
             var slugHelper = new SlugHelper();
             data.Slug = slugHelper.GenerateSlug(data.ProductName);
 

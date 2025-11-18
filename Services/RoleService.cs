@@ -27,11 +27,24 @@ namespace Fastkart.Services
                 return new List<Roles>();
             }
         }
+        public List<Roles> GetRolePermission()
+        {
+            try
+            {
+                return _context.Roles.Where(p => !p.Deleted && p.RoleName != "customer").ToList();
+                
+            }
+            catch (Exception ex)
+            {
+                return new List<Roles>();
+            }
+        }
 
         public void CreateRole(Roles roles)
         {
             try
             {
+                roles.RoleName = roles.RoleName.Trim();
                 _context.Roles.Add(roles);
 
                 _context.SaveChanges();
@@ -62,7 +75,7 @@ namespace Fastkart.Services
 
                 if (existRole != null)
                 {
-                    existRole.RoleName = roles.RoleName;
+                    existRole.RoleName = roles.RoleName.Trim();
                     existRole.UpdatedAt = DateTime.Now;
                 }
 
@@ -158,6 +171,26 @@ namespace Fastkart.Services
             } catch(Exception ex)
             {
                 return new List<object>();
+            }
+        }
+
+        public bool checkRoleName(int id, string name)
+        {
+            try
+            {
+                var normalizedName = name.Trim().ToLower();
+                if (id > 0)
+                {
+                    return _context.Roles.Any(p => p.Uid != id && p.RoleName.ToLower() == normalizedName && !p.Deleted);
+                }
+                else
+                {
+                    return _context.Roles.Any(p => p.RoleName.ToLower() == normalizedName && !p.Deleted);
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

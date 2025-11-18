@@ -6519,7 +6519,7 @@ footer .main-footer .footer-contact {
 }
 .product-box {
   padding: 0.625rem;
-  /* width: calc(100% / 3); */
+   width: calc(100% / 3); 
   height: auto;
   border-radius: 0.625rem;
   box-sizing: border-box;

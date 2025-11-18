@@ -10,5 +10,6 @@ namespace Fastkart.Services.IServices
         public List<Product> GetAllProduct();
         public List<Product> GetNewProduct();
         public List<Product> GetFeatureProduct();
+        public List<Product> GetTopProduct();
     }
 }

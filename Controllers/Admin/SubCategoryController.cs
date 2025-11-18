@@ -21,6 +21,10 @@ namespace Fastkart.Controllers.Admin
         [HttpGet("")]
         public IActionResult Index()
         {
+            //search
+            string keyword = Request.Query["keyword"];
+            //end search
+
             //filter
             string status = Request.Query["status"];
             if (string.IsNullOrEmpty(status))
@@ -39,11 +43,11 @@ namespace Fastkart.Controllers.Admin
             }
 
             int skip = (page - 1) * limitItem;
-            int totalProduct = _subCategoryService.CountSubCategory(status);
+            int totalProduct = _subCategoryService.CountSubCategory(status, keyword);
             int totalPage = (int)Math.Ceiling((double)totalProduct / limitItem);
             //pagination
 
-            var listSubCategory = _subCategoryService.GetAllSubCategory(skip, limitItem, status);
+            var listSubCategory = _subCategoryService.GetAllSubCategory(skip, limitItem, status, keyword);
             ViewData["productSubCategories"] = listSubCategory;
             ViewData["TotalPage"] = totalPage;
             ViewData["CurrentPage"] = page;
@@ -61,8 +65,12 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] ProductSubCategory productSubCategory)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _subCategoryService.checkSubCategoryName(-1, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
             {
+                if (_subCategoryService.checkSubCategoryName(-1, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
+                {
+                    ModelState.AddModelError("SubCategoryName", "Tên này đã tồn tại, xin vui lòng nhập tên khác");
+                }
                 var listProductCategory = _subCategoryService.GetAllProductCategory();
                 ViewData["productCategories"] = listProductCategory;
                 return View("~/Views/Admin/SubCategory/Create.cshtml", productSubCategory);
@@ -84,16 +92,22 @@ namespace Fastkart.Controllers.Admin
             var productSubCategory = _subCategoryService.GetSubCategory(id);
             ViewData["productCategories"] = listProductCategory;
             ViewData["productSubCategory"] = productSubCategory;
-            return View("~/Views/Admin/SubCategory/Edit.cshtml");
+            return View("~/Views/Admin/SubCategory/Edit.cshtml", productSubCategory);
         }
 
         [HttpPost("edit/{id}")]
         public IActionResult EditPost([FromForm] ProductSubCategory productSubCategory, int id)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || _subCategoryService.checkSubCategoryName(id, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
             {
+                if(_subCategoryService.checkSubCategoryName(id, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
+                {
+                    ModelState.AddModelError("SubCategoryName", "Tên này đã tồn tại, xin vui lòng nhập tên khác");
+                }
                 var listProductCategory = _subCategoryService.GetAllProductCategory();
+                var subCategories = _subCategoryService.GetSubCategory(id);
                 ViewData["productCategories"] = listProductCategory;
+                ViewData["productSubCategory"] = subCategories;
                 return View("~/Views/Admin/SubCategory/Edit.cshtml", productSubCategory);
             }
 

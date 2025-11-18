@@ -7,7 +7,7 @@ namespace Fastkart.Models.Entities
         public int Uid {  get; set; }
 
         [Required(ErrorMessage = "Tên sản phẩm không được để trống")]
-        //[RegularExpression(@"^[a-zA-ZÀ-ỹ\s']+$", ErrorMessage = "Tên sản phẩm không được chứa ký tự đặc biệt")]
+        [RegularExpression(@"^[a-zA-ZÀ-ỹ0-9\s\-\.,']+$", ErrorMessage = "Tên sản phẩm không được chứa ký tự đặc biệt")]
         public string ProductName { get; set; }
 
         public int SubCategoryUid { get; set; }
@@ -26,7 +26,7 @@ namespace Fastkart.Models.Entities
         public string Sku {  get; set; }
 
         [Required(ErrorMessage = "Giá sản phẩm không được để trống")]
-        [Range(0, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0 hoặc bằng 0")]
+        [Range(typeof(decimal), "0.01", "99999999999", ErrorMessage = "Giá sản phẩm phải lớn hơn 0")]
         public decimal? Price { get; set; }
 
         [Required(ErrorMessage = "Giảm giá không được để trống")]
@@ -42,7 +42,7 @@ namespace Fastkart.Models.Entities
         public Brand Brand { get; set; }
 
         [Required(ErrorMessage = "Khối lượng không được để trống")]
-        [Range(0, 1000, ErrorMessage = "Khối lượng không hợp lệ")]
+        [Range(0.01, 1000, ErrorMessage = "Khối lượng không hợp lệ")]
         public Double? Weight { get; set; }
         public bool IsFeatured { get; set; }
         public bool Exchangeable { get; set; }
