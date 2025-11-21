@@ -52,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Blog\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

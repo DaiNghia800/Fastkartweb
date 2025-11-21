@@ -1,0 +1,419 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["title"] = "blog detail";
+}
+
+
+<section class="blog-section blog-detail">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-xxl-3 col-xl-4 col-lg-5 d-lg-block d-none">
+                <div class="left-box">
+                    <div>
+                        <form action="#">
+                            <div class="search-box position-relative">
+                                <input type="text" name="keyword" placeholder="Search...">
+                                <button type="submit">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="accordion-box">
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" button-accordion>
+                                    Recent Post
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse" id="panelsStayOpen-collapseOne">
+                                <div class="recent-post">
+                                    <div class="recent-item d-flex">
+                                        <a href="blog-detail.html">
+                                            <img src="./assets/images/blog-list-1.jpg" alt="" class="w-100 h-100 object-fit-cover">
+                                        </a>
+                                        <div class="recent-detail">
+                                            <a href="blog-detail.html">
+                                                <h5>Green onion knife and salad placed</h5>
+                                            </a>
+                                            <h6>
+                                                25 Jan, 2022
+                                                <i class="fa-regular fa-thumbs-up"></i>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="recent-item d-flex">
+                                        <a href="blog-detail.html">
+                                            <img src="./assets/images/blog-list-1.jpg" alt="" class="w-100 h-100 object-fit-cover">
+                                        </a>
+                                        <div class="recent-detail">
+                                            <a href="blog-detail.html">
+                                                <h5>Green onion knife and salad placed</h5>
+                                            </a>
+                                            <h6>
+                                                25 Jan, 2022
+                                                <i class="fa-regular fa-thumbs-up"></i>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="recent-item d-flex">
+                                        <a href="blog-detail.html">
+                                            <img src="./assets/images/blog-list-1.jpg" alt="" class="w-100 h-100 object-fit-cover">
+                                        </a>
+                                        <div class="recent-detail">
+                                            <a href="blog-detail.html">
+                                                <h5>Green onion knife and salad placed</h5>
+                                            </a>
+                                            <h6>
+                                                25 Jan, 2022
+                                                <i class="fa-regular fa-thumbs-up"></i>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" button-accordion>
+                                    Category
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse" id="panelsStayOpen-collapseTwo">
+                                <div class="category-list">
+                                    <ul class="list-unstyled d-flex flex-wrap gap-3">
+                                        <li class="d-block w-100">
+                                            <a href="blog-list.html">
+                                                <div class="category-name d-flex justify-content-between align-items-center">
+                                                    <h5 class="text-capitalize">Latest Recipes</h5>
+                                                    <span>10</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="d-block w-100">
+                                            <a href="blog-list.html">
+                                                <div class="category-name d-flex justify-content-between align-items-center">
+                                                    <h5 class="text-capitalize">Latest Recipes</h5>
+                                                    <span>10</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="d-block w-100">
+                                            <a href="blog-list.html">
+                                                <div class="category-name d-flex justify-content-between align-items-center">
+                                                    <h5 class="text-capitalize">Latest Recipes</h5>
+                                                    <span>10</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="d-block w-100">
+                                            <a href="blog-list.html">
+                                                <div class="category-name d-flex justify-content-between align-items-center">
+                                                    <h5 class="text-capitalize">Latest Recipes</h5>
+                                                    <span>10</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="d-block w-100">
+                                            <a href="blog-list.html">
+                                                <div class="category-name d-flex justify-content-between align-items-center">
+                                                    <h5 class="text-capitalize">Latest Recipes</h5>
+                                                    <span>10</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" button-accordion>
+                                    Product tags
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse" id="panelsStayOpen-collapseThree">
+                                <ul class="list-tag d-flex flex-wrap gap-2">
+                                    <li class="tag">
+                                        <a href="#">Fruit Cutting</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Meat</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Organic</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Cake</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Pick Fruit</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Backery</a>
+                                    </li>
+                                    <li class="tag">
+                                        <a href="#">Organix Food</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center" data-bs-toggle="collapse"
+                                        data-bs-target="#panelsStayOpen-collapseFour" button-accordion>
+                                    Trending Products
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse" id="panelsStayOpen-collapseFour">
+                                <ul class="trending-products">
+                                    <li class="d-flex align-content-center">
+                                        <a href="#" class="box-img">
+                                            <img src="./assets/images/img-product-1.png" alt="" class="w-100 h-100 object-fit-contain">
+                                        </a>
+                                        <div class="box-body">
+                                            <div>
+                                                <a href="#">
+                                                    <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                </a>
+                                                <span>450g</span>
+                                                <h6 class="price">$70.00</h6>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="d-flex align-content-center">
+                                        <a href="#" class="box-img">
+                                            <img src="./assets/images/image-product.png" alt="" class="w-100 h-100 object-fit-contain">
+                                        </a>
+                                        <div class="box-body">
+                                            <div>
+                                                <a href="#">
+                                                    <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                </a>
+                                                <span>450g</span>
+                                                <h6 class="price">$70.00</h6>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="d-flex align-content-center">
+                                        <a href="#" class="box-img">
+                                            <img src="./assets/images/img-product-1.png" alt="" class="w-100 h-100 object-fit-contain">
+                                        </a>
+                                        <div class="box-body">
+                                            <div>
+                                                <a href="#">
+                                                    <h6 class="name">Meatigo Premium Goat Curry</h6>
+                                                </a>
+                                                <span>450g</span>
+                                                <h6 class="price">$70.00</h6>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-9 col-xl-8 col-lg-7">
+                <div class="right-box-detail">
+                    <div class="box-img position-relative mb-4">
+                        <img src="./assets/images/blog-list-1.jpg" class="d-none" />
+                        <div class="box-img-contain position-absolute bottom-0 w-100 text-center">
+                            <ul class="contain-list d-flex justify-content-center align-items-center">
+                                <li class="text-capitalize">backpack</li>
+                                <li class="text-capitalize">life style</li>
+                                <li class="text-capitalize">organic</li>
+                            </ul>
+                            <h2 class="title text-capitalize">Agriculture Conference Harvest 2022 in Paris</h2>
+                            <ul class="contain-comment-list">
+                                <li>
+                                    <i class="fa-regular fa-user"></i>
+                                    <span class="text-capitalize">Caroline</span>
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-calendar"></i>
+                                    <span class="text-capitalize">April 19, 2022</span>
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-message"></i>
+                                    <span class="text-capitalize">82 Comment</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-detail">
+                        <p>
+                            <span class="first">S</span>
+                            hotgun approach message the initiative so can I just chime in
+                            on that one. Make sure to include in your wheelhouse bells and whistles, and touch base
+                            slow-walk our commitment nor what's the status on the deliverables for eow?. Create spaces
+                            to explore what next commitment to the cause , or UI, for get buy-in but draw a line in
+                            the sand, and pig in a python we've got kpis for that. Message the initiative value prop,
+                            please use "solutionise" instead of solution ideas! i am dead inside. Quick sync
+                            4-blocker. Driving the initiative forward flesh that out.
+                        </p>
+                        <p>
+                            Let's unpack that later everyone thinks the soup tastes better after they pissed in it
+                            pivot, re-inventing the wheel, and it's not hard guys. Market-facing pushback back of the
+                            net, for pro-sumer software let's see if we can dovetail these two projects but turn the
+                            crank for they have downloaded gmail and seems to be working for now. This is not the hill i
+                            want to die on you better eat a reality sandwich before you walk back in that boardroom land
+                            the plane yet exposing new ways to evolve our design language design thinking nor poop, so
+                            can you put it into a banner that is not alarming, but eye catching and not too giant. That
+                            is a good problem to have dog and pony show we're ahead of the curve on that one.
+                        </p>
+                        <p>
+                            Waste of resources can you run this by clearance? hot johnny coming through driving the
+                            initiative forward our competitors are jumping the shark. Unlock meaningful moments of
+                            relaxation. Copy and paste from stack overflow a tentative event rundown is attached for
+                            your reference, including other happenings on the day you are most welcome to join us
+                            beforehand for a light lunch we would also like to invite you to other activities on the
+                            day, including the interim and closing panel discussions on the intersection of businesses
+                            and social innovation, and on building a stronger social innovation eco-system respectively
+                            what are the expectations,on-brand but completely fresh we can't hear you.
+                        </p>
+                        <div class="quote">
+                            <h3>Adipisicing elit Qui ipsam natus aspernatur quaerat impedit eveniet ipsum dolor</h3>
+                            <h5>- Denny Dose</h5>
+                        </div>
+                        <p>
+                            Agile currying favour pulling teeth collaboration through advanced technology. Everyone
+                            thinks
+                            the soup tastes better after they pissed in it can you put it on my calendar?.
+                            Low-hanging fruit. Data-point blue sky yet first-order optimal strategies shotgun approach.
+                            Land it in region. Idea shower prairie dogging a set of certitudes based on deductions
+                            founded on false premise nor three-martini lunch. Baseline. Run it up the flag pole big boy
+                            pants so game-plan, and it just needs more cowbell pixel pushing, but we need to make the
+                            new version clean and sexy. Back of the net we need a recap by eod, cob or whatever comes
+                            first for we need evergreen content.
+                        </p>
+                        <p>
+                            We need to harvest synergy effects land it in region nor time to open the
+                            kimono, but we need to touch base off-line before we fire the new ux experience. Moving the
+                            goalposts. Lean into that problem we need to get all stakeholders up to speed and in the
+                            right place. Get all your ducks in a row this proposal is a win-win situation which will
+                            cause a stellar paradigm shift, and produce a multi-fold increase in deliverables or dunder
+                            muffin for high-level nor gain alignment into the weeds. Open door policy. Goalposts
+                            player-coach but quick win, so effort made was a lot for game-plan in an ideal world
+                            commitment to the cause . Service as core &innovations as power makes our brand meeting
+                            assassin core competencies run it up the flagpole, ping the boss and circle back but zoom
+                            meeting at 2:30 today.
+                        </p>
+                        <div class="box-comment">
+                            <h3>Comment</h3>
+                            <div class="user-comment-box mt-4">
+                                <ul>
+                                    <li class="d-flex flex-wrap align-items-start position-relative pb-5">
+                                        <div class="user-img position-relative">
+                                            <img src="./assets/images/user-1.jpg" alt="">
+                                            <div class="user-name position-absolute top-0">
+                                                <span>30 Jan, 2022</span>
+                                                <h5>Glenn Greer</h5>
+                                            </div>
+                                        </div>
+                                        <div class="user-contain">
+                                            <p>
+                                                "This proposal is a win-win situation which will cause a stellar paradigm
+                                                shift, and produce a multi-fold increase in deliverables a better
+                                                understanding"
+                                            </p>
+                                        </div>
+                                        <div class="relpy-button position-absolute top-0 end-0 d-flex">
+                                            <i class="fa-solid fa-reply"></i>
+                                            <span>Relpy</span>
+                                        </div>
+                                    </li>
+                                    <li class="li-padding d-flex flex-wrap position-relative align-items-start pb-5">
+                                        <div class="user-img position-relative">
+                                            <img src="./assets/images/user-2.jpg" alt="">
+                                            <div class="user-name position-absolute top-0">
+                                                <span>30 Jan, 2022</span>
+                                                <h5>Glenn Greer</h5>
+                                            </div>
+                                        </div>
+                                        <div class="user-contain">
+                                            <p>
+                                                "This proposal is a win-win situation which will cause a stellar paradigm
+                                                shift, and produce a multi-fold increase in deliverables a better
+                                                understanding"
+                                            </p>
+                                        </div>
+                                        <div class="relpy-button position-absolute top-0 end-0 d-flex">
+                                            <i class="fa-solid fa-reply"></i>
+                                            <span>Relpy</span>
+                                        </div>
+                                    </li>
+                                    <li class="d-flex flex-wrap align-items-start position-relative pb-5">
+                                        <div class="user-img position-relative">
+                                            <img src="./assets/images/user-3.jpg" alt="">
+                                            <div class="user-name position-absolute top-0">
+                                                <span>30 Jan, 2022</span>
+                                                <h5>Glenn Greer</h5>
+                                            </div>
+                                        </div>
+                                        <div class="user-contain">
+                                            <p>
+                                                "This proposal is a win-win situation which will cause a stellar paradigm
+                                                shift, and produce a multi-fold increase in deliverables a better
+                                                understanding"
+                                            </p>
+                                        </div>
+                                        <div class="relpy-button position-absolute top-0 end-0 d-flex">
+                                            <i class="fa-solid fa-reply"></i>
+                                            <span>Relpy</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="box-leave">
+                            <div class="leave-title">
+                                <h3>Leave Comment</h3>
+                            </div>
+                            <div class="leave-comment">
+                                <div class="notes">
+                                    <p class="mb-4">Your email address will not be published. Required fields are marked</p>
+                                </div>
+                                <div class="box-form">
+                                    <form action="#">
+                                        <div class="row">
+                                            <div class="col-xxl-4 col-lg-12 col-sm-6 col-12">
+                                                <input type="text" class="inner-input" placeholder="Full Name">
+                                            </div>
+                                            <div class="col-xxl-4 col-lg-12 col-sm-6 col-12 mt-xxl-0 mt-lg-4 mt-sm-0 mt-4">
+                                                <input type="email" class="inner-input" placeholder="Enter Email Address">
+                                            </div>
+                                            <div class="col-xxl-4 col-12 mt-xxl-0 mt-4">
+                                                <input type="url" class="inner-input" placeholder="Enter URL">
+                                            </div>
+                                            <div class="col-12 mt-4">
+                                                <textarea name="Comment" class="inner-input" rows="4" id="" placeholder="Comments"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <input type="checkbox" id="checkdefault">
+                                            <label for="checkdefault">
+                                                Save my name, email, and website in this
+                                                browser for the next time I comment.
+                                            </label>
+                                        </div>
+                                        <div class="box-button mt-3 d-flex justify-content-xxl-end justify-content-start">
+                                            <button type="submit" class="">Post Comment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
