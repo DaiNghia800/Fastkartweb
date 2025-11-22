@@ -32,14 +32,14 @@ namespace Fastkart.Controllers
         [HttpGet("blog")]
         public IActionResult Index()
         {
-            return View("~/Views/Blog/Index.cshtml");
+            return View("~/Views/Blog/blog-list.cshtml");
         }
 
         [HttpGet("blog/{id}")]
         public IActionResult Detail(int id)
         {
             ViewData["BlogId"] = id;
-            return View("~/Views/Blog/Detail.cshtml");
+            return View("~/Views/Blog/blog-detail.cshtml");
         }
 
         [HttpGet("blog/api/list")]

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Fastkart.Migrations
 {
     /// <inheritdoc />
-    public partial class reload_database : Migration
+    public partial class RebuildDatabasee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -323,8 +323,8 @@ namespace Fastkart.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorUid = table.Column<int>(type: "int", nullable: false),
                     CategoryUid = table.Column<int>(type: "int", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()")
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -373,13 +373,41 @@ namespace Fastkart.Migrations
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.Uid);
                     table.ForeignKey(
                         name: "FK_Order_Users_UserUid",
+                        column: x => x.UserUid,
+                        principalTable: "Users",
+                        principalColumn: "Uid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wishlist",
+                columns: table => new
+                {
+                    Uid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserUid = table.Column<int>(type: "int", nullable: false),
+                    ProductUid = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wishlist", x => x.Uid);
+                    table.ForeignKey(
+                        name: "FK_Wishlist_Product_ProductUid",
+                        column: x => x.ProductUid,
+                        principalTable: "Product",
+                        principalColumn: "Uid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Wishlist_Users_UserUid",
                         column: x => x.UserUid,
                         principalTable: "Users",
                         principalColumn: "Uid",
@@ -600,6 +628,16 @@ namespace Fastkart.Migrations
                 name: "IX_Users_RoleUid",
                 table: "Users",
                 column: "RoleUid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wishlist_ProductUid",
+                table: "Wishlist",
+                column: "ProductUid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wishlist_UserUid",
+                table: "Wishlist",
+                column: "UserUid");
         }
 
         /// <inheritdoc />
@@ -621,13 +659,13 @@ namespace Fastkart.Migrations
                 name: "Permissions");
 
             migrationBuilder.DropTable(
+                name: "Wishlist");
+
+            migrationBuilder.DropTable(
                 name: "BlogCategories");
 
             migrationBuilder.DropTable(
                 name: "Cart");
-
-            migrationBuilder.DropTable(
-                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Order");
@@ -637,6 +675,12 @@ namespace Fastkart.Migrations
 
             migrationBuilder.DropTable(
                 name: "PermissionTypes");
+
+            migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Brand");
@@ -651,13 +695,10 @@ namespace Fastkart.Migrations
                 name: "Unit");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "ProductCategory");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
         }
     }
 }

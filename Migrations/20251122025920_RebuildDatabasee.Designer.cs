@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fastkart.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251116034123_reload_database")]
-    partial class reload_database
+    [Migration("20251122025920_RebuildDatabasee")]
+    partial class RebuildDatabasee
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,13 +62,10 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -242,6 +239,9 @@ namespace Fastkart.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -984,6 +984,32 @@ namespace Fastkart.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Fastkart.Models.Entities.Wishlist", b =>
+                {
+                    b.Property<int>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductUid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserUid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("ProductUid");
+
+                    b.HasIndex("UserUid");
+
+                    b.ToTable("Wishlist");
+                });
+
             modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
                 {
                     b.HasOne("Fastkart.Models.Entities.Users", "Users")
@@ -1156,6 +1182,25 @@ namespace Fastkart.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Fastkart.Models.Entities.Wishlist", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>

@@ -59,13 +59,10 @@ namespace Fastkart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -983,6 +980,7 @@ namespace Fastkart.Migrations
 
                     b.ToTable("Users");
                 });
+
             modelBuilder.Entity("Fastkart.Models.Entities.Wishlist", b =>
                 {
                     b.Property<int>("Uid")
@@ -1007,233 +1005,235 @@ namespace Fastkart.Migrations
                     b.HasIndex("UserUid");
 
                     b.ToTable("Wishlist");
-                    modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Users", "Users")
-                                .WithMany()
-                                .HasForeignKey("AuthorUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.BlogCategories", "Category")
-                                .WithMany()
-                                .HasForeignKey("CategoryUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.BlogPosts", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("AuthorUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Category");
+                    b.HasOne("Fastkart.Models.Entities.BlogCategories", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Users");
-                        });
+                    b.Navigation("Category");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Users", "User")
-                                .WithMany()
-                                .HasForeignKey("UserUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Users");
+                });
 
-                            b.Navigation("User");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.CartItem", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Cart", "Cart")
-                                .WithMany("Items")
-                                .HasForeignKey("CartUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("User");
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.Product", "Product")
-                                .WithMany()
-                                .HasForeignKey("ProductUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.CartItem", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("Cart");
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Product");
-                        });
+                    b.Navigation("Cart");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Users", "User")
-                                .WithMany()
-                                .HasForeignKey("UserUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Product");
+                });
 
-                            b.Navigation("User");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.OrderItem", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Order", "Order")
-                                .WithMany("OrderItems")
-                                .HasForeignKey("OrderUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("User");
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.Product", "Product")
-                                .WithMany()
-                                .HasForeignKey("ProductUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("Order");
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Product");
-                        });
+                    b.Navigation("Order");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Payment", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Order", "Order")
-                                .WithMany("Payments")
-                                .HasForeignKey("OrderUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Product");
+                });
 
-                            b.Navigation("Order");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Payment", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Order", "Order")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Function", "Function")
-                                .WithMany("Permissions")
-                                .HasForeignKey("FunctionId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Order");
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.PermissionType", "PermissionType")
-                                .WithMany("Permissions")
-                                .HasForeignKey("PermissionTypeId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.Permission", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Function", "Function")
+                        .WithMany("Permissions")
+                        .HasForeignKey("FunctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.HasOne("Fastkart.Models.Entities.Roles", "Role")
-                                .WithMany("Permissions")
-                                .HasForeignKey("RoleId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.HasOne("Fastkart.Models.Entities.PermissionType", "PermissionType")
+                        .WithMany("Permissions")
+                        .HasForeignKey("PermissionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("Function");
+                    b.HasOne("Fastkart.Models.Entities.Roles", "Role")
+                        .WithMany("Permissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("PermissionType");
+                    b.Navigation("Function");
 
-                            b.Navigation("Role");
-                        });
+                    b.Navigation("PermissionType");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Brand", "Brand")
-                                .WithMany()
-                                .HasForeignKey("BrandUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.Navigation("Role");
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.StockStatus", "StockStatus")
-                                .WithMany()
-                                .HasForeignKey("StockStatusUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.Product", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.HasOne("Fastkart.Models.Entities.ProductSubCategory", "SubCategory")
-                                .WithMany()
-                                .HasForeignKey("SubCategoryUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.HasOne("Fastkart.Models.Entities.StockStatus", "StockStatus")
+                        .WithMany()
+                        .HasForeignKey("StockStatusUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.HasOne("Fastkart.Models.Entities.Unit", "Unit")
-                                .WithMany()
-                                .HasForeignKey("UnitUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.HasOne("Fastkart.Models.Entities.ProductSubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Brand");
+                    b.HasOne("Fastkart.Models.Entities.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("StockStatus");
+                    b.Navigation("Brand");
 
-                            b.Navigation("SubCategory");
+                    b.Navigation("StockStatus");
 
-                            b.Navigation("Unit");
-                        });
+                    b.Navigation("SubCategory");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.ProductSubCategory", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.ProductCategory", "ProductCategory")
-                                .WithMany("SubCategories")
-                                .HasForeignKey("CategoryUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.Navigation("Unit");
+                });
 
-                            b.Navigation("ProductCategory");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.ProductSubCategory", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.ProductCategory", "ProductCategory")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Roles", "Role")
-                                .WithMany("Users")
-                                .HasForeignKey("RoleUid")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.Navigation("ProductCategory");
+                });
 
-                            b.Navigation("Role");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Users", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Roles", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleUid")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Wishlist", b =>
-                        {
-                            b.HasOne("Fastkart.Models.Entities.Product", "Product")
-                                .WithMany()
-                                .HasForeignKey("ProductUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.Navigation("Role");
+                });
 
-                            b.HasOne("Fastkart.Models.Entities.Users", "User")
-                                .WithMany()
-                                .HasForeignKey("UserUid")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+            modelBuilder.Entity("Fastkart.Models.Entities.Wishlist", b =>
+                {
+                    b.HasOne("Fastkart.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("Product");
+                    b.HasOne("Fastkart.Models.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("User");
-                        });
+                    b.Navigation("Product");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
-                        {
-                            b.Navigation("Items");
-                        });
+                    b.Navigation("User");
+                });
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
-                        {
-                            b.Navigation("Permissions");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Cart", b =>
+                {
+                    b.Navigation("Items");
+                });
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
-                        {
-                            b.Navigation("OrderItems");
+            modelBuilder.Entity("Fastkart.Models.Entities.Function", b =>
+                {
+                    b.Navigation("Permissions");
+                });
 
-                            b.Navigation("Payments");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
-                        {
-                            b.Navigation("Permissions");
-                        });
+                    b.Navigation("Payments");
+                });
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
-                        {
-                            b.Navigation("SubCategories");
-                        });
+            modelBuilder.Entity("Fastkart.Models.Entities.PermissionType", b =>
+                {
+                    b.Navigation("Permissions");
+                });
 
-                    modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
-                        {
-                            b.Navigation("Permissions");
+            modelBuilder.Entity("Fastkart.Models.Entities.ProductCategory", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
 
-                            b.Navigation("Users");
-                        });
-            });
+            modelBuilder.Entity("Fastkart.Models.Entities.Roles", b =>
+                {
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Users");
+                });
+#pragma warning restore 612, 618
         }
     }
 }
