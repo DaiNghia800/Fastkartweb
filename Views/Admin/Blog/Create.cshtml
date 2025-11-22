@@ -282,7 +282,7 @@
     </div>
 
     <div class="form-card">
-        <form id="blogForm">
+        <form id="blogForm" method="post" action="/admin/blog/create">
             <input type="hidden" id="blogUid" value="@blogId" />
 
             <!-- Basic Information -->
@@ -341,7 +341,7 @@
                     <textarea id="content"
                               class="form-textarea"
                               placeholder="Write your blog content here..."
-                              required></textarea>
+                              ></textarea>
                 </div>
             </div>
 
@@ -554,7 +554,7 @@
         submitBtn.disabled = true;
 
         try {
-            const url = isEditMode ? `/admin/blog/api/update/${blogId}` : '/admin/blog/api/create';
+            const url = isEditMode ? `/admin/blog/api/update/${blogId}` : '/admin/blog/create';
             const method = isEditMode ? 'PUT' : 'POST';
 
             const response = await fetch(url, {

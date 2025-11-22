@@ -222,7 +222,7 @@ namespace Fastkart.Controllers
             return Ok(blog);
         }
 
-        [HttpPost("admin/blog/api/create")]
+        [HttpPost("admin/blog/create")]
         [Authorize(Policy = "NoCustomer")]
         public async Task<ActionResult<BlogPosts>> CreateBlog([FromBody] CreateBlogDto createDto)
         {

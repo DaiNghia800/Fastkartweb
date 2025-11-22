@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_Layout";
-    ViewData["title"] = "blog list";
+    ViewData["title"] = "Blog list";
 }
 
 <section class="blog-section">
@@ -72,6 +72,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         loadData();
         setupSearch();
+        loadSidebarData();
     });
 
     async function loadData() {
@@ -79,6 +80,26 @@
             await Promise.all([loadBlogs(), loadCategories()]);
         } catch (error) {
             console.error('Error loading data:', error);
+        }
+    }
+
+    async function loadSidebarData() {
+        try {
+            const [blogsRes, categoriesRes] = await Promise.all([
+                fetch('/blog/api/list'),
+                fetch('/blog/api/categories')
+            ]);
+
+            if (blogsRes.ok) {
+                allBlogs = await blogsRes.json();
+                renderRecentPosts();
+            }
+            if (categoriesRes.ok) {
+                categories = await categoriesRes.json();
+                renderCategories();
+            }
+        } catch (error) {
+            console.error('Error loading sidebar data:', error);
         }
     }
 
