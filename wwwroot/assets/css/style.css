@@ -1762,8 +1762,11 @@ span.badge-number {
 }
 
 .shop-category-box img {
-  z-index: 2;
-  transition: all 0.4s;
+    z-index: 2;
+    transition: all 0.4s;
+    max-width: 6rem;
+    border-radius: 10px;
+    height: 4rem;
 }
 
 .shop-category-box:hover a::before {
