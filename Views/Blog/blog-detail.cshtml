@@ -1,0 +1,335 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["title"] = "blog detail";
+}
+
+<section class="blog-section blog-detail">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-xxl-3 col-xl-4 col-lg-5 d-lg-block d-none">
+                <div class="left-box">
+                    <div>
+                        <form action="#">
+                            <div class="search-box position-relative">
+                                <input type="text" id="searchInput" name="keyword" placeholder="Search...">
+                                <button type="button" onclick="searchBlogs()">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="accordion-box">
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" button-accordion>
+                                    Recent Post
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse show" id="panelsStayOpen-collapseOne">
+                                <div class="recent-post" id="recentPostsContainer">
+                                    <!-- Recent posts will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" button-accordion>
+                                    Category
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse show" id="panelsStayOpen-collapseTwo">
+                                <div class="category-list">
+                                    <ul class="list-unstyled d-flex flex-wrap gap-3" id="categoriesContainer">
+                                        <!-- Categories will be loaded here -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-9 col-xl-8 col-lg-7">
+                <div class="right-box-detail" id="blogDetailContainer">
+                    <!-- Blog detail will be loaded here -->
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3">Loading blog...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let blog = null;
+    let allBlogs = [];
+    let categories = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy BlogId từ ViewData (được truyền từ Controller)
+        const blogId = '@ViewData["BlogId"]';
+
+        if (blogId && blogId !== '') {
+            loadBlogDetail(blogId);
+            loadSidebarData();
+        } else {
+            showError('Blog not found');
+        }
+    });
+
+    async function loadBlogDetail(id) {
+        try {
+            const response = await fetch(`/blog/api/detail/${id}`);
+            if (response.ok) {
+                blog = await response.json();
+                renderBlogDetail();
+            } else {
+                showError('Blog not found');
+            }
+        } catch (error) {
+            console.error('Error loading blog:', error);
+            showError('Error loading blog');
+        }
+    }
+
+    async function loadSidebarData() {
+        try {
+            const [blogsRes, categoriesRes] = await Promise.all([
+                fetch('/blog/api/list'),
+                fetch('/blog/api/categories')
+            ]);
+
+            if (blogsRes.ok) {
+                allBlogs = await blogsRes.json();
+                renderRecentPosts();
+            }
+            if (categoriesRes.ok) {
+                categories = await categoriesRes.json();
+                renderCategories();
+            }
+        } catch (error) {
+            console.error('Error loading sidebar data:', error);
+        }
+    }
+
+    function renderBlogDetail() {
+        const container = document.getElementById('blogDetailContainer');
+        const hasImage = blog.imageUrl && blog.imageUrl.trim() !== '';
+
+        container.innerHTML = `
+            <div class="box-img position-relative mb-4" id="blogHeaderImage">
+                <div class="box-img-contain position-absolute bottom-0 w-100 text-center">
+                    <ul class="contain-list d-flex justify-content-center align-items-center">
+                        <li class="text-capitalize">${blog.categoryName}</li>
+                    </ul>
+                    <h2 class="title text-capitalize">${blog.title}</h2>
+                    <ul class="contain-comment-list">
+                        <li>
+                            <i class="fa-regular fa-user"></i>
+                            <span class="text-capitalize">${blog.authorName}</span>
+                        </li>
+                        <li>
+                            <i class="fa-regular fa-calendar"></i>
+                            <span class="text-capitalize">${formatDateLong(blog.createdAt)}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-detail">
+                <div class="blog-content">
+                    ${blog.content}
+                </div>
+
+                <div class="box-comment mt-5">
+                    <h3>Comments</h3>
+                    <div class="user-comment-box mt-4">
+                        <p class="text-muted">Comments feature coming soon...</p>
+                    </div>
+                </div>
+
+                <div class="box-leave mt-5">
+                    <div class="leave-title">
+                        <h3>Leave a Comment</h3>
+                    </div>
+                    <div class="leave-comment">
+                        <div class="notes">
+                            <p class="mb-4">Your email address will not be published. Required fields are marked *</p>
+                        </div>
+                        <div class="box-form">
+                            <form action="#" onsubmit="submitComment(event)">
+                                <div class="row">
+                                    <div class="col-xxl-4 col-lg-12 col-sm-6 col-12">
+                                        <input type="text" class="inner-input" placeholder="Full Name" required>
+                                    </div>
+                                    <div class="col-xxl-4 col-lg-12 col-sm-6 col-12 mt-xxl-0 mt-lg-4 mt-sm-0 mt-4">
+                                        <input type="email" class="inner-input" placeholder="Enter Email Address" required>
+                                    </div>
+                                    <div class="col-xxl-4 col-12 mt-xxl-0 mt-4">
+                                        <input type="url" class="inner-input" placeholder="Enter URL">
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <textarea name="Comment" class="inner-input" rows="4" placeholder="Comments" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <input type="checkbox" id="checkdefault">
+                                    <label for="checkdefault">
+                                        Save my name, email, and website in this browser for the next time I comment.
+                                    </label>
+                                </div>
+                                <div class="box-button mt-3 d-flex justify-content-xxl-end justify-content-start">
+                                    <button type="submit" class="">Post Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Set background-image động cho header
+        const headerImg = document.getElementById('blogHeaderImage');
+        if (hasImage) {
+            headerImg.style.backgroundImage = `url('${blog.imageUrl}')`;
+        }
+        // Nếu không có image, CSS mặc định sẽ dùng ./assets/images/blog-list-1.jpg
+    }
+
+    function renderRecentPosts() {
+        const container = document.getElementById('recentPostsContainer');
+        // Lấy BlogId từ ViewData
+        const currentBlogId = parseInt('@ViewData["BlogId"]');
+
+        const recentBlogs = allBlogs.filter(b => b.uid !== currentBlogId).slice(0, 3);
+
+        if (recentBlogs.length === 0) {
+            container.innerHTML = '<p class="text-muted">No other posts available</p>';
+            return;
+        }
+
+        container.innerHTML = recentBlogs.map(b => `
+            <div class="recent-item d-flex">
+                <a href="/blogs/detail?id=${b.uid}">
+                    <img src="${b.imageUrl || './assets/images/blog-list-1.jpg'}" alt="${b.title}" class="w-100 h-100 object-fit-cover">
+                </a>
+                <div class="recent-detail">
+                    <a href="/blogs/detail?id=${b.uid}">
+                        <h5>${b.title.substring(0, 40)}${b.title.length > 40 ? '...' : ''}</h5>
+                    </a>
+                    <h6>
+                        ${formatDate(b.createdAt)}
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </h6>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+
+        container.innerHTML = categories.map(cat => {
+            const count = allBlogs.filter(b => b.categoryUid === cat.uid).length;
+            return `
+                <li class="d-block w-100">
+                    <a href="/blogs?category=${cat.uid}">
+                        <div class="category-name d-flex justify-content-between align-items-center">
+                            <h5 class="text-capitalize">${cat.name}</h5>
+                            <span>${count}</span>
+                        </div>
+                    </a>
+                </li>`;
+        }).join('');
+    }
+
+    function showError(message) {
+        const container = document.getElementById('blogDetailContainer');
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fa-solid fa-exclamation-circle fa-3x text-danger mb-3"></i>
+                <h4>${message}</h4>
+                <a href="/blogs" class="btn btn-primary mt-3">Back to Blog List</a>
+            </div>
+        `;
+    }
+
+    function searchBlogs() {
+        const searchTerm = document.getElementById('searchInput').value;
+        if (searchTerm) {
+            window.location.href = `/blogs?search=${encodeURIComponent(searchTerm)}`;
+        }
+    }
+
+    function submitComment(event) {
+        event.preventDefault();
+        alert('Comment feature coming soon!');
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function formatDateLong(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+</script>
+
+<style>
+    /* Style cho nội dung blog */
+    .blog-content {
+        line-height: 1.8;
+        font-size: 16px;
+    }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .blog-content h1, .blog-content h2, .blog-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+    .inner-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+        .inner-input:focus {
+            outline: none;
+            border-color: #14a38b;
+        }
+
+    .box-button button {
+        background-color: #14a38b;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .box-button button:hover {
+            background-color: #0f8570;
+        }
+</style>

@@ -1,0 +1,382 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["title"] = "blog list";
+}
+
+<section class="blog-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-xxl-3 col-xl-4 col-lg-5 order-lg-0 order-1">
+                <div class="left-box">
+                    <div>
+                        <form action="#">
+                            <div class="search-box position-relative">
+                                <input type="text" id="searchInput" name="keyword" placeholder="Search...">
+                                <button type="button">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="accordion-box">
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" button-accordion>
+                                    Recent Post
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse show" id="panelsStayOpen-collapseOne">
+                                <div class="recent-post" id="recentPostsContainer">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2>
+                                <button class="d-flex justify-content-between w-100 align-items-center text-capitalize"
+                                        data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" button-accordion>
+                                    Category
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </button>
+                            </h2>
+                            <div class="accordion-body mt-4 collapse show" id="panelsStayOpen-collapseTwo">
+                                <div class="category-list">
+                                    <ul class="list-unstyled d-flex flex-wrap gap-3" id="categoriesContainer">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-9 col-xl-8 col-lg-7 order-lg-1 order-0">
+                <div class="right-box">
+                    <div class="row gap-4" id="blogsContainer">
+                    </div>
+                    <nav class="box-page" id="paginationContainer">
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let allBlogs = [];
+    let categories = [];
+    let currentPage = 1;
+    const itemsPerPage = 6;
+    let selectedCategory = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadData();
+        setupSearch();
+    });
+
+    async function loadData() {
+        try {
+            await Promise.all([loadBlogs(), loadCategories()]);
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    }
+
+    async function loadBlogs() {
+        try {
+            const response = await fetch('/blog/api/list');
+            if (response.ok) {
+                allBlogs = await response.json();
+                renderBlogs();
+                renderRecentPosts();
+            }
+        } catch (error) {
+            console.error('Error loading blogs:', error);
+        }
+    }
+
+    async function loadCategories() {
+        try {
+            const response = await fetch('/blog/api/categories');
+            if (response.ok) {
+                categories = await response.json();
+                renderCategories();
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    function renderBlogs(filteredBlogs = null) {
+        const container = document.getElementById('blogsContainer');
+        const blogs = filteredBlogs || allBlogs;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedBlogs = blogs.slice(startIndex, endIndex);
+
+        if (paginatedBlogs.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <h4>No blogs found</h4>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = paginatedBlogs.map((blog, index) => {
+            const hasImage = blog.imageUrl && blog.imageUrl.trim() !== '';
+            // SỬA: Dùng /blogs/detail?id= thay vì /blog/
+            const detailUrl = `/blogs/detail?id=${blog.uid}`;
+            return `
+                <div class="col-12">
+                    <div class="box-item d-inline-flex flex-wrap align-items-center">
+                        <div class="box-img overflow-hidden position-relative">
+                            <a href="${detailUrl}">
+                                ${hasImage
+                                    ? `<img src="${blog.imageUrl}" alt="${blog.title}" class="blog-list-image">`
+                                    : `<div class="blog-list-placeholder">
+                                        <i class="fa-regular fa-image"></i>
+                                        <span>No Image</span>
+                                       </div>`
+                                }
+                            </a>
+                            ${index % 3 === 1 ? `
+                            <label class="position-absolute top-0 start-0">
+                                <i class="fa-solid fa-bolt-lightning me-1"></i>
+                                popular
+                            </label>` : ''}
+                        </div>
+                        <div class="box-body">
+                            <div class="label d-flex gap-2">
+                                <span class="time">
+                                    <i class="fa-regular fa-clock"></i>
+                                    <span>${formatDate(blog.createdAt)}</span>
+                                </span>
+                                <span class="super">
+                                    <i class="fa-regular fa-user"></i>
+                                    <span>${blog.authorName}</span>
+                                </span>
+                            </div>
+                            <a href="${detailUrl}" class="title text-black">
+                                <h3>${blog.title}</h3>
+                            </a>
+                            <p class="desc">${stripHtml(blog.content).substring(0, 200)}...</p>
+                            <a href="${detailUrl}" class="button">
+                                Read More
+                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        renderPagination(blogs.length);
+    }
+
+    function renderRecentPosts() {
+        const container = document.getElementById('recentPostsContainer');
+        const recentBlogs = allBlogs.slice(0, 3);
+
+        container.innerHTML = recentBlogs.map(blog => {
+            const hasImg = blog.imageUrl && blog.imageUrl.trim() !== '';
+            // SỬA: Dùng /blogs/detail?id= thay vì /blog/
+            const detailUrl = `/blogs/detail?id=${blog.uid}`;
+            return `
+                <div class="recent-item d-flex">
+                    <a href="${detailUrl}" class="recent-img-link">
+                        ${hasImg
+                            ? `<img src="${blog.imageUrl}" alt="${blog.title}" class="recent-post-img">`
+                            : `<div class="recent-post-placeholder"><i class="fa-regular fa-image"></i></div>`
+                        }
+                    </a>
+                    <div class="recent-detail">
+                        <a href="${detailUrl}">
+                            <h5>${blog.title.substring(0, 40)}${blog.title.length > 40 ? '...' : ''}</h5>
+                        </a>
+                        <h6>
+                            ${formatDate(blog.createdAt)}
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </h6>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+
+        container.innerHTML = categories.map(cat => {
+            const count = allBlogs.filter(b => b.categoryUid === cat.uid).length;
+            return `
+                <li class="d-block w-100">
+                    <a href="#" onclick="filterByCategory(${cat.uid}); return false;">
+                        <div class="category-name d-flex justify-content-between align-items-center">
+                            <h5 class="text-capitalize">${cat.name}</h5>
+                            <span>${count}</span>
+                        </div>
+                    </a>
+                </li>`;
+        }).join('');
+    }
+
+    function renderPagination(totalItems) {
+        const container = document.getElementById('paginationContainer');
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+
+        let paginationHtml = '<ul class="d-flex justify-content-center gap-2">';
+        paginationHtml += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" onclick="changePage(${currentPage - 1}); return false;">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+        </li>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHtml += `<li class="page-item ${currentPage === i ? 'active' : ''}">
+                <a href="#" onclick="changePage(${i}); return false;">${i}</a>
+            </li>`;
+        }
+
+        paginationHtml += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a href="#" onclick="changePage(${currentPage + 1}); return false;">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </li></ul>`;
+
+        container.innerHTML = paginationHtml;
+    }
+
+    function changePage(page) {
+        const filteredBlogs = getFilteredBlogs();
+        const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderBlogs(filteredBlogs);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterByCategory(categoryUid) {
+        selectedCategory = categoryUid;
+        currentPage = 1;
+        renderBlogs(getFilteredBlogs());
+    }
+
+    function getFilteredBlogs() {
+        let filtered = allBlogs;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+        if (selectedCategory) {
+            filtered = filtered.filter(b => b.categoryUid === selectedCategory);
+        }
+        if (searchTerm) {
+            filtered = filtered.filter(b =>
+                b.title.toLowerCase().includes(searchTerm) ||
+                b.content.toLowerCase().includes(searchTerm)
+            );
+        }
+        return filtered;
+    }
+
+    function setupSearch() {
+        document.getElementById('searchInput').addEventListener('input', function() {
+            currentPage = 1;
+            renderBlogs(getFilteredBlogs());
+        });
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function stripHtml(html) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    }
+</script>
+
+<style>
+    .box-item .box-img {
+        width: 280px;
+        height: 200px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background-color: #f5f5f5;
+    }
+
+    .blog-list-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+    }
+
+    .blog-list-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        color: #999;
+        border-radius: 12px;
+    }
+
+        .blog-list-placeholder i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .blog-list-placeholder span {
+            font-size: 14px;
+        }
+
+    .recent-img-link {
+        display: block;
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .recent-post-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .recent-post-placeholder {
+        width: 100%;
+        height: 100%;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 24px;
+    }
+
+    @@media (max-width: 992px) {
+        .box-item .box-img {
+            width: 100%;
+            height: 220px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .box-item .box-img {
+            height: 180px;
+        }
+    }
+</style>

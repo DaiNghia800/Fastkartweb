@@ -97,7 +97,7 @@ h5{
 html,
 body {
   font-family: "Public Sans", sans-serif !important;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* product-left-box */
