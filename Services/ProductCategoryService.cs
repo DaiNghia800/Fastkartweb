@@ -120,18 +120,30 @@ namespace Fastkart.Services
             }
         }
 
-        public void DeleteProduct(int id)
+        public int DeleteProduct(int id)
         {
             try
             {
-                var product = _context.ProductCategory.SingleOrDefault(p => p.Uid == id && !p.Deleted);
-                product.Deleted = true;
-                product.UpdatedAt = DateTime.Now;
-                _context.SaveChanges();
+                var productSubCategory = _context.ProductSubCategory.Count(p => p.CategoryUid == id && !p.Deleted);
+                if(productSubCategory > 0)
+                {
+                    return productSubCategory;
+                }
+                else
+                {
+                    var productCategory = _context.ProductCategory.SingleOrDefault(p => p.Uid == id && !p.Deleted);
+                    
+                    productCategory.Deleted = true;
+                    productCategory.UpdatedAt = DateTime.Now;
+                    _context.SaveChanges();
+
+                    return 0;
+                }
+                    
             }
             catch (Exception ex)
             {
-                throw;
+                return -1;
             }
         }
 

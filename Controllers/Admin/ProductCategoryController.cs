@@ -146,8 +146,11 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("delete/{id}")]
         public JsonResult Delete(int id)
         {
-            _productCategoryService.DeleteProduct(id);
-            return Json(new { code = "success" });
+            int productCategory = _productCategoryService.DeleteProduct(id);
+            return Json(new { 
+                code = productCategory,
+                message = $"Không thể xóa danh mục vì đang chứa {productCategory} danh mục con. Vui lòng xóa hoặc chuyển danh mục con trước."
+            });
         }
 
         [HttpPost("change-status/{id}")]

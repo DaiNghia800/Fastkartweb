@@ -82,8 +82,11 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("delete/{id}")]
         public JsonResult Delete(int id)
         {
-            _roleService.DeleteRole(id);
-            return Json(new { code = "success" });
+            int role = _roleService.DeleteRole(id);
+            return Json(new { 
+                code = role,
+                message = $"Không thể xóa vai trò vì đang chứa {role} người dùng. Vui lòng xóa hoặc chuyển người dùng trước."
+            });
         }
 
         [HttpGet("permission")]

@@ -325,27 +325,27 @@
                                 </li>
                             }
                                                         
-                            <li class="sidebar-list">
-                                <a href="#collapseAtributes" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseAtributes">
-                                    <i class="fa-solid fa-sliders"></i>
-                                    <span class="text-capitalize">Attributes</span>
-                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </div>
-                                </a>
-                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "show" : "")" id="collapseAtributes">
-                                    <li>
-                                        <a href="/admin/attributes" class="text-capitalize">
-                                            Attributes
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/attributes/create" class="text-capitalize">
-                                            Add Attributes
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                            // <li class="sidebar-list">
+                            //     <a href="#collapseAtributes" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseAtributes">
+                            //         <i class="fa-solid fa-sliders"></i>
+                            //         <span class="text-capitalize">Attributes</span>
+                            //         <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "active" : "")">
+                            //             <i class="fa-solid fa-chevron-right"></i>
+                            //         </div>
+                            //     </a>
+                            //     <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/attributes") ? "show" : "")" id="collapseAtributes">
+                            //         <li>
+                            //             <a href="/admin/attributes" class="text-capitalize">
+                            //                 Attributes
+                            //             </a>
+                            //         </li>
+                            //         <li>
+                            //             <a href="/admin/attributes/create" class="text-capitalize">
+                            //                 Add Attributes
+                            //             </a>
+                            //         </li>
+                            //     </ul>
+                            // </li>
                             <li class="sidebar-list">
                                 <a href="#collapseBlog" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/blog") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseBlog">
                                     <i class="fa-solid fa-blog"></i>
@@ -447,33 +447,33 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="sidebar-list">
-                                <a href="#collapseCoupons" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCoupons">
-                                    <i class="fa-solid fa-tag"></i>
-                                    <span class="text-capitalize">Coupons</span>
-                                    <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </div>
-                                </a>
-                                <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "show" : "")" id="collapseCoupons">
-                                    <li>
-                                        <a href="/admin/coupons" class="text-capitalize">
-                                            Coupon List
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/coupons/create" class="text-capitalize">
-                                            Create Coupon
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="sidebar-list">
-                                <a href="/admin/product-review" class="sidebar-link @(Context.Request.Path == "/admin/product-review" ? "active" : "")">
-                                    <i class="fa-solid fa-star"></i>
-                                    <span class="text-capitalize">Product Review</span>
-                                </a>
-                            </li>
+                            // <li class="sidebar-list">
+                            //     <a href="#collapseCoupons" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCoupons">
+                            //         <i class="fa-solid fa-tag"></i>
+                            //         <span class="text-capitalize">Coupons</span>
+                            //         <div class="according-menu @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "active" : "")">
+                            //             <i class="fa-solid fa-chevron-right"></i>
+                            //         </div>
+                            //     </a>
+                            //     <ul class="sidebar-submenu position-relative p-0 list-unstyled w-100 collapse @(Context.Request.Path.StartsWithSegments("/admin/coupons") ? "show" : "")" id="collapseCoupons">
+                            //         <li>
+                            //             <a href="/admin/coupons" class="text-capitalize">
+                            //                 Coupon List
+                            //             </a>
+                            //         </li>
+                            //         <li>
+                            //             <a href="/admin/coupons/create" class="text-capitalize">
+                            //                 Create Coupon
+                            //             </a>
+                            //         </li>
+                            //     </ul>
+                            // </li>
+                            // <li class="sidebar-list">
+                            //     <a href="/admin/product-review" class="sidebar-link @(Context.Request.Path == "/admin/product-review" ? "active" : "")">
+                            //         <i class="fa-solid fa-star"></i>
+                            //         <span class="text-capitalize">Product Review</span>
+                            //     </a>
+                            // </li>
                             <li class="sidebar-list">
                                 <a href="#collapseSettings" class="sidebar-link @(Context.Request.Path.StartsWithSegments("/admin/settings") ? "active" : "")" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseSettings">
                                     <i class="fa-solid fa-cog"></i>
@@ -490,12 +490,12 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="sidebar-list">
-                                <a href="/admin/list-page" class="sidebar-link @(Context.Request.Path == "/admin/list-page" ? "active" : "")">
-                                    <i class="fa-solid fa-list"></i>
-                                    <span class="text-capitalize">List Page</span>
-                                </a>
-                            </li>
+                            // <li class="sidebar-list">
+                            //     <a href="/admin/list-page" class="sidebar-link @(Context.Request.Path == "/admin/list-page" ? "active" : "")">
+                            //         <i class="fa-solid fa-list"></i>
+                            //         <span class="text-capitalize">List Page</span>
+                            //     </a>
+                            // </li>
                         }
                     </ul>
                 </nav>

@@ -19,7 +19,7 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.ProductCategory.Where(p => p.Status == "Active" && !p.Deleted).AsNoTracking().ToList();
+                return _context.ProductCategory.Where(p => p.Status == "Active" && !p.Deleted).OrderByDescending(p => p.Position).AsNoTracking().ToList();
             }
             catch
             {

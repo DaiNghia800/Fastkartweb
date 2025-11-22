@@ -194,7 +194,7 @@ namespace Fastkart.Controllers.Admin
         public JsonResult Delete(int id)
         {
             _productService.DeleteProduct(id);
-            return Json(new {code = "success"});
+            return Json(new {code = 0});
         }
 
         [HttpPost("change-status/{id}")]

@@ -11,7 +11,7 @@ namespace Fastkart.Services.IServices
         void CreateRole(Roles role);
         Roles GetRole(int id);
         void EditRole(Roles role, int id);
-        void DeleteRole(int id);
+        int DeleteRole(int id);
         void UpdatePermission(JsonElement data);
         IEnumerable<object> GetPermissions();
         bool checkRoleName(int id, string name);

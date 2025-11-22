@@ -87,23 +87,32 @@ namespace Fastkart.Services
             }
         }
 
-        public void DeleteRole(int id)
+        public int DeleteRole(int id)
         {
             try
             {
-                var existRole = _context.Roles.SingleOrDefault(p => p.Uid == id && !p.Deleted);
-
-                if (existRole != null)
+                var user = _context.Users.Count(p => p.RoleUid == id && !p.Deleted);
+                if(user > 0)
                 {
-                    existRole.Deleted = true;
-                    existRole.UpdatedAt = DateTime.Now;
-                }
+                    return user;
+                } else
+                {
+                    var existRole = _context.Roles.SingleOrDefault(p => p.Uid == id && !p.Deleted);
 
-                _context.SaveChanges();
+                    if (existRole != null)
+                    {
+                        existRole.Deleted = true;
+                        existRole.UpdatedAt = DateTime.Now;
+                    }
+
+                    _context.SaveChanges();
+                    return 0;
+                }
+                    
             }
             catch (Exception ex)
             {
-                throw;
+                return -1;
             }
         }
 
