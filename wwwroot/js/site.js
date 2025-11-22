@@ -343,7 +343,8 @@ if (productList) {
                     })
                         .then(res => res.json())
                         .then(data => {
-                            if (data.code == "success") {
+                            console.log(data.code)
+                            if (data.code == 0) {
                                 Swal.fire({
                                     title: "Đã xóa!",
                                     text: "",
@@ -353,6 +354,14 @@ if (productList) {
                                 }).then(() => {
                                     location.reload();
                                 });
+                            } else if (data.code > 0) {
+                                Swal.fire({
+                                    title: data.message,
+                                    text: "",
+                                    icon: "error",
+                                    timer: 3000,
+                                    showConfirmButton: false
+                                })
                             }
                         })
                 }

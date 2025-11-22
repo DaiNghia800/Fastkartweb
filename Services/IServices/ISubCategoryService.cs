@@ -12,7 +12,7 @@ namespace Fastkart.Services.IServices
 
         ProductSubCategory GetSubCategory(int id);
         void EditSubCategory(ProductSubCategory subCategory, int id);
-        void DeleteSubCategory(int id);
+        int DeleteSubCategory(int id);
         void ChangeStatus(int id, string status);
         string ChangeMulti(JsonElement data);
         bool checkSubCategoryName(int subId, int categoryId, string name);
