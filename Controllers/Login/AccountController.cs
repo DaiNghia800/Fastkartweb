@@ -42,6 +42,11 @@ namespace Fastkart.Controllers.Login
         {
             return View("~/Views/Account/sign-up.cshtml", new RegisterViewModel());
         }
+        [Route("/access-denied")]
+        public IActionResult AccessDenied()
+        {
+            return View("~/Views/Account/AccessDenied.cshtml");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> LoginToSystem(string username, string password, bool rememberMe)
@@ -73,16 +78,16 @@ namespace Fastkart.Controllers.Login
                     };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authProperties);
                     string redirectUrl = (accounts.Role.RoleName == WebConstants.ROLE_CUSTOMER) ? "/" : "/admin/dashboard";
-                    return Json(new { status = WebConstants.SUCCESS, success = true, message = "Đăng nhập thành công", redirectUrl = redirectUrl });
+                    return Json(new { status = WebConstants.SUCCESS, success = true, message = "Log in successfully", redirectUrl = redirectUrl });
                 }
                 else
                 {
-                    return Json(new { status = WebConstants.ERROR, success = false, message = "Tài khoản hoặc mật khẩu không chính xác" });
+                    return Json(new { status = WebConstants.ERROR, success = false, message = "Incorrect account or password" });
                 }
             }
             catch (Exception ex)
             {
-                return Json(new { status = WebConstants.ERROR, success = false, message = "Lỗi đăng nhập", error = ex.ToString() });
+                return Json(new { status = WebConstants.ERROR, success = false, message = "Login error", error = ex.ToString() });
             }
         }
 
@@ -103,7 +108,7 @@ namespace Fastkart.Controllers.Login
                 {
                     status = WebConstants.ERROR,
                     success = false,
-                    message = "Dữ liệu không hợp lệ",
+                    message = "Invalid data",
                     errors = errors
                 });
             }
@@ -126,7 +131,7 @@ namespace Fastkart.Controllers.Login
             {
                 status = WebConstants.SUCCESS,
                 success = true,
-                message = "Đăng ký tài khoản thành công! Vui lòng đăng nhập."
+                message = "Account registration successful! Please log in."
             });
         }
 
@@ -149,7 +154,7 @@ namespace Fastkart.Controllers.Login
 
                 if (!authenticateResult.Succeeded)
                 {
-                    TempData["ErrorMessage"] = "Xác thực thất bại. Vui lòng thử lại.";
+                    TempData["ErrorMessage"] = "Authentication failed. Please try again.";
                     return RedirectToAction("Index");
                 }
 
@@ -177,7 +182,7 @@ namespace Fastkart.Controllers.Login
 
                 if (string.IsNullOrEmpty(email))
                 {
-                    TempData["ErrorMessage"] = "Không lấy được email. Vui lòng thử lại.";
+                    TempData["ErrorMessage"] = "Email could not be retrieved. Please try again.";
                     return RedirectToAction("Index");
                 }
 
@@ -191,7 +196,7 @@ namespace Fastkart.Controllers.Login
 
                 if (user == null || user.Role == null)
                 {
-                    TempData["ErrorMessage"] = "Không thể tạo tài khoản. Vui lòng liên hệ quản trị viên.";
+                    TempData["ErrorMessage"] = "Unable to create account. Please contact administrator.";
                     return RedirectToAction("Index");
                 }
 
@@ -232,7 +237,7 @@ namespace Fastkart.Controllers.Login
             catch (Exception ex)
             {
                 Console.WriteLine($"ERROR in ExternalLoginCallback: {ex.Message}");
-                TempData["ErrorMessage"] = "Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.";
+                TempData["ErrorMessage"] = "An error occurred while logging in. Please try again.";
                 return RedirectToAction("Index");
             }
         }
@@ -243,7 +248,7 @@ namespace Fastkart.Controllers.Login
         {
             if (string.IsNullOrEmpty(email))
             {
-                return Json(new { success = false, message = "Email không được để trống" });
+                return Json(new { success = false, message = "Email cannot be blank" });
             }
 
             var (success, message) = await _userService.GenerateOtpAsync(email);
@@ -264,7 +269,7 @@ namespace Fastkart.Controllers.Login
         {
             if (newPassword != confirmPassword)
             {
-                return Json(new { success = false, message = "Mật khẩu xác nhận không khớp" });
+                return Json(new { success = false, message = "Confirmation password does not match" });
             }
 
             var (success, message) = await _userService.ResetPasswordAsync(email, otpCode, newPassword);
