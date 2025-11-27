@@ -30,7 +30,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromHours(3);
         options.LoginPath = "/login";
         options.AccessDeniedPath = "/access-denied";
-        options.SlidingExpiration = true;
+        options.SlidingExpiration = false;
+        options.Cookie.HttpOnly = true;                    
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; 
+        options.Cookie.IsEssential = true;
     })
     .AddCookie("External", options =>
     {
