@@ -630,7 +630,7 @@ $(document).ready(function () {
         contentDiv.html(`
             <div class="text-center py-4">
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
         `);
@@ -644,7 +644,7 @@ $(document).ready(function () {
             error: function () {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi khi tải dữ liệu",
+                    title: "Error loading data",
                     text: res.message
                 });
             }
@@ -679,8 +679,8 @@ $(document).ready(function () {
             error: function () {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi khi tải dữ liệu",
-                    text: "Không thể tải form chỉnh sửa"
+                    title: "Error loading data",
+                    text: "Unable to load edit form"
                 });
             }
         });
@@ -702,8 +702,8 @@ $(document).ready(function () {
                 if (response.success) {
                     Swal.fire({
                         icon: "success",
-                        title: "Thành công",
-                        text: response.message || "Cập nhật thông tin thành công"
+                        title: "Success",
+                        text: response.message || "Information updated successfully"
                     }).then(() => {
                         $('#userEditModal').modal('hide');
                         location.reload(); // Reload trang để cập nhật dữ liệu
@@ -711,16 +711,16 @@ $(document).ready(function () {
                 } else {
                     Swal.fire({
                         icon: "error",
-                        title: "Lỗi",
-                        text: response.message || "Có lỗi xảy ra"
+                        title: "Error",
+                        text: response.message || "An error occurred"
                     });
                 }
             },
             error: function () {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
-                    text: "Không thể cập nhật thông tin"
+                    title: "Error",
+                    text: "Unable to update information"
                 });
             }
         });
@@ -743,8 +743,8 @@ function viewMyProfile(userId){
             console.error('Error loading profile:', error);
             Swal.fire({
                 icon: "error",
-                title: "Lỗi khi tải dữ liệu",
-                text: "Không thể tải thông tin cá nhân"
+                title: "Error loading data",
+                text: "Unable to load personal information"
             });
         }
     });
@@ -765,7 +765,7 @@ $(document).ready(function () {
                     $('#confirmPassword').addClass('is-invalid');
                     const errorSpan = $('#confirmPassword').next('.text-danger');
                     if (errorSpan.length) {
-                        errorSpan.text('Mật khẩu xác nhận không khớp');
+                        errorSpan.text('Confirm password does not match');
                     }
                 } else {
                     $('#confirmPassword').removeClass('is-invalid');
@@ -798,7 +798,7 @@ $(document).ready(function () {
             if (email && !emailRegex.test(email)) {
                 $(this).addClass('is-invalid');
                 if (errorSpan.length) {
-                    errorSpan.text('Email không đúng định dạng');
+                    errorSpan.text('Email is not in correct format.');
                 }
             } else {
                 $(this).removeClass('is-invalid');
@@ -816,8 +816,8 @@ $(document).ready(function () {
                 if (file.size > 5 * 1024 * 1024) {
                     Swal.fire({
                         icon: "warning",
-                        title: "File quá lớn",
-                        text: "Kích thước file không được vượt quá 5MB"
+                        title: "File is too large",
+                        text: "File size must not exceed 5MB"
                     });
                     $(this).val('');
                     return;
@@ -828,8 +828,8 @@ $(document).ready(function () {
                 if (!allowedTypes.includes(file.type)) {
                     Swal.fire({
                         icon: "warning",
-                        title: "Định dạng không hợp lệ",
-                        text: "Chỉ chấp nhận file ảnh (JPG, PNG, GIF)"
+                        title: "Invalid format",
+                        text: "Only image files (JPG, PNG, GIF) are accepted."
                     });
                     $(this).val('');
                     return;
@@ -858,8 +858,8 @@ $(document).ready(function () {
                 if (!confirmPassword || confirmPassword.length === 0) {
                     Swal.fire({
                         icon: "warning",
-                        title: "Thiếu xác nhận mật khẩu",
-                        text: "Vui lòng nhập xác nhận mật khẩu khi thay đổi mật khẩu."
+                        title: "Missing password confirmation",
+                        text: "Please enter password confirmation when changing password."
                     });
                     return false;
                 }
@@ -868,8 +868,8 @@ $(document).ready(function () {
                 if (password !== confirmPassword) {
                     Swal.fire({
                         icon: "warning",
-                        title: "Mật khẩu không khớp",
-                        text: "Mật khẩu và xác nhận mật khẩu phải giống nhau."
+                        title: "Passwords do not match",
+                        text: "Password and confirm password must be the same."
                     });
                     return false;
                 }
@@ -879,8 +879,8 @@ $(document).ready(function () {
                 if (!passwordRegex.test(password)) {
                     Swal.fire({
                         icon: "warning",
-                        title: "Mật khẩu không đủ mạnh",
-                        text: "Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt."
+                        title: "Password is not strong enough",
+                        text: "Password must be at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character."
                     });
                     return false;
                 }
@@ -888,8 +888,8 @@ $(document).ready(function () {
 
             // Show loading
             Swal.fire({
-                title: 'Đang cập nhật...',
-                text: 'Vui lòng chờ trong giây lát.',
+                title: 'Updating...',
+                text: 'Please wait a moment.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -914,8 +914,8 @@ $(document).ready(function () {
                     if (response.success) {
                         Swal.fire({
                             icon: "success",
-                            title: "Thành công",
-                            text: response.message || "Cập nhật thông tin thành công!",
+                            title: "Success",
+                            text: response.message || "Information updated successfully!",
                             timer: 2000,
                             showConfirmButton: false
                         }).then(() => {
@@ -924,8 +924,8 @@ $(document).ready(function () {
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "Lỗi",
-                            text: response.message || "Cập nhật thất bại"
+                            title: "Error",
+                            text: response.message || "Update failed"
                         });
                     }
                 },
@@ -935,7 +935,7 @@ $(document).ready(function () {
                     console.error('Status:', xhr.status);
                     console.error('Response:', xhr.responseText);
 
-                    let errorMessage = "Không thể cập nhật thông tin. Vui lòng thử lại.";
+                    let errorMessage = "The information could not be updated. Please try again.";
 
                     // Parse error từ server
                     try {
@@ -949,7 +949,7 @@ $(document).ready(function () {
 
                     Swal.fire({
                         icon: "error",
-                        title: "Lỗi kết nối",
+                        title: "Connection error",
                         text: errorMessage
                     });
                 }

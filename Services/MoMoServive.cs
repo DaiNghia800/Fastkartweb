@@ -21,8 +21,8 @@ namespace Fastkart.Services
             var secretKey = _config["MoMo:SecretKey"];
 
             var requestId = Guid.NewGuid().ToString();
-            var redirectUrl = "https://overgenerous-unslimly-brianna.ngrok-free.dev/payment/return"; // tạm thời test
-            var ipnUrl = "https://overgenerous-unslimly-brianna.ngrok-free.dev/payment/notify"; // URL nhận kết quả giao dịch
+            var redirectUrl = " https://jalousied-ustulate-hoa.ngrok-free.dev/payment/return"; // tạm thời test
+            var ipnUrl = " https://jalousied-ustulate-hoa.ngrok-free.dev/payment/notify"; // URL nhận kết quả giao dịch
             var requestType = "captureWallet";
 
             // Tạo raw signature

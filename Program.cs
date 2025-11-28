@@ -1,10 +1,13 @@
 ﻿using Fastkart.Helpers;
+using Fastkart.Middleware;
 using Fastkart.Models.EF;
 using Fastkart.Models.Entities;
 using Fastkart.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Fastkart.Services.IServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +29,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.ExpireTimeSpan = TimeSpan.FromHours(3);
         options.LoginPath = "/login";
+        options.AccessDeniedPath = "/access-denied";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.IsEssential = true;
+        options.SlidingExpiration = false;
     })
     .AddCookie("External", options =>
     {
@@ -105,6 +113,10 @@ builder.Services.AddScoped<IBlogService, BlogService>();
 // (KHỐI AddSession BỊ TRÙNG LẶP Ở ĐÂY ĐÃ ĐƯỢC XÓA)
 
 
+
+
+
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -117,6 +129,15 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+var defaultCulture = new CultureInfo("en-US");
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(defaultCulture),
+    SupportedCultures = new List<CultureInfo> { defaultCulture },
+    SupportedUICultures = new List<CultureInfo> { defaultCulture }
+};
+
+app.UseRequestLocalization(localizationOptions);
 
 // Configure the HTTP request pipeline.
 
@@ -139,6 +160,8 @@ app.UseHttpMethodOverride();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<AdminAccessMiddleware>();
 
 // Kích hoạt Session (đã được đăng ký ở trên)
 app.UseSession();

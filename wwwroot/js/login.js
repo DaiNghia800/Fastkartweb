@@ -5,8 +5,8 @@
 function loginAccount(userInput) {
     userInput.__RequestVerificationToken = token();
     Swal.fire({
-        title: 'Đang đăng nhập...',
-        text: 'Vui lòng chờ trong giây lát.',
+        title: 'Logging in...',
+        text: 'Please wait a moment.',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -22,7 +22,7 @@ function loginAccount(userInput) {
             if (res.status === 'success' && res.success === true) {
                 Swal.fire({
                     icon: "success",
-                    title: "Đăng nhập thành công!",
+                    title: "Login Successful!",
                     text: res.message,
                     timer: 1500,
                     showConfirmButton: false
@@ -33,7 +33,7 @@ function loginAccount(userInput) {
             else {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi đăng nhập",
+                    title: "Login Failed",
                     text: res.message
                 });
             }
@@ -43,8 +43,8 @@ function loginAccount(userInput) {
             console.error('Login error:', xhr.responseText);
             Swal.fire({
                 icon: "error",
-                title: "Lỗi kết nối",
-                text: "Không thể kết nối đến server"
+                title: "Connection Error",
+                text: "Unable to connect to server"
             });
         }
     });
@@ -53,8 +53,8 @@ function loginAccount(userInput) {
 function signupAccount(userInput) {
     userInput.__RequestVerificationToken = token();
     Swal.fire({
-        title: 'Đang đăng ký...',
-        text: 'Vui lòng chờ trong giây lát.',
+        title: 'Signing up...',
+        text: 'Please wait a moment.',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -70,7 +70,7 @@ function signupAccount(userInput) {
             if (res.success) {
                 Swal.fire({
                     icon: "success",
-                    title: "Đăng ký thành công!",
+                    title: "Sign Up Successful!",
                     text: res.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -84,7 +84,7 @@ function signupAccount(userInput) {
                 }
                 Swal.fire({
                     icon: "error",
-                    title: "Đăng ký thất bại",
+                    title: "Sign Up Failed",
                     text: errorMessage
                 });
             }
@@ -94,19 +94,19 @@ function signupAccount(userInput) {
             console.error('Signup error:', xhr.responseText);
             Swal.fire({
                 icon: "error",
-                title: "Lỗi kết nối",
-                text: "Không thể kết nối đến server. Vui lòng thử lại."
+                title: "Connection Error",
+                text: "Unable to connect to server. Please try again."
             });
         }
     });
 }
 
-// Gửi OTP
+// Send OTP
 function sendOtp(email) {
     var tokenValue = token();
     Swal.fire({
-        title: 'Đang gửi OTP...',
-        text: 'Vui lòng chờ trong giây lát.',
+        title: 'Sending OTP...',
+        text: 'Please wait a moment.',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -126,7 +126,7 @@ function sendOtp(email) {
             if (res.success) {
                 Swal.fire({
                     icon: "success",
-                    title: "Thành công",
+                    title: "Success",
                     text: res.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -137,13 +137,13 @@ function sendOtp(email) {
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
+                    title: "Error",
                     text: res.message
                 });
             }
         },
         error: function (xhr, status, error) {
-        
+
             try {
                 var errorResponse = JSON.parse(xhr.responseText);
                 console.log('Parsed Error Response:', errorResponse);
@@ -152,22 +152,21 @@ function sendOtp(email) {
             }
 
             Swal.close();
-            // Hiển thị thông tin chi tiết lỗi
-            var errorMessage = "Không thể kết nối đến server";
+            var errorMessage = "Unable to connect to server";
             Swal.fire({
                 icon: "error",
-                title: "Lỗi kết nối",
+                title: "Connection Error",
                 text: errorMessage
             });
         }
     });
 }
 
-// Xác thực OTP
+// Verify OTP
 function verifyOtp(email, otpCode) {
     Swal.fire({
-        title: 'Đang xác thực OTP...',
-        text: 'Vui lòng chờ trong giây lát.',
+        title: 'Verifying OTP...',
+        text: 'Please wait a moment.',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -188,7 +187,7 @@ function verifyOtp(email, otpCode) {
             if (res.success) {
                 Swal.fire({
                     icon: "success",
-                    title: "Thành công",
+                    title: "Success",
                     text: res.message,
                     timer: 1500,
                     showConfirmButton: false
@@ -199,7 +198,7 @@ function verifyOtp(email, otpCode) {
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
+                    title: "Error",
                     text: res.message
                 });
             }
@@ -209,8 +208,8 @@ function verifyOtp(email, otpCode) {
             console.error('Verify OTP error:', xhr.responseText);
             Swal.fire({
                 icon: "error",
-                title: "Lỗi kết nối",
-                text: "Không thể kết nối đến server"
+                title: "Connection Error",
+                text: "Unable to connect to server"
             });
         }
     });
@@ -219,8 +218,8 @@ function verifyOtp(email, otpCode) {
 // Reset password
 function resetPassword(email, otpCode, newPassword, confirmPassword) {
     Swal.fire({
-        title: 'Đang đặt lại mật khẩu...',
-        text: 'Vui lòng chờ trong giây lát.',
+        title: 'Resetting password...',
+        text: 'Please wait a moment.',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -243,7 +242,7 @@ function resetPassword(email, otpCode, newPassword, confirmPassword) {
             if (res.success) {
                 Swal.fire({
                     icon: "success",
-                    title: "Thành công",
+                    title: "Success",
                     text: res.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -255,7 +254,7 @@ function resetPassword(email, otpCode, newPassword, confirmPassword) {
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
+                    title: "Error",
                     text: res.message
                 });
             }
@@ -265,29 +264,29 @@ function resetPassword(email, otpCode, newPassword, confirmPassword) {
             console.error('Reset password error:', xhr.responseText);
             Swal.fire({
                 icon: "error",
-                title: "Lỗi kết nối",
-                text: "Không thể kết nối đến server"
+                title: "Connection Error",
+                text: "Unable to connect to server"
             });
         }
     });
 }
 
-// Xử lý OTP inputs
+// Handle OTP inputs
 function initOtpInputs() {
     const otpInputs = $('.otp-input');
 
-    // Xử lý input
+    // Handle input
     otpInputs.on('input', function () {
         const input = $(this);
         const value = input.val();
 
-        // Chỉ cho phép nhập số
+        // Only allow numbers
         if (!/^\d*$/.test(value)) {
             input.val('');
             return;
         }
 
-        // Tự động focus sang ô tiếp theo
+        // Auto focus to next field
         if (value.length === 1) {
             const nextIndex = parseInt(input.attr('data-index')) + 1;
             if (nextIndex < 6) {
@@ -295,11 +294,11 @@ function initOtpInputs() {
             }
         }
 
-        // Cập nhật hidden input
+        // Update hidden input
         updateOtpCode();
     });
 
-    // Xử lý backspace
+    // Handle backspace
     otpInputs.on('keydown', function (e) {
         if (e.key === 'Backspace' && $(this).val() === '') {
             const prevIndex = parseInt($(this).attr('data-index')) - 1;
@@ -309,7 +308,7 @@ function initOtpInputs() {
         }
     });
 
-    // Xử lý paste
+    // Handle paste
     otpInputs.first().on('paste', function (e) {
         e.preventDefault();
         const pastedData = e.originalEvent.clipboardData.getData('text');
@@ -333,7 +332,7 @@ function initOtpInputs() {
     }
 }
 
-// Countdown timer cho resend OTP
+// Countdown timer for resend OTP
 let countdownInterval = null;
 
 function startResendCountdown(seconds) {
@@ -346,7 +345,7 @@ function startResendCountdown(seconds) {
         'opacity': '0.5'
     });
 
-    // Clear interval cũ nếu có
+    // Clear old interval if exists
     if (countdownInterval) {
         clearInterval(countdownInterval);
     }
@@ -385,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         console.log('Signup form submitted');
 
-        // Tạo form data để gửi lên server
+        // Create form data to send to server
         const formData = {
             FullName: $('input[name="FullName"]').val().trim(),
             Email: $('input[name="Email"]').val().trim(),
@@ -408,8 +407,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!email) {
             Swal.fire({
                 icon: "warning",
-                title: "Thông báo",
-                text: "Vui lòng nhập email"
+                title: "Notice",
+                text: "Please enter your email"
             });
             return false;
         }
@@ -418,25 +417,25 @@ document.addEventListener('DOMContentLoaded', function () {
         return false;
     });
 
-    // Khởi tạo OTP inputs nếu đang ở trang OTP
+    // Initialize OTP inputs if on OTP page
     if ($('#verify_otp_form').length > 0) {
-        // Hiển thị email đã mask
+        // Display masked email
         const email = sessionStorage.getItem('resetEmail');
         if (email) {
             const maskedEmail = email.substring(0, 3) + '*****' + email.substring(email.indexOf('@'));
             $('#masked-email').text(maskedEmail);
         }
 
-        // Khởi tạo OTP inputs
+        // Initialize OTP inputs
         initOtpInputs();
 
-        // Bắt đầu countdown
+        // Start countdown
         startResendCountdown(60);
 
-        // Focus vào ô đầu tiên
+        // Focus on first field
         $('.otp-input').first().focus();
 
-        // Xử lý submit form OTP
+        // Handle OTP form submit
         $('#verify_otp_form').off('submit').on('submit', function (e) {
             e.preventDefault();
             console.log('Verify OTP form submitted');
@@ -447,8 +446,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!email) {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
-                    text: "Không tìm thấy email. Vui lòng thử lại từ đầu."
+                    title: "Error",
+                    text: "Email not found. Please try again from the beginning."
                 }).then(() => {
                     window.location.href = '/forgot-password';
                 });
@@ -458,8 +457,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!otpCode || otpCode.length !== 6) {
                 Swal.fire({
                     icon: "warning",
-                    title: "Thông báo",
-                    text: "Vui lòng nhập đầy đủ mã OTP (6 chữ số)"
+                    title: "Notice",
+                    text: "Please enter the complete OTP code (6 digits)"
                 });
                 return false;
             }
@@ -481,8 +480,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!email) {
                 Swal.fire({
                     icon: "error",
-                    title: "Lỗi",
-                    text: "Không tìm thấy email. Vui lòng thử lại từ đầu."
+                    title: "Error",
+                    text: "Email not found. Please try again from the beginning."
                 }).then(() => {
                     window.location.href = '/forgot-password';
                 });
@@ -490,8 +489,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             Swal.fire({
-                title: 'Đang gửi lại OTP...',
-                text: 'Vui lòng chờ trong giây lát.',
+                title: 'Resending OTP...',
+                text: 'Please wait a moment.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -511,8 +510,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (res.success) {
                         Swal.fire({
                             icon: "success",
-                            title: "Thành công",
-                            text: "Mã OTP mới đã được gửi đến email của bạn",
+                            title: "Success",
+                            text: "A new OTP code has been sent to your email",
                             timer: 2000,
                             showConfirmButton: false
                         });
@@ -525,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         Swal.fire({
                             icon: "error",
-                            title: "Lỗi",
+                            title: "Error",
                             text: res.message
                         });
                     }
@@ -535,8 +534,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Resend OTP error:', xhr.responseText);
                     Swal.fire({
                         icon: "error",
-                        title: "Lỗi kết nối",
-                        text: "Không thể kết nối đến server"
+                        title: "Connection Error",
+                        text: "Unable to connect to server"
                     });
                 }
             });
@@ -556,8 +555,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!email || !otpCode) {
             Swal.fire({
                 icon: "error",
-                title: "Lỗi",
-                text: "Phiên làm việc đã hết hạn. Vui lòng thử lại từ đầu."
+                title: "Error",
+                text: "Session has expired. Please try again from the beginning."
             }).then(() => {
                 window.location.href = '/forgot-password';
             });
@@ -567,8 +566,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!newPassword || !confirmPassword) {
             Swal.fire({
                 icon: "warning",
-                title: "Thông báo",
-                text: "Vui lòng nhập đầy đủ thông tin"
+                title: "Notice",
+                text: "Please fill in all fields"
             });
             return false;
         }
@@ -576,8 +575,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (newPassword !== confirmPassword) {
             Swal.fire({
                 icon: "warning",
-                title: "Thông báo",
-                text: "Mật khẩu xác nhận không khớp"
+                title: "Notice",
+                text: "Passwords do not match"
             });
             return false;
         }
@@ -615,17 +614,17 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!logoutBtn) return;
 
     logoutBtn.addEventListener("click", function (e) {
-        e.preventDefault(); // Ngăn chuyển trang ngay
+        e.preventDefault();
 
         Swal.fire({
-            title: 'Bạn có chắc muốn đăng xuất?',
-            text: "Phiên làm việc của bạn sẽ kết thúc.",
+            title: 'Are you sure you want to logout?',
+            text: "Your session will end.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Đăng xuất',
-            cancelButtonText: 'Hủy'
+            confirmButtonText: 'Log out',
+            cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = logoutBtn.getAttribute("href");
@@ -634,6 +633,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 //end logout
+
 //login for user
 $(document).ready(function () {
     // Toggle profile dropdown
@@ -654,14 +654,14 @@ $(document).ready(function () {
         e.preventDefault();
 
         Swal.fire({
-            title: 'Bạn có chắc muốn đăng xuất?',
-            text: "Phiên làm việc của bạn sẽ kết thúc.",
+            title: 'Are you sure you want to logout?',
+            text: "Your session will end.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Đăng xuất',
-            cancelButtonText: 'Hủy'
+            confirmButtonText: 'Log out',
+            cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = $(this).attr('href');
