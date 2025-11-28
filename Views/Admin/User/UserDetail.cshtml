@@ -23,42 +23,42 @@
     <div class="col-md-8">
         <div class="user-detail-info px-3">
 
-            <h6 class="text-primary fw-bold mb-3 pt-2">Thông tin liên hệ</h6>
+            <h6 class="text-primary fw-bold mb-3 pt-2">Contact information</h6>
             <div class="mb-3">
                 <label class="fw-bold d-block">Email:</label>
                 <span class="text-muted">@Model.Email</span>
             </div>
             <div class="mb-3">
-                <label class="fw-bold d-block">Số điện thoại:</label>
+                <label class="fw-bold d-block">Phone number:</label>
                 <span class="text-muted">@Model.PhoneNumber</span>
             </div>
             <div class="mb-3">
-                <label class="fw-bold d-block">Địa chỉ:</label>
+                <label class="fw-bold d-block">Address:</label>
                 <span class="text-muted">@Model.Address</span>
             </div>
 
             <hr>
 
-            <h6 class="text-primary fw-bold mb-3">Thông tin hệ thống</h6>
+            <h6 class="text-primary fw-bold mb-3">System information</h6>
             <div class="row">
                 <div class="col-sm-6 mb-3">
-                    <label class="fw-bold d-block">Ngày tạo:</label>
+                    <label class="fw-bold d-block">Creation date:</label>
                     <span class="text-muted">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
                 </div>
                 <div class="col-sm-6 mb-3">
-                    <label class="fw-bold d-block">Tạo bởi:</label>
+                    <label class="fw-bold d-block">Created by:</label>
                     <span class="text-muted">
                         @(string.IsNullOrEmpty(Model.CreatedBy) ? "N/A" : Model.CreatedBy)
                     </span>
                 </div>
                 <div class="col-sm-6 mb-3">
-                    <label class="fw-bold d-block">Cập nhật (lần cuối):</label>
+                    <label class="fw-bold d-block">Updated (last):</label>
                     <span class="text-muted">
-                        @(Model.UpdatedAt == Model.CreatedAt ? "Chưa cập nhật" : Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm"))
+                        @(Model.UpdatedAt == Model.CreatedAt ? "Not updated yet" : Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm"))
                     </span>
                 </div>
                 <div class="col-sm-6 mb-3">
-                    <label class="fw-bold d-block">Cập nhật (bởi):</label>
+                    <label class="fw-bold d-block">Updated (by):</label>
                     <span class="text-muted">
                         @(string.IsNullOrEmpty(Model.UpdatedBy) ? "N/A" : Model.UpdatedBy)
                     </span>
