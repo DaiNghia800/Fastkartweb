@@ -1,7 +1,7 @@
 ﻿@using System.Text.Json
 @model Fastkart.Models.Entities.Order
 @{
-    ViewData["Title"] = "Kết quả đặt hàng";
+    ViewData["Title"] = "Kết quả VNDặt hàng";
     Layout = "_Layout";
 }
 
@@ -12,7 +12,7 @@
             <img src="https://themes.pixelstrap.com/fastkart/email-templete/images/order-success-poster.png" alt="Delivery Scooter">
 
             <h2 style="@(ViewBag.Result != null)">
-                @(ViewBag.Result ?? "Đã xảy ra lỗi")
+                @(ViewBag.Result ?? "VNDã xảy ra lỗi")
             </h2>
             <p>
                 @ViewBag.Message <br />
@@ -59,7 +59,7 @@
                                     <strong>@(item.Product?.ProductName ?? "Không tìm thấy tên")</strong>
                                     <span>SL: @item.Quantity</span>
                                 </div>
-                                <span class="ty-item-price">@item.PriceAtPurchase.ToString("N0") ₫</span>
+                                <span class="ty-item-price">@item.PriceAtPurchase.ToString("N0") VND</span>
                             </li>
                         }
                     </ul>
@@ -70,7 +70,7 @@
                     <div class="ty-summary-details">
                         <div class="ty-summary-total">
                             <span>Order Summary Total</span>
-                            <span>@Model.TotalAmount.ToString("N0") ₫</span>
+                            <span>@Model.TotalAmount.ToString("N0") VND</span>
                         </div>
                     </div>
                 </div>

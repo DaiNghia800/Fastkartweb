@@ -1,4 +1,6 @@
-﻿@{
+﻿@using System.Text.Json
+@model Fastkart.Models.ViewModels.DashboardViewModel
+@{
     Layout = "_LayoutAdmin";
     ViewData["title"] = "Dashboard";
 }
@@ -11,10 +13,10 @@
                     <div class="media-body">
                         <span>Total Revenue</span>
                         <h4>
-                            $6659
-                            <span>
+                            @Model.TotalRevenue.ToString("N0") VND 
+                            <span class="font-success">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                                8.5%
+                                +10%
                             </span>
                         </h4>
                     </div>
@@ -24,16 +26,17 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-6 col-xxl-3 col-lg-6">
             <div class="box-total box-order card-hover">
                 <div class="box-contain">
                     <div class="media-body">
                         <span>Total Orders</span>
                         <h4>
-                            $6659
-                            <span>
+                            @Model.TotalOrders
+                            <span class="font-danger">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
-                                8.5%
+                                -5%
                             </span>
                         </h4>
                     </div>
@@ -43,13 +46,14 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-6 col-xxl-3 col-lg-6">
             <div class="box-total box-product card-hover">
                 <div class="box-contain">
                     <div class="media-body">
                         <span>Total Products</span>
                         <h4>
-                            $6659
+                            @Model.TotalProducts
                             <span>
                                 Add new
                             </span>
@@ -61,16 +65,17 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-6 col-xxl-3 col-lg-6">
             <div class="box-total box-custom card-hover">
                 <div class="box-contain">
                     <div class="media-body">
                         <span>Total Customers</span>
                         <h4>
-                            46K
-                            <span>
+                            @Model.TotalCustomers
+                            <span class="font-success">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-down"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
-                                8.5%
+                                +15%
                             </span>
                         </h4>
                     </div>
@@ -80,582 +85,263 @@
                 </div>
             </div>
         </div>
+
         <div class="col-12">
             <div class="box-category card-hover">
                 <div class="box-title mb-3">
-                    <h4 class="text-capitalize">Category</h4>
+                    <h4 class="text-capitalize">Categories</h4>
                 </div>
                 <div class="slide-dashboard-category">
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/cup.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/frozen.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/milk.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/breakfast.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/vegetable.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/cup.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/frozen.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/milk.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/breakfast.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/vegetable.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/cup.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/frozen.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/milk.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/breakfast.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
-                    <div class="">
-                        <a href="#" class="category-img">
-                            <img src="/images/vegetable.svg" alt="Alternate Text" class="img-fluid" />
-                        </a>
-                        <a href="#" class="category-name">
-                            <h6>Beverages</h6>
-                        </a>
-                    </div>
+                    @if (Model.Categories != null)
+                    {
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <div>
+                                <a href="#" class="category-img">
+                                    @{
+                                        // 1. Giải mã JSON từ cột Thumbnail
+                                        var thumbnails = string.IsNullOrWhiteSpace(cat.Thumbnail)
+                                        ? new List<string>()
+                                        : JsonSerializer.Deserialize<List<string>>(cat.Thumbnail);
+
+                                        // 2. Lấy ảnh đầu tiên trong list
+                                        var firstImg = thumbnails != null ? thumbnails.FirstOrDefault() : null;
+
+                                        // 3. Kiểm tra nếu có ảnh thì dùng, không thì dùng ảnh mặc định
+                                        var displayImg = !string.IsNullOrEmpty(firstImg) ? firstImg : "/images/placeholder.png";
+                                    }
+
+                                    <img src="@displayImg" alt="@cat.CategoryName" class="img-fluid" style="width:50px; height:50px; object-fit:contain;" />
+                                </a>
+                                <a href="#" class="category-name">
+                                    <h6>@cat.CategoryName</h6>
+                                </a>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
+
         <div class="col-6">
             <div class="box-report card-hover">
                 <div class="box-title mb-3">
-                    <h4 class="text-capitalize">Category</h4>
+                    <h4 class="text-capitalize">Revenue Report</h4>
                 </div>
                 <div id="report-chart"></div>
             </div>
         </div>
+
         <div class="col-6">
             <div class="box-best-selling card-hover">
                 <div class="box-title-border">
                     <div class="title">
-                        <h4>Best Selling Product</h4>
-                    </div>
-                    <div class="box-dropdown d-flex align-items-center">
-                        <span>Short by:</span>
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" id="dropdownBestSelling" data-bs-toggle="dropdown" aria-expanded="false">
-                                Today
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownBestSelling">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="best-selling-table w-img table mb-0">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="best-product-box">
-                                        <div class="product-img">
-                                            <img src="/images/1.png" alt="Alternate Text" class="img-fluid" />
-                                        </div>
-                                        <div class="product-name">
-                                            <h5>Aata Buscuit</h5>
-                                            <h6>26-08-2022</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$29.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Orders</h6>
-                                        <h5>62</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Stock</h6>
-                                        <h5>510</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Amount</h6>
-                                        <h5>$1,798</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="best-product-box">
-                                        <div class="product-img">
-                                            <img src="/images/1.png" alt="Alternate Text" class="img-fluid" />
-                                        </div>
-                                        <div class="product-name">
-                                            <h5>Aata Buscuit</h5>
-                                            <h6>26-08-2022</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$29.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Orders</h6>
-                                        <h5>62</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Stock</h6>
-                                        <h5>510</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Amount</h6>
-                                        <h5>$1,798</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="best-product-box">
-                                        <div class="product-img">
-                                            <img src="/images/1.png" alt="Alternate Text" class="img-fluid" />
-                                        </div>
-                                        <div class="product-name">
-                                            <h5>Aata Buscuit</h5>
-                                            <h6>26-08-2022</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$29.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Orders</h6>
-                                        <h5>62</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Stock</h6>
-                                        <h5>510</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Amount</h6>
-                                        <h5>$1,798</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="box-best-selling card-hover">
-                <div class="box-title-border">
-                    <div class="title">
-                        <h4>Recent orders</h4>
-                    </div>
-                    <div class="box-dropdown d-flex align-items-center">
-                        <span>Short by:</span>
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" id="dropdownBestSelling" data-bs-toggle="dropdown" aria-expanded="false">
-                                Today
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownBestSelling">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
+                        <h4>Recent Orders</h4>
                     </div>
                 </div>
                 <div class="table-responsive">
                     <table class="best-selling-table table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Aata Buscuit</h6>
-                                        <h5>#64548</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Date Placed</h6>
-                                        <h5>5/1/22</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$250.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Order Status</h6>
-                                        <h5>Completed</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Payment</h6>
-                                        <h5 class="text-danger">Unpaid</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Aata Buscuit</h6>
-                                        <h5>#64548</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Date Placed</h6>
-                                        <h5>5/1/22</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$250.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Order Status</h6>
-                                        <h5>Completed</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Payment</h6>
-                                        <h5 class="text-danger">Unpaid</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Aata Buscuit</h6>
-                                        <h5>#64548</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Date Placed</h6>
-                                        <h5>5/1/22</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$250.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Order Status</h6>
-                                        <h5>Completed</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Payment</h6>
-                                        <h5 class="font-primary">Paid</h5>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Aata Buscuit</h6>
-                                        <h5>#64548</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Date Placed</h6>
-                                        <h5>5/1/22</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Price</h6>
-                                        <h5>$250.00</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Order Status</h6>
-                                        <h5>Completed</h5>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="product-detail-box">
-                                        <h6>Payment</h6>
-                                        <h5 class="text-danger">Unpaid</h5>
-                                    </div>
-                                </td>
-                            </tr>
+                            @if (Model.RecentOrders != null)
+                            {
+                                foreach (var order in Model.RecentOrders)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>#@order.Uid</h6>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>@order.OrderDate.ToString("dd/MM/yyyy")</h6>
+                                                <h5>@order.OrderDate.ToString("HH:mm")</h5>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h5 style="color: #0da487;">@order.TotalAmount.ToString("#,##0") VND</h5>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                @if (order.Status == "Completed" || order.Status == "Delivered")
+                                                {
+                                                    <h5 class="text-success">@order.Status</h5>
+                                                }
+                                                else if (order.Status == "Cancelled")
+                                                {
+                                                    <h5 class="text-danger">@order.Status</h5>
+                                                }
+                                                else
+                                                {
+                                                    <h5 class="text-warning">@order.Status</h5>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6>@order.PaymentMethod</h6>
+                                                @if (order.Status == "Paid" || order.Status == "Completed")
+                                                {
+                                                    <h5 class="text-success">Paid</h5>
+                                                }
+                                                else
+                                                {
+                                                    <h5 class="text-danger">Unpaid</h5>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
         <div class="col-6">
             <div class="box-earning card-hover">
                 <div class="box-title mb-3">
-                    <h4 class="text-capitalize">earning</h4>
+                    <h4 class="text-capitalize">Earning</h4>
                 </div>
                 <div id="earning-chart"></div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="box-transaction card-hover">
-                <div class="box-title mb-3">
-                    <h4 class="text-capitalize">transactions</h4>
-                </div>
-                <div class="table-responsive transaction-table border-0">
-                    <table class="table mb-0">
-                        <tbody>
-                            <tr>
-                                <td class="td-color-1">
-                                    <div class="transaction-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598ZM5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879L5 4.60434Z"></path></svg>
-                                    </div>
-                                    <div class="transaction-name">
-                                        <h6 class="text-capitalize">Wallets</h6>
-                                        <p class="text-capitalize">Starbucks</p>
-                                    </div>
-                                </td>
-                                <td class="lost">-$74</td>
-                            </tr>
-                            <tr>
-                                <td class="td-color-2">
-                                    <div class="transaction-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z"></path></svg>
-                                    </div>
-                                    <div class="transaction-name">
-                                        <h6 class="text-capitalize">Bank Transfer</h6>
-                                        <p class="text-capitalize">Add Money</p>
-                                    </div>
-                                </td>
-                                <td class="success">-$74</td>
-                            </tr>
-                            <tr>
-                                <td class="td-color-3">
-                                    <div class="transaction-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.3788 15.1057C20.9258 11.4421 19.5373 7.11431 16.0042 5.0745C13.4511 3.60046 10.4232 3.69365 8.03452 5.0556L7.04216 3.31879C10.028 1.61639 13.8128 1.4999 17.0042 3.34245C21.4949 5.93513 23.2139 11.4848 21.1217 16.112L22.4635 16.8867L18.2984 19.1008L18.1334 14.3867L19.3788 15.1057ZM4.62961 8.89968C3.08263 12.5633 4.47116 16.8911 8.00421 18.9309C10.5573 20.4049 13.5851 20.3118 15.9737 18.9499L16.9661 20.6867C13.9803 22.389 10.1956 22.5055 7.00421 20.663C2.51357 18.0703 0.794565 12.5206 2.88672 7.89342L1.54492 7.11873L5.70999 4.90463L5.87505 9.61873L4.62961 8.89968ZM8.50421 14.0027H14.0042C14.2804 14.0027 14.5042 13.7788 14.5042 13.5027C14.5042 13.2266 14.2804 13.0027 14.0042 13.0027H10.0042C8.6235 13.0027 7.50421 11.8834 7.50421 10.5027C7.50421 9.122 8.6235 8.00271 10.0042 8.00271H11.0042V7.00271H13.0042V8.00271H15.5042V10.0027H10.0042C9.72807 10.0027 9.50421 10.2266 9.50421 10.5027C9.50421 10.7788 9.72807 11.0027 10.0042 11.0027H14.0042C15.3849 11.0027 16.5042 12.122 16.5042 13.5027C16.5042 14.8834 15.3849 16.0027 14.0042 16.0027H13.0042V17.0027H11.0042V16.0027H8.50421V14.0027Z"></path></svg>
-                                    </div>
-                                    <div class="transaction-name">
-                                        <h6 class="text-capitalize">Paypal</h6>
-                                        <p class="text-capitalize">-$50</p>
-                                    </div>
-                                </td>
-                                <td class="lost">-$74</td>
-                            </tr>
-                            <tr>
-                                <td class="td-color-4">
-                                    <div class="transaction-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.00488 2.99979H21.0049C21.5572 2.99979 22.0049 3.4475 22.0049 3.99979V19.9998C22.0049 20.5521 21.5572 20.9998 21.0049 20.9998H3.00488C2.4526 20.9998 2.00488 20.5521 2.00488 19.9998V3.99979C2.00488 3.4475 2.4526 2.99979 3.00488 2.99979ZM20.0049 10.9998H4.00488V18.9998H20.0049V10.9998ZM20.0049 8.99979V4.99979H4.00488V8.99979H20.0049ZM14.0049 14.9998H18.0049V16.9998H14.0049V14.9998Z"></path></svg>
-                                    </div>
-                                    <div class="transaction-name">
-                                        <h6 class="text-capitalize">Mastercard</h6>
-                                        <p class="text-capitalize">Ordered Food</p>
-                                    </div>
-                                </td>
-                                <td class="lost">-$74</td>
-                            </tr>
-                            <tr>
-                                <td class="td-color-5">
-                                    <div class="transaction-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2 12H4V21H2V12ZM5 14H7V21H5V14ZM16 8H18V21H16V8ZM19 10H21V21H19V10ZM9 2H11V21H9V2ZM12 4H14V21H12V4Z"></path></svg>
-                                    </div>
-                                    <div class="transaction-name">
-                                        <h6 class="text-capitalize">Transfer</h6>
-                                        <p class="text-capitalize">Refund</p>
-                                    </div>
-                                </td>
-                                <td class="success">-$74</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="box-visitors card-hover">
-                <div class="box-title mb-3">
-                    <h4 class="text-capitalize">earning</h4>
-                </div>
-                <div id="visitors-chart"></div>
-            </div>
-        </div>
-        <div class="col-4">
+
+        @* <div class="col-6">
             <div class="box-to-do card-hover">
                 <div class="box-title mb-3">
-                    <h4 class="text-capitalize">to do list  </h4>
+                    <h4 class="text-capitalize">To Do List</h4>
                 </div>
                 <ul class="to-do-list">
                     <li>
                         <div class="form-check ps-0">
-                            <input type="checkbox" name="name" value="" class="check-animated" />
+                            <input type="checkbox" class="check-animated" />
                         </div>
                         <div class="to-do-list-name">
-                            <strong>Pick up kids from school</strong>
-                            <p>8 Hours</p>
+                            <strong>Check new orders</strong>
+                            <p>Daily</p>
                         </div>
                     </li>
                     <li>
                         <div class="form-check ps-0">
-                            <input type="checkbox" name="name" value="" class="check-animated" />
+                            <input type="checkbox" class="check-animated" />
                         </div>
                         <div class="to-do-list-name">
-                            <strong>Pick up kids from school</strong>
-                            <p>8 Hours</p>
+                            <strong>Update product stock</strong>
+                            <p>Weekly</p>
                         </div>
-                    </li>
-                    <li>
-                        <div class="form-check ps-0">
-                            <input type="checkbox" name="name" value="" class="check-animated" />
-                        </div>
-                        <div class="to-do-list-name">
-                            <strong>Pick up kids from school</strong>
-                            <p>8 Hours</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="form-check ps-0">
-                            <input type="checkbox" name="name" value="" class="check-animated" />
-                        </div>
-                        <div class="to-do-list-name">
-                            <strong>Pick up kids from school</strong>
-                            <p>8 Hours</p>
-                        </div>
-                    </li>
-                    <li>
-                        <form class="row g-2">
-                            <div class="col-8">
-                                <input type="text" name="name" value="" placeholder="Enter Task Name" class="form-control" />
-                            </div>
-                            <div class="col-4">
-                                <button type="submit" class="">Add task</button>
-                            </div>
-                        </form>
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> *@
     </div>
 </section>
+@section Scripts {
+    @* <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> *@
 
+    <script>
+        // 1. Lấy dữ liệu từ C# Model đổi sang JSON
+        var chartLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartLabels));
+        var chartData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartData));
+
+        // 2. Cấu hình biểu đồ (Cấu hình này chuẩn theo Fastkart Theme)
+        var options = {
+            series: [{
+                name: 'Revenue',
+                data: chartData // Dữ liệu tiền [10000, 20000...]
+            }],
+            chart: {
+                height: 350,
+                type: 'area', // Loại biểu đồ: Area, Bar, Line...
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            xaxis: {
+                type: 'category',
+                categories: chartLabels, // Dữ liệu tháng ["Jan", "Feb"...]
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val.toLocaleString('en-US') + " VND" // Format tiền đẹp
+                    }
+                }
+            },
+            colors: ['#0da487'] // Màu xanh chủ đạo của theme
+        };
+
+        // 3. Vẽ biểu đồ vào thẻ div #report-chart
+        var chart = new ApexCharts(document.querySelector("#report-chart"), options);
+        chart.render();
+        // --- CHART 2: EARNING CHART (THÊM MỚI) ---
+        // 1. Lấy dữ liệu
+        var earningLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EarningLabels));
+        var earningData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EarningData));
+
+        // 2. Cấu hình (Dạng Cột - Bar Chart cho khác biệt)
+        var optionsEarning = {
+            series: [{
+                name: 'Earning',
+                data: earningData
+            }],
+            chart: {
+                height: 350,
+                type: 'bar', // Dùng biểu đồ cột
+                toolbar: { show: false }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%', // Độ rộng cột
+                    borderRadius: 5,    // Bo tròn đầu cột
+                }
+            },
+            dataLabels: { enabled: false },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: earningLabels,
+                title: { text: 'Date (Day of Month)' }
+            },
+            yaxis: {
+                title: { text: 'Amount (VND)' }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val.toLocaleString('en-US') + " VND"
+                    }
+                }
+            },
+            colors: ['#0da487'] // Màu xanh
+        };
+
+        // 3. Render
+        var chart2 = new ApexCharts(document.querySelector("#earning-chart"), optionsEarning);
+        chart2.render();
+    </script>
+}

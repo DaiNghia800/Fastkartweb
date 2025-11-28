@@ -862,15 +862,15 @@ header.close {
     .dashboard-area .box-category .category-img img {
         width: 100%;
         height: 100%;
-        filter: brightness(0);
-        opacity: 0.5;
+/*        filter: brightness(0);*/
+/*        opacity: 0.5;*/
         object-fit: contain;
     }
 
-    .dashboard-area .box-category .category-img:hover img {
+/*    .dashboard-area .box-category .category-img:hover img {
         filter: brightness(100);
         opacity: 1;
-    }
+    }*/
 
 .dashboard-area .box-category .category-name {
     width: 70%;
