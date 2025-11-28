@@ -117,7 +117,7 @@
                 </ul>
             </nav>
             <div class="text-end mt-2">
-                Trang @Model.PageIndex / @Model.TotalPages
+                Page @Model.PageIndex / @Model.TotalPages
             </div>
         </div>
     </div>
@@ -127,20 +127,20 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userDetailModalLabel">Thông tin người dùng</h5>
+                <h5 class="modal-title" id="userDetailModalLabel">User information</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="userDetailContent">
                     <div class="text-center py-4">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Đang tải...</span>
+                            <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-animation " data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
