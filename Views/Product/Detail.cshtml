@@ -5,6 +5,12 @@
     Layout = "_Layout";
     ViewData["Title"] = "Product detail";
     var product = ViewBag.product as Product;
+    var likedIds = ViewBag.LikedProductIds as List<int> ?? new List<int>();
+
+    // 2. Check xem sản phẩm chính (Main Product) có nằm trong danh sách like không
+    bool isMainLiked = likedIds.Contains(product.Uid);
+    string mainHeartClass = isMainLiked ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart";
+
 }
 
 <section class="product-detail-hp">
@@ -98,13 +104,9 @@
                         </button>
                     </div>
                     <div class="buy-box">
-                        <a href="">
-                            <i class="fa-regular fa-heart"></i>
+                        <a href="javascript:void(0)" class="js-toggle-wishlist" data-product-id="@product.Uid">
+                            <i class="@mainHeartClass"></i>
                             <span>Add To Wishlist</span>
-                        </a>
-                        <a href="">
-                            <i class="fa-solid fa-arrows-rotate"></i>
-                            <span>Add To Compare</span>
                         </a>
                     </div>
 
@@ -169,6 +171,8 @@
                     <div class="product-lists product-wrapper">
                         @foreach (Product item in ViewBag.productRelated)
                         {
+                            bool isItemLiked = likedIds.Contains(item.Uid);
+                            string itemHeartClass = isItemLiked ? "fa-solid fa-heart text-danger" : "fa-regular fa-heart";
                             <div class="product-box-3">
                                 <div class="product-header">
                                     <div class="product-image">
@@ -184,7 +188,11 @@
                                         </a>
                                         <ul class="product-option">
                                             <li><a href=""><i class="fa-regular fa-eye"></i></a></li>
-                                            <li><a href=""><i class="fa-regular fa-heart"></i></a></li>
+                                            <li>
+                                                <a href="javascript:void(0)" class="js-toggle-wishlist" data-product-id="@item.Uid">
+                                                    <i class="@itemHeartClass"></i>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -302,9 +310,17 @@
 
                         // Cập nhật icon giỏ hàng trên header nếu cần (VD: gọi hàm cập nhật UI)
                         // updateHeaderCart(response.cartCount);
-                        location.reload(); // Hoặc reload trang để thấy giỏ hàng cập nhật
+                        // location.reload(); Hoặc reload trang để thấy giỏ hàng cập nhật
 
-                        Swal.fire("Success", "Item added to cart successfully!", "success");
+                       Swal.fire({
+                            title: "Success",
+                            text: "Item added to cart successfully!",
+                            icon: "success",
+                            timer: 1500,
+                            showConfirmButton: false 
+                        }).then(() => {
+                            location.reload();
+                        });
                     } else {
                         alert(response.message || "Có lỗi xảy ra.");
                     }

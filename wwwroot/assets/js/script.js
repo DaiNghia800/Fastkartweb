@@ -583,7 +583,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 const quantity = quantityInput.value;
 
                 if (quantity <= 0) {
-                    alert("Vui lòng chọn số lượng lớn hơn 0");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Invalid Quantity",
+                        text: "Please select a quantity greater than 0.",
+                        confirmButtonColor: '#0baf9a'
+                    });
                     return;
                 }
 

@@ -13,26 +13,24 @@ namespace Fastkart.Controllers.Client
             _cartService = cartService;
         }
 
-        [HttpGet] 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            var cartItems = _cartService.GetCartItems();
-
-            ViewBag.Subtotal = _cartService.GetSubtotal();
+            var cartItems = await _cartService.GetCartItemsAsync();
+            ViewBag.Subtotal = await _cartService.GetSubtotalAsync();
 
             return View("~/Views/Cart/Index.cshtml", cartItems);
         }
 
         [HttpPost("add")]
-        public IActionResult Add(int productId, int quantity = 1)
+        public async Task<IActionResult> Add(int productId, int quantity = 1)
         {
             try
             {
-                _cartService.AddToCart(productId, quantity);
+                await _cartService.AddToCartAsync(productId, quantity);
 
-                var cartItems = _cartService.GetCartItems();
+                var cartItems = await _cartService.GetCartItemsAsync();
                 int totalItems = cartItems.Sum(item => item.Quantity);
-
 
                 return Ok(new
                 {
@@ -43,14 +41,15 @@ namespace Fastkart.Controllers.Client
             }
             catch (Exception ex)
             {
+                // Ghi log lỗi tại đây nếu cần
                 return BadRequest(new { success = false, message = ex.Message });
             }
         }
-        [HttpGet("remove")]
-        public IActionResult Remove(int productId)
-        {
-            _cartService.RemoveFromCart(productId);
 
+        [HttpGet("remove")]
+        public async Task<IActionResult> Remove(int productId)
+        {
+            await _cartService.RemoveFromCartAsync(productId);
             return RedirectToAction("Index");
         }
     }

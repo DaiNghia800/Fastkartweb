@@ -35,13 +35,13 @@ namespace Fastkart.Controllers
                 return BadRequest("Invalid payment method.");
             }
 
-            var cartItems = _cartService.GetCartItems();
+            var cartItems = await _cartService.GetCartItemsAsync();
             if (cartItems == null || !cartItems.Any())
             {
                 return RedirectToAction("Index", "Cart");
             }
 
-            long subtotal = _cartService.GetSubtotal();
+            long subtotal = await _cartService.GetSubtotalAsync();
             long shippingFee = 25000;
             long couponDiscount = 10000;
             long finalTotal = subtotal + shippingFee - couponDiscount;
@@ -77,7 +77,7 @@ namespace Fastkart.Controllers
             _context.Order.Add(newOrder);
             await _context.SaveChangesAsync();
 
-            _cartService.ClearCart();
+            await _cartService.ClearCartAsync();
 
             var createdOrder = await _context.Order
                 .Include(o => o.OrderItems)

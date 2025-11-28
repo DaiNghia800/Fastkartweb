@@ -33,7 +33,7 @@ namespace Fastkart.Controllers.Client
             int.TryParse(userIdStr, out int userId);
 
             // 2. Lấy giỏ hàng từ Session
-            var cartItems = _cartService.GetCartItems();
+            var cartItems = await _cartService.GetCartItemsAsync();
             if (cartItems == null || !cartItems.Any())
             {
                 return RedirectToAction("Index", "Cart");

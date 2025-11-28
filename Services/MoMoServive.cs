@@ -20,9 +20,15 @@ namespace Fastkart.Services
             var accessKey = _config["MoMo:AccessKey"];
             var secretKey = _config["MoMo:SecretKey"];
 
+            var baseUrl = _config["PaymentSettings:BaseUrl"];
+            var returnPath = _config["PaymentSettings:ReturnPath"];
+            var notifyPath = _config["PaymentSettings:NotifyPath"];
+
             var requestId = Guid.NewGuid().ToString();
-            var redirectUrl = " https://jalousied-ustulate-hoa.ngrok-free.dev/payment/return"; // tạm thời test
-            var ipnUrl = " https://jalousied-ustulate-hoa.ngrok-free.dev/payment/notify"; // URL nhận kết quả giao dịch
+
+            // Ghép chuỗi tạo URL hoàn chỉnh
+            var redirectUrl = $"{baseUrl}{returnPath}";
+            var ipnUrl = $"{baseUrl}{notifyPath}";
             var requestType = "captureWallet";
 
             // Tạo raw signature

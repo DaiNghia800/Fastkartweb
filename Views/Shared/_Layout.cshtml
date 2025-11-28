@@ -14,7 +14,7 @@
         currentUser = UserService.GetUserById(userId);
     }
     var pageTitle = ViewData["Title"]?.ToString();
-    var cartItems = MyCartService.GetCartItems();
+    var cartItems = await MyCartService.GetCartItemsAsync();
     var cartItemCount = cartItems.Sum(item => item.Quantity);
 }
 <!DOCTYPE html>

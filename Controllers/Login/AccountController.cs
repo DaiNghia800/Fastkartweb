@@ -6,15 +6,17 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Fastkart.Models.ViewModels;
 using Fastkart.Services.IServices;
-
+using Fastkart.Services;
 namespace Fastkart.Controllers.Login
 {
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
-        public AccountController(IUserService userService)
+        private readonly CartService _cartService;
+        public AccountController(IUserService userService, CartService cartService)
         {
             _userService = userService;
+            _cartService = cartService;
         }
 
         [Route("/login")]
@@ -77,6 +79,7 @@ namespace Fastkart.Controllers.Login
                         ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(30) : null
                     };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authProperties);
+                    await _cartService.MergeSessionCartToDatabase(accounts.Uid);
                     string redirectUrl = (accounts.Role.RoleName == WebConstants.ROLE_CUSTOMER) ? "/" : "/admin/dashboard";
                     return Json(new { status = WebConstants.SUCCESS, success = true, message = "Log in successfully", redirectUrl = redirectUrl });
                 }
@@ -226,7 +229,7 @@ namespace Fastkart.Controllers.Login
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
-
+                await _cartService.MergeSessionCartToDatabase(user.Uid);
                 // 7. Redirect dựa trên Role
                 string redirectUrl = user.Role.RoleName == WebConstants.ROLE_CUSTOMER
                     ? "/" 

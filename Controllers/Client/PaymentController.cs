@@ -43,13 +43,13 @@ namespace Fastkart.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            var cartItems = _cartService.GetCartItems();
+            var cartItems = await _cartService.GetCartItemsAsync();
             if (cartItems == null || !cartItems.Any())
             {
                 return RedirectToAction("Index", "Cart");
             }
 
-            long subtotal = _cartService.GetSubtotal();
+            long subtotal = await _cartService.GetSubtotalAsync();
             long shippingFee = 25000;      
             long couponDiscount = 10000; 
             long finalTotal = subtotal + shippingFee - couponDiscount;
@@ -79,7 +79,7 @@ namespace Fastkart.Controllers
 
             string orderId = $"{newOrder.Uid}_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
 
-            string orderInfo = "Thanh toán đơn hàng #" + orderId;
+            string orderInfo = "Payment for order #" + orderId;
             long paymentAmount = finalTotal; 
 
             var payUrl = await _momoService.CreatePaymentAsync(paymentAmount, orderId, orderInfo);
@@ -109,16 +109,24 @@ namespace Fastkart.Controllers
 
             if (resultCode == "0")
             {
-                ViewBag.Result = "Thanh toán thành công!";
+                ViewBag.Result = "Payment successful!";
                 if (order != null)
                 {
-                    _cartService.ClearCart();
+                    if (order.Status != "Paid")
+                    {
+                        order.Status = "Paid"; 
+
+                        _context.Order.Update(order);
+                        await _context.SaveChangesAsync();
+                    }
+                    await _cartService.ClearCartAsync();
                 }
             }
             else
             {
-                ViewBag.Result = "Thanh toán thất bại hoặc bị hủy.";
+                ViewBag.Result = "Payment failed or cancelled.";
                 ViewBag.Message = query["message"];
+                if (order != null) order.Status = "Failed";
             }
 
             ViewBag.OrderId = query["orderId"];
