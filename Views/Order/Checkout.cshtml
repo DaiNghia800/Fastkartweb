@@ -111,7 +111,7 @@
                                 <img src="@firstImg" alt="@item.ProductName">
                                 <div>
                                     <span>@item.ProductName <br /> <b>SL: </b>@(item.Quantity)</span>
-                                    <span>@item.Total.ToString("N0") ₫</span>
+                                    <span>@item.Total.ToString("N0") VND</span>
                                 </div>
                             </li>
                         }
@@ -120,19 +120,19 @@
                     <div class="fk-chk-summary-details">
                         <div>
                             <span>Subtotal</span>
-                            <span>@subtotal.ToString("N0") ₫</span>
+                            <span>@subtotal.ToString("N0") VND</span>
                         </div>
                         <div>
                             <span>Shipping</span>
-                            <span>@shippingFee.ToString("N0") ₫</span>
+                            <span>@shippingFee.ToString("N0") VND</span>
                         </div>
                         <div class="fk-chk-coupon-row">
                             <span>Discount</span>
-                            <span>-@couponDiscount.ToString("N0") ₫</span>
+                            <span>-@couponDiscount.ToString("N0") VND</span>
                         </div>
                         <div class="fk-chk-total-row">
                             <span>Total (VND)</span>
-                            <span>@total.ToString("N0") ₫</span>
+                            <span>@total.ToString("N0") VND</span>
                         </div>
                     </div>
                 </div>
