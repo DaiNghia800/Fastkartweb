@@ -675,5 +675,55 @@ if (listButtonPagination.length > 0) {
 }
 //end pagination
 
+//timer 
+document.addEventListener('DOMContentLoaded', function () {
+    // 1. Tìm tất cả các phần tử có class 'timer'
+    const timers = document.querySelectorAll('.timer');
+
+    timers.forEach(timer => {
+        // 2. Lấy thời gian kết thúc từ thuộc tính data-endtime
+        const endTimeStr = timer.getAttribute('data-endtime');
+
+        if (!endTimeStr) return; // Nếu không có ngày kết thúc thì bỏ qua
+
+        const countDownDate = new Date(endTimeStr).getTime();
+
+        // 3. Cập nhật thời gian mỗi 1 giây (1000ms)
+        const x = setInterval(function () {
+
+            // Lấy thời gian hiện tại
+            const now = new Date().getTime();
+
+            // Tính khoảng cách giữa bây giờ và lúc kết thúc
+            const distance = countDownDate - now;
+
+            // Tính toán ngày, giờ, phút, giây
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // 4. Hiển thị kết quả ra giao diện
+            // Sử dụng hàm padStart(2, '0') để luôn hiện 2 chữ số (VD: 09 thay vì 9)
+            const dayEl = timer.querySelector('.days');
+            const hourEl = timer.querySelector('.hours');
+            const minEl = timer.querySelector('.minutes');
+            const secEl = timer.querySelector('.seconds');
+
+            if (dayEl) dayEl.innerText = days.toString().padStart(2, '0');
+            if (hourEl) hourEl.innerText = hours.toString().padStart(2, '0');
+            if (minEl) minEl.innerText = minutes.toString().padStart(2, '0');
+            if (secEl) secEl.innerText = seconds.toString().padStart(2, '0');
+
+            // 5. Nếu đếm ngược kết thúc
+            if (distance < 0) {
+                clearInterval(x);
+                // Ẩn timer hoặc hiện thông báo hết hạn
+                timer.innerHTML = '<span class="expired">Hết hạn</span>';
+            }
+        }, 1000);
+    });
+});
+
 
 

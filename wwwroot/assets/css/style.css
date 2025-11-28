@@ -2165,13 +2165,16 @@ ul.list-tab li .btn-tab:hover {
   gap: 0.625rem;
 }
 
-.list-product-pro .item {
-  width: calc(100% / 4 - 1.875rem / 4);
-  border: 0.0625rem solid #ececec;
-  border-radius: 0.625rem;
-  padding: 0.9375rem;
-  position: relative;
-}
+    .list-product-pro .item {
+        width: calc(100% / 4 - 1.875rem / 4);
+        border: 0.0625rem solid #ececec;
+        border-radius: 0.625rem;
+        padding: 0.9375rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
 .list-product-pro .image-product {
   width: 70%;
