@@ -317,14 +317,14 @@ if (productList) {
             e.preventDefault();
 
             Swal.fire({
-                title: "Bạn có chắc chắn muốn xóa bảng ghi này?",
+                title: "Are you sure you want to delete this record?",
                 text: "",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Đồng ý",
-                cancelButtonText: "Huỷ bỏ",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
             }).then((result) => {
                 if (result.isConfirmed) {
                     const patch = buttonDelete.getAttribute("data-patch");
@@ -346,7 +346,7 @@ if (productList) {
                             console.log(data.code)
                             if (data.code == 0) {
                                 Swal.fire({
-                                    title: "Đã xóa!",
+                                    title: "Deleted!",
                                     text: "",
                                     icon: "success",
                                     timer: 1500,
@@ -458,14 +458,14 @@ if (formChangeMulti) {
 
         if (status == "delete") {
             Swal.fire({
-                title: "Bạn có chắc chắn muốn xóa những bảng ghi này?",
+                title: "Are you sure you want to delete this record?",
                 text: "",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Đồng ý",
-                cancelButtonText: "Huỷ bỏ",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
             }).then((result) => {
                 if (!result.isConfirmed) {
                     return;
@@ -502,7 +502,7 @@ if (formChangeMulti) {
                 .then(data => {
                     if (data.code == "deleted") {
                         Swal.fire({
-                            title: "Xóa thành công!",
+                            title: "Deleted!",
                             text: "",
                             icon: "success",
                             timer: 1500,

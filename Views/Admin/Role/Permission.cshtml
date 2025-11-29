@@ -15,7 +15,7 @@
             <table class="table theme-table mb-0" table-permission='@Html.Raw(JsonSerializer.Serialize(ViewData["permissions"]))'>
                 <thead>
                     <tr>
-                        <th>Tính năng</th>
+                        <th>Feature</th>
                         @{
                             if(ViewData["roles"] != null)
                             {
@@ -32,11 +32,11 @@
                         // product
                         <tr>
                             <td colspan="@ViewBag.roles.Count + 1" class="text-start">
-                                <b class="fs-5">Quản lý sản phẩm</b>
+                                <b class="fs-5">Product Management</b>
                             </td>
                         </tr>
                         <tr data-name="product_view">
-                            <td>Xem</td>
+                            <td>View</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -45,7 +45,7 @@
                             }
                         </tr>
                         <tr data-name="product_create">
-                            <td>Thêm mới</td>
+                            <td>Create</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -54,7 +54,7 @@
                             }
                         </tr>
                         <tr data-name="product_edit">
-                            <td>Sửa</td>
+                            <td>Edit</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -63,7 +63,7 @@
                             }
                         </tr>
                         <tr data-name="product_delete">
-                            <td>Xóa</td>
+                            <td>Delete</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -76,11 +76,11 @@
                         // product category
                         <tr>
                             <td colspan="@ViewBag.roles.Count + 1" class="text-start">
-                                <b class="fs-5">Quản lý danh mục sản phẩm</b>
+                                <b class="fs-5">Product catalog management</b>
                             </td>
                         </tr>
                         <tr data-name="product-category_view">
-                            <td>Xem</td>
+                            <td>View</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -89,7 +89,7 @@
                             }
                         </tr>
                         <tr data-name="product-category_create">
-                            <td>Thêm mới</td>
+                            <td>Create</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -98,7 +98,7 @@
                             }
                         </tr>
                         <tr data-name="product-category_edit">
-                            <td>Sửa</td>
+                            <td>Edit</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -107,7 +107,7 @@
                             }
                         </tr>
                         <tr data-name="product-category_delete">
-                            <td>Xóa</td>
+                            <td>Delete</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -120,11 +120,11 @@
                         // product subCategory
                         <tr>
                             <td colspan="@ViewBag.roles.Count + 1" class="text-start">
-                                <b class="fs-5">Quản lý danh mục phụ</b>
+                                <b class="fs-5">Subcategory Management</b>
                             </td>
                         </tr>
                         <tr data-name="product-sub-category_view">
-                            <td>Xem</td>
+                            <td>View</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -133,7 +133,7 @@
                             }
                         </tr>
                         <tr data-name="product-sub-category_create">
-                            <td>Thêm mới</td>
+                            <td>Create</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -142,7 +142,7 @@
                             }
                         </tr>
                         <tr data-name="product-sub-category_edit">
-                            <td>Sửa</td>
+                            <td>Edit</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -151,10 +151,10 @@
                             }
                         </tr>
                         <tr data-name="product-sub-category_delete">
-                            <td>Xóa</td>
+                            <td>Delete</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
-                                <td>
+                                <td>    
                                     <input type="checkbox" class="checkbox_animated checkall" data-id="@role.Uid" />
                                 </td>
                             }
@@ -164,11 +164,11 @@
                         // product role
                         <tr>
                             <td colspan="@ViewBag.roles.Count + 1" class="text-start">
-                                <b class="fs-5">Quản lý quyền</b>
+                                <b class="fs-5">Role Management</b>
                             </td>
                         </tr>
                         <tr data-name="role_view">
-                            <td>Xem</td>
+                            <td>View</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -177,7 +177,7 @@
                             }
                         </tr>
                         <tr data-name="role_create">
-                            <td>Thêm mới</td>
+                            <td>Create</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -186,7 +186,7 @@
                             }
                         </tr>
                         <tr data-name="role_edit">
-                            <td>Sửa</td>
+                            <td>Edit</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -195,7 +195,7 @@
                             }
                         </tr>
                         <tr data-name="role_delete">
-                            <td>Xóa</td>
+                            <td>Delete</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>
@@ -204,7 +204,7 @@
                             }
                         </tr>
                         <tr data-name="role_permission">
-                            <td>Phân quyền</td>
+                            <td>Permission</td>
                             @foreach (Roles role in ViewBag.roles)
                             {
                                 <td>

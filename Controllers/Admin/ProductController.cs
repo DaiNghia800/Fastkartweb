@@ -93,7 +93,7 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] Product product)
         {
-            if (!ModelState.IsValid || _productService.CheckSku(-1, product.Sku))
+            if (!ModelState.IsValid || _productService.checkProductName(-1, product.SubCategoryUid, product.ProductName) || _productService.CheckSku(-1, product.Sku))
             {
                 if (_productService.CheckSku(-1, product.Sku))
                 {

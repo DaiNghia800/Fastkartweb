@@ -61,7 +61,7 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.Product.Where(p => p.Status == "Active" && !p.Deleted).AsNoTracking().Take(8).ToList();
+                return _context.Product.Where(p => p.Status == "Active" && !p.Deleted).OrderByDescending(p => p.Position).AsNoTracking().Take(8).ToList();
             } catch(Exception ex)
             {
                 return new List<Product>();
@@ -72,7 +72,7 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.Product.Where(p => p.Status == "Active" && !p.Deleted).OrderByDescending(p => p.Uid).Take(9).AsNoTracking().ToList();
+                return _context.Product.Where(p => p.Status == "Active" && !p.Deleted).OrderByDescending(p => p.Position).Take(9).AsNoTracking().ToList();
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.Product.Where(p => p.Status == "Active" && p.IsFeatured == true && !p.Deleted).Take(9).AsNoTracking().ToList();
+                return _context.Product.Where(p => p.Status == "Active" && p.IsFeatured == true && !p.Deleted).OrderByDescending(p => p.Position).Take(9).AsNoTracking().ToList();
             }
             catch (Exception ex)
             {
