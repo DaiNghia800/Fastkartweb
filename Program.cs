@@ -108,7 +108,7 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<WishlistService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
-
+builder.Services.AddScoped<Fastkart.Services.EmailService>();
 
 // (KHỐI AddSession BỊ TRÙNG LẶP Ở ĐÂY ĐÃ ĐƯỢC XÓA)
 

@@ -15,11 +15,13 @@ namespace Fastkart.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly CartService _cartService;
+        private readonly EmailService _emailService;
 
-        public OrderController(ApplicationDbContext context, CartService cartService)
+        public OrderController(ApplicationDbContext context, CartService cartService, EmailService emailService)
         {
             _context = context;
             _cartService = cartService;
+            _emailService = emailService;
         }
 
         [HttpPost("submit")]
@@ -76,13 +78,17 @@ namespace Fastkart.Controllers
 
             _context.Order.Add(newOrder);
             await _context.SaveChangesAsync();
-
-            await _cartService.ClearCartAsync();
-
             var createdOrder = await _context.Order
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
+                .Include(o => o.User) // <--- QUAN TRỌNG: Phải có dòng này để lấy Email
                 .FirstOrDefaultAsync(o => o.Uid == newOrder.Uid);
+
+            // 3. Gửi mail
+            if (createdOrder != null)
+            {
+                _ = _emailService.SendOrderConfirmationAsync(createdOrder);
+            }
+            await _cartService.ClearCartAsync();
 
             ViewBag.Result = "(COD) Order placed successfully!";
             ViewBag.Message = $"Your order will be delivered soon!";

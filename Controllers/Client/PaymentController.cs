@@ -21,18 +21,21 @@ namespace Fastkart.Controllers
         private readonly ILogger<PaymentController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly CartService _cartService;
+        private readonly EmailService _emailService;
         public PaymentController(
             MoMoService momoService,
             IConfiguration config,
             ILogger<PaymentController> logger,
             ApplicationDbContext context, 
-            CartService cartService)      
+            CartService cartService,
+            EmailService emailService)      
         {
             _momoService = momoService;
             _config = config;
             _logger = logger;
             _context = context;         
-            _cartService = cartService;   
+            _cartService = cartService;
+            _emailService = emailService;
         }
 
         [HttpGet("momo")]
@@ -103,6 +106,7 @@ namespace Fastkart.Controllers
                 order = await _context.Order
                     .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
+                    .Include(o => o.User)
                     .FirstOrDefaultAsync(o => o.Uid == dbOrderId);
             }
 
@@ -114,11 +118,11 @@ namespace Fastkart.Controllers
                 {
                     if (order.Status != "Paid")
                     {
-                        order.Status = "Paid"; 
-
+                        order.Status = "Paid";
                         _context.Order.Update(order);
                         await _context.SaveChangesAsync();
                     }
+                    _ = _emailService.SendOrderConfirmationAsync(order);
                     await _cartService.ClearCartAsync();
                 }
             }
@@ -213,6 +217,37 @@ namespace Fastkart.Controllers
             using var hmacsha256 = new HMACSHA256(keyByte);
             byte[] hashMessage = hmacsha256.ComputeHash(messageBytes);
             return BitConverter.ToString(hashMessage).Replace("-", "").ToLower();
+        }
+
+        private string GenerateEmailBody(Order order)
+        {
+            var sb = new StringBuilder();
+            sb.Append($"<h1>Thank you for your order!</h1>");
+            sb.Append($"<p>Hello <strong>{order.User?.FullName ?? "Customer"}</strong>,</p>");
+            sb.Append($"<p>Your order <strong>#{order.Uid}</strong> has been successfully paid via MoMo.</p>");
+
+            sb.Append("<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>");
+            sb.Append("<tr style='background-color: #f2f2f2;'><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>");
+
+            foreach (var item in order.OrderItems)
+            {
+                var productName = item.Product?.ProductName ?? "Unknown Item";
+                var totalItemPrice = item.PriceAtPurchase * item.Quantity;
+                sb.Append("<tr>");
+                sb.Append($"<td>{productName}</td>");
+                sb.Append($"<td style='text-align:center'>{item.Quantity}</td>");
+                sb.Append($"<td style='text-align:right'>{item.PriceAtPurchase:N0} VND</td>");
+                sb.Append($"<td style='text-align:right'>{totalItemPrice:N0} VND</td>");
+                sb.Append("</tr>");
+            }
+
+            sb.Append($"<tr><td colspan='3' style='text-align:right'><strong>Grand Total:</strong></td><td style='text-align:right'><strong>{order.TotalAmount:N0} VND</strong></td></tr>");
+            sb.Append("</table>");
+
+            sb.Append("<p>We will ship your items as soon as possible.</p>");
+            sb.Append("<p>Best Regards,<br/>Fastkart Team</p>");
+
+            return sb.ToString();
         }
     }
 }
