@@ -70,10 +70,6 @@ namespace Fastkart.Controllers
             return Ok(categories);
         }
 
-        // ============================================
-        // PHẦN ADMIN CATEGORIES (Gọi Service)
-        // ============================================
-
         [HttpGet("api/BlogCategories")]
         [Authorize(Policy = "NoCustomer")]
         public async Task<ActionResult<IEnumerable<BlogCategories>>> GetBlogCategories()
