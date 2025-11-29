@@ -41,7 +41,7 @@ namespace Fastkart.Controllers.Admin
                 .CountAsync();
 
             // 5. Lấy danh sách danh mục (Lấy 10 cái đầu tiên để hiển thị slide)
-            model.Categories = await _context.ProductCategory.Take(10).ToListAsync();
+            model.Categories = await _context.ProductCategory.Where(c => c.Deleted == false).Take(10).ToListAsync();
 
             // 6. Lấy 5 đơn hàng mới nhất (để hiển thị bảng Recent Orders)
             model.RecentOrders = await _context.Order
