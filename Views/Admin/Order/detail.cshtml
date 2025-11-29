@@ -16,7 +16,7 @@
         <span>/</span>
         <span>@Model.OrderItems.Sum(x => x.Quantity) items</span>
         <span>/</span>
-        <span>Total @Model.TotalAmount.ToString("N0") ₫</span>
+        <span>Total @Model.TotalAmount.ToString("N0") VND</span>
         <span>/</span>
         <span class="badge @(Model.Status == "Paid" || Model.Status == "Delivered" ? "bg-success" : "bg-warning text-dark")">
             @Model.Status
@@ -61,7 +61,7 @@
                                     </div>
                                 </td>
                                 <td>Quantity: @item.Quantity</td>
-                                <td>@item.PriceAtPurchase.ToString("N0") ₫</td>
+                                <td>@item.PriceAtPurchase.ToString("N0") VND</td>
                             </tr>
                         }
                     </tbody>
@@ -75,19 +75,19 @@
                             <tbody>
                                 <tr>
                                     <td>Subtotal</td>
-                                    <td>@subtotal.ToString("N0") ₫</td>
+                                    <td>@subtotal.ToString("N0") VND</td>
                                 </tr>
                                 <tr>
                                     <td>Shipping</td>
-                                    <td>@shipping.ToString("N0") ₫</td>
+                                    <td>@shipping.ToString("N0") VND</td>
                                 </tr>
                                 <tr>
                                     <td>Tax(GST)</td>
-                                    <td>@tax.ToString("N0") ₫</td>
+                                    <td>@tax.ToString("N0") VND</td>
                                 </tr>
                                 <tr>
                                     <td class="fs-5 fw-bold">Total Price :</td>
-                                    <td class="fs-5 fw-bold text-success">@Model.TotalAmount.ToString("N0") ₫</td>
+                                    <td class="fs-5 fw-bold text-success">@Model.TotalAmount.ToString("N0") VND</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -109,7 +109,7 @@
                         <span>Order Date:</span> @Model.OrderDate.ToString("MMMM dd, yyyy")
                     </li>
                     <li>
-                        <span>Order Total:</span> @Model.TotalAmount.ToString("N0") ₫
+                        <span>Order Total:</span> @Model.TotalAmount.ToString("N0") VND
                     </li>
                 </ul>
             </div>

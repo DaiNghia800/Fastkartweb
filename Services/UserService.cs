@@ -125,7 +125,7 @@ namespace Fastkart.Services
         {
             try
             {
-                return _context.Roles.AsNoTracking().ToList();
+                return _context.Roles.Where(r => !r.Deleted).AsNoTracking().ToList();
             }
             catch (Exception ex)
             {

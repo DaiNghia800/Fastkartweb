@@ -71,7 +71,7 @@
                         <div class="col-9">
                             <select asp-for="RoleUid" class="js-example-basic-single w-100"
                                     asp-items="@(ViewData["RolesList"] as SelectList)">
-                                <option value="">-- Chọn một quyền --</option>
+                                <option value="">-- Choose one role --</option>
                             </select>
                             <span asp-validation-for="RoleUid" class="text-danger"></span>
                         </div>

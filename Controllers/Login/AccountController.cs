@@ -76,7 +76,7 @@ namespace Fastkart.Controllers.Login
                     var authProperties = new AuthenticationProperties
                     {
                         IsPersistent = true,
-                        ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(30) : null
+                        ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(30) : DateTimeOffset.UtcNow.AddHours(3),
                     };
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authProperties);
                     await _cartService.MergeSessionCartToDatabase(accounts.Uid);
