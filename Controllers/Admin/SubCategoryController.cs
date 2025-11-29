@@ -69,7 +69,7 @@ namespace Fastkart.Controllers.Admin
             {
                 if (_subCategoryService.checkSubCategoryName(-1, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
                 {
-                    ModelState.AddModelError("SubCategoryName", "Tên này đã tồn tại, xin vui lòng nhập tên khác");
+                    ModelState.AddModelError("SubCategoryName", "Name already exists, please enter another name.");
                 }
                 var listProductCategory = _subCategoryService.GetAllProductCategory();
                 ViewData["productCategories"] = listProductCategory;
@@ -102,7 +102,7 @@ namespace Fastkart.Controllers.Admin
             {
                 if(_subCategoryService.checkSubCategoryName(id, productSubCategory.CategoryUid, productSubCategory.SubCategoryName))
                 {
-                    ModelState.AddModelError("SubCategoryName", "Tên này đã tồn tại, xin vui lòng nhập tên khác");
+                    ModelState.AddModelError("SubCategoryName", "Name already exists, please enter another name");
                 }
                 var listProductCategory = _subCategoryService.GetAllProductCategory();
                 var subCategories = _subCategoryService.GetSubCategory(id);
@@ -125,7 +125,7 @@ namespace Fastkart.Controllers.Admin
             
             return Json(new { 
                 code = subCategory, 
-                message = $"Không thể xóa danh mục con vì đang chứa {subCategory} sản phẩm. Vui lòng xóa hoặc chuyển sản phẩm trước." 
+                message = $"Cannot delete category because it contains {subCategory} subcategory. Please delete or move subcategory first." 
             });
         }
 
