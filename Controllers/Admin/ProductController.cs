@@ -93,15 +93,15 @@ namespace Fastkart.Controllers.Admin
         [HttpPost("create")]
         public IActionResult CreatePost([FromForm] Product product)
         {
-            if (!ModelState.IsValid || _productService.CheckSku(-1, product.Sku))
+            if (!ModelState.IsValid || _productService.checkProductName(-1, product.SubCategoryUid, product.ProductName) || _productService.CheckSku(-1, product.Sku))
             {
                 if (_productService.CheckSku(-1, product.Sku))
                 {
-                    ModelState.AddModelError("Sku", "Mã SKU đã tồn tại, vui lòng nhập mã khác.");
+                    ModelState.AddModelError("Sku", "SKU code already exists, please enter another code.");
                 }
                 else if (_productService.checkProductName(-1, product.SubCategoryUid, product.ProductName))
                 {
-                    ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại, vui lòng nhập tên khác.");
+                    ModelState.AddModelError("ProductName", "Product name already exists, please enter another name.");
                 }
                 var listProductCategory = _productService.GetAllProductCategory();
                 var listBrand = _productService.GetAllBrand();
@@ -155,10 +155,10 @@ namespace Fastkart.Controllers.Admin
             {
                 if (_productService.CheckSku(id, data.Sku))
                 {
-                    ModelState.AddModelError("Sku", "Mã SKU đã tồn tại, vui lòng nhập mã khác.");
+                    ModelState.AddModelError("Sku", "SKU code already exists, please enter another code.");
                 } else if(_productService.checkProductName(id, data.SubCategoryUid, data.ProductName))
                 {
-                    ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại, vui lòng nhập tên khác.");
+                    ModelState.AddModelError("ProductName", "Product name already exists, please enter another name.");
                 }
                 var listProductCategory = _productService.GetAllProductCategory();
                 var listBrand = _productService.GetAllBrand();

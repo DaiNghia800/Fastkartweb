@@ -80,7 +80,7 @@ namespace Fastkart.Controllers.Admin
             {
                 if (_productCategoryService.checkCategoryName(-1, productCategory.CategoryName))
                 {
-                    ModelState.AddModelError("CategoryName", "Tên này đã tồn tại, vui lòng nhập tên khác");
+                    ModelState.AddModelError("CategoryName", "This name already exists, please enter another name");
                 }
                 return View("~/Views/Admin/ProductCategory/Create.cshtml", productCategory);
             }
@@ -119,7 +119,7 @@ namespace Fastkart.Controllers.Admin
             {
                 if(_productCategoryService.checkCategoryName(id, productCategory.CategoryName))
                 {
-                    ModelState.AddModelError("CategoryName", "Tên này đã tồn tại, vui lòng nhập tên khác");
+                    ModelState.AddModelError("CategoryName", "This name already exists, please enter another name");
                 }
                 var category = _productCategoryService.GetProductCategory(id);
                 ViewData["productCategory"] = category;
@@ -149,7 +149,7 @@ namespace Fastkart.Controllers.Admin
             int productCategory = _productCategoryService.DeleteProduct(id);
             return Json(new { 
                 code = productCategory,
-                message = $"Không thể xóa danh mục vì đang chứa {productCategory} danh mục con. Vui lòng xóa hoặc chuyển danh mục con trước."
+                message = $"Cannot delete category because it contains {productCategory} subcategory. Please delete or move subcategory first."
             });
         }
 

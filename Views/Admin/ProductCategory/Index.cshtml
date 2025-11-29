@@ -27,44 +27,44 @@
         <div>
             <div class="table-search">
                 <label>
-                    Tìm kiếm
+                    Search
                     <input type="text" name="name" value="" input-search />
                 </label>
             </div>
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="d-flex align-items-center me-3">
-                    <span class="me-3">Lọc</span>
+                    <span class="me-3">Filter</span>
                     <select class="js-example-basic-single" box-filter>
-                        <option value="">Tất cả</option>
-                        <option value="Active">Hoạt động</option>
-                        <option value="Inactive">Dừng hoạt động</option>
+                        <option value="">All</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
                     </select>
                 </div>
                 <div class="d-flex">
                     <div class="me-4 d-flex align-items-center">
-                        <span class="text-nowrap me-3">Sắp xếp</span>
+                        <span class="text-nowrap me-3">Sort</span>
                         <select class="js-example-basic-single" sort-select>
-                            <option value="Position-desc">Vị trí giảm dần</option>
-                            <option value="Position-asc">Vị trí tăng dần</option>
-                            <option value="CategoryName-desc">Tiêu đề từ Z đến A</option>
-                            <option value="CategoryName-asc">Tiêu đề từ A đến Z</option>
+                            <option value="Price-desc">Price Descending</option>
+                            <option value="Price-asc">Price Ascending</option>
+                            <option value="ProductName-desc">Title Z to A</option>
+                            <option value="ProductName-asc">Title A to Z</option>
                         </select>
                     </div>
                     @if (User.HasClaim("permission", "product-category_edit"))
                     {
                         <div class="d-flex align-items-center">
-                            <span class="text-nowrap me-3">Thay đổi</span>
+                            <span class="text-nowrap me-3">Change</span>
                             <form form-change-multi data-patch="/admin/product-category/change-multi">
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <select class="js-example-basic-single" name="status">
-                                            <option value="Active">Hoạt động</option>
-                                            <option value="Inactive">Dừng hoạt động</option>
-                                            <option value="delete">Xóa</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                            <option value="delete">Delete</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <button type="submit">Áp dụng</button>
+                                        <button type="submit">Apply</button>
                                     </div>
                                 </div>
                             </form>
@@ -118,13 +118,13 @@
                                                     if (productCategory.Status == "Active")
                                                     {
                                                         <td class="status status-close">
-                                                            <button type="button" button-change-status="Active" data-patch="/admin/product-category/change-status/@productCategory.Uid" item-id="@productCategory.Uid">Hoạt động</button>
+                                                            <button type="button" button-change-status="Active" data-patch="/admin/product-category/change-status/@productCategory.Uid" item-id="@productCategory.Uid">@productCategory.Status</button>
                                                         </td>
                                                     }
                                                     else
                                                     {
                                                         <td class="status status-danger">
-                                                            <button type="button" button-change-status="Inactive" data-patch="/admin/product-category/change-status/@productCategory.Uid" item-id="@productCategory.Uid">Dừng hoạt động</button>
+                                                            <button type="button" button-change-status="Inactive" data-patch="/admin/product-category/change-status/@productCategory.Uid" item-id="@productCategory.Uid">@productCategory.Status</button>
                                                         </td>
                                                     }
                                                 }
@@ -133,13 +133,13 @@
                                                     if (productCategory.Status == "Active")
                                                     {
                                                         <td class="status status-close">
-                                                            <button type="button">Hoạt động</button>
+                                                            <button type="button">@productCategory.Status</button>
                                                         </td>
                                                     }
                                                     else
                                                     {
                                                         <td class="status status-danger">
-                                                            <button type="button">Dừng hoạt động</button>
+                                                            <button type="button">@productCategory.Status</button>
                                                         </td>
                                                     }
                                                 }
